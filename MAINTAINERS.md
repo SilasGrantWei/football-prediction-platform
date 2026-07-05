@@ -1,10 +1,8 @@
 # Maintainers
 
-Replace the placeholder below before publishing the repository.
-
 | Name | GitHub | Role | Contact |
 |---|---|---|---|
-| `<your name>` | `@<your-github-user>` | Primary maintainer | `<your public contact email or GitHub profile>` |
+| Silas Grant Wei | @SilasGrantWei | Primary maintainer | https://github.com/SilasGrantWei |
 
 Maintainer responsibilities include issue triage, pull request review, release
 management, dependency review, and security response coordination.
