@@ -1,0 +1,6 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security policy
+    url: https://github.com/<your-github-user>/football-prediction-platform/security/policy
+    about: Do not report undisclosed vulnerabilities in public issues.
+
