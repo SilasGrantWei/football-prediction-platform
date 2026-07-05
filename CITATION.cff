@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using this metadata."
+title: "Production Sports Intelligence System"
+type: software
+authors:
+  - name: "Project Contributors"
+version: "0.1.0"
+date-released: "2026-07-05"
+license: "MIT"
+abstract: "An open-source football intelligence platform for realtime ingestion, prediction, odds comparison, simulation, and post-match calibration."
+

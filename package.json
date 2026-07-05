@@ -1,0 +1,35 @@
+{
+  "name": "football-prediction-platform",
+  "version": "0.1.0",
+  "description": "Open-source football intelligence platform for realtime ingestion, prediction, odds comparison, simulation, and post-match calibration.",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "services/api"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w services/api\" \"npm run dev -w apps/web\"",
+    "dev:demo": "concurrently \"npm run dev:demo -w services/api\" \"npm run dev -w apps/web\"",
+    "dev:web": "npm run dev -w apps/web",
+    "dev:api": "npm run dev -w services/api",
+    "start:local": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-local.ps1 -OpenBrowser",
+    "startup:register": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/register-startup.ps1",
+    "startup:unregister": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/unregister-startup.ps1",
+    "build": "npm run build -w services/api && npm run build -w apps/web",
+    "lint": "npm run lint -w apps/web",
+    "test": "npm run test -w services/api && npm run test:ai",
+    "test:api": "npm run test -w services/api",
+    "test:ai": "node scripts/test-ai.mjs"
+  },
+  "overrides": {
+    "postcss": "8.5.16",
+    "next@16.2.10": {
+      "postcss": "8.5.16"
+    }
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "cross-env": "^10.1.0"
+  }
+}

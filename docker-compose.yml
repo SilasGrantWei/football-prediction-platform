@@ -1,0 +1,107 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: football_predictions
+      POSTGRES_USER: football
+      POSTGRES_PASSWORD: football
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U football -d football_predictions"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  ai:
+    build:
+      context: ./services/ai
+    environment:
+      CORS_ORIGINS: http://localhost:3000,http://localhost:4000
+    ports:
+      - "8001:8000"
+
+  websocket:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgres://football:football@postgres:5432/football_predictions
+      CORS_ORIGINS: http://localhost:3000,http://localhost:4000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["python", "scheduler.py"]
+    environment:
+      DATABASE_URL: postgres://football:football@postgres:5432/football_predictions
+      ODDS_API_KEY: ${ODDS_API_KEY:-}
+      MLFLOW_TRACKING_URI: file:/app/backend/artifacts/mlruns
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    environment:
+      NODE_ENV: production
+      API_PORT: 4000
+      DATABASE_URL: postgres://football:football@postgres:5432/football_predictions
+      REDIS_URL: redis://redis:6379
+      AI_SERVICE_URL: http://ai:8000
+      CORS_ORIGIN: http://localhost:3000
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ai:
+        condition: service_started
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      NODE_ENV: production
+      API_BASE_URL: http://api:4000
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:4000
+      DATA_API_BASE_URL: http://websocket:8000
+      NEXT_PUBLIC_DATA_API_BASE_URL: http://localhost:8000
+      NEXT_PUBLIC_WS_URL: ws://localhost:4000/ws/live
+      NEXT_PUBLIC_DATA_WS_URL: ws://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+      - websocket
+
+volumes:
+  postgres_data:

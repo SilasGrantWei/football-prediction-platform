@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build and test output
+.next/
+**/.next/
+dist/
+**/dist/
+coverage/
+**/coverage/
+
+# Local environments and secrets
+.env
+.env.*
+!.env.example
+.venv/
+**/.venv/
+
+# Python and tool caches
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+.ruff_cache/
+**/.ruff_cache/
+*.pyc
+
+# Runtime output
+logs/
+.codex-logs/
+*.log
+
+# Local release packages
+*.zip
