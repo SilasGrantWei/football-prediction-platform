@@ -1,0 +1,9 @@
+{
+  "model_version": "worldcup-contextual-lightgbm-elo-poisson-v2",
+  "engine": "lightgbm",
+  "rows": 12,
+  "metrics": {
+    "training_accuracy": 1.0
+  },
+  "dataset_path": "app\\data\\matches.csv"
+}
