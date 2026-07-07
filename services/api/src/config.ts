@@ -56,6 +56,7 @@ export const config = {
   sportmonksApiKey: process.env.SPORTMONKS_API_KEY,
   sportmonksBaseUrl:
     process.env.SPORTMONKS_BASE_URL ?? "https://api.sportmonks.com/v3/football",
+  officialMatchesJson: process.env.OFFICIAL_MATCHES_JSON,
   liveScoreBelgiumSenegalUrl:
     process.env.LIVE_SCORE_BELGIUM_SENEGAL_URL ??
     "https://www.livescore.com/en/football/international/world-cup-2026/belgium-vs-senegal/1691875/",

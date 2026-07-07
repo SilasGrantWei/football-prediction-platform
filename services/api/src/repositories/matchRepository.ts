@@ -2,6 +2,8 @@ import { query } from "../db.js";
 import { config } from "../config.js";
 import { demoStore } from "../demoStore.js";
 import type { EventType, Match, MatchEvent, MatchStatus, Prediction, ScorePrediction, TrendPoint, UpsetRisk } from "../models.js";
+import { staleScheduledDisplayCutoffMs } from "../services/matchDisplayPolicy.js";
+import { matchDisplayTimeZone } from "../services/matchPeriodPolicy.js";
 
 interface MatchRow {
   id: string;
@@ -51,6 +53,17 @@ export interface MatchFilters {
   status?: MatchStatus | MatchStatus[];
   competition?: string;
   period?: "today" | "tomorrow";
+  displayable?: boolean;
+}
+
+export interface MatchStateUpdate {
+  minute: number;
+  homeScore: number;
+  awayScore: number;
+  status: MatchStatus;
+  homeTeamId?: string;
+  awayTeamId?: string;
+  startTime?: string;
 }
 
 const MATCH_SELECT = `
@@ -192,14 +205,22 @@ function buildWhere(filters: MatchFilters, values: unknown[]): string {
     clauses.push(`m.competition = $${values.length}`);
   }
 
+  const kickoffExpression = "COALESCE(m.kickoff_time, m.start_time)";
+  const todayStartExpression = `(date_trunc('day', NOW() AT TIME ZONE '${matchDisplayTimeZone}') AT TIME ZONE '${matchDisplayTimeZone}')`;
+
   if (filters.period === "today") {
-    clauses.push("m.start_time >= date_trunc('day', NOW())");
-    clauses.push("m.start_time < date_trunc('day', NOW()) + INTERVAL '1 day'");
+    clauses.push(`${kickoffExpression} >= ${todayStartExpression}`);
+    clauses.push(`${kickoffExpression} < ${todayStartExpression} + INTERVAL '1 day'`);
   }
 
   if (filters.period === "tomorrow") {
-    clauses.push("m.start_time >= date_trunc('day', NOW()) + INTERVAL '1 day'");
-    clauses.push("m.start_time < date_trunc('day', NOW()) + INTERVAL '2 days'");
+    clauses.push(`${kickoffExpression} >= ${todayStartExpression} + INTERVAL '1 day'`);
+    clauses.push(`${kickoffExpression} < ${todayStartExpression} + INTERVAL '2 days'`);
+  }
+
+  if (filters.displayable) {
+    values.push(`${staleScheduledDisplayCutoffMs} milliseconds`);
+    clauses.push(`NOT (m.status = 'scheduled' AND ${kickoffExpression} < NOW() - $${values.length}::interval)`);
   }
 
   return clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
@@ -216,8 +237,8 @@ export class MatchRepository {
        ${where}
        ORDER BY
          CASE m.status WHEN 'live' THEN 1 WHEN 'halftime' THEN 2 WHEN 'scheduled' THEN 3 ELSE 4 END,
-         CASE WHEN m.status = 'finished' THEN m.start_time END DESC,
-         CASE WHEN m.status <> 'finished' THEN m.start_time END ASC,
+         CASE WHEN m.status = 'finished' THEN COALESCE(m.kickoff_time, m.start_time) END DESC,
+         CASE WHEN m.status <> 'finished' THEN COALESCE(m.kickoff_time, m.start_time) END ASC,
          ht.name ASC,
          at.name ASC`,
       values
@@ -274,10 +295,7 @@ export class MatchRepository {
     );
   }
 
-  async updateMatchState(
-    matchId: string,
-    state: { minute: number; homeScore: number; awayScore: number; status: MatchStatus }
-  ): Promise<void> {
+  async updateMatchState(matchId: string, state: MatchStateUpdate): Promise<void> {
     if (config.demoMode) {
       demoStore.updateMatchState(matchId, state);
       return;
@@ -285,9 +303,25 @@ export class MatchRepository {
 
     await query(
       `UPDATE matches
-       SET minute = $2, home_score = $3, away_score = $4, status = $5, updated_at = NOW()
+       SET minute = $2,
+           home_score = $3,
+           away_score = $4,
+           status = $5,
+           home_team_id = COALESCE($6, home_team_id),
+           away_team_id = COALESCE($7, away_team_id),
+           kickoff_time = COALESCE($8::timestamptz, kickoff_time),
+           updated_at = NOW()
        WHERE id = $1`,
-      [matchId, state.minute, state.homeScore, state.awayScore, state.status]
+      [
+        matchId,
+        state.minute,
+        state.homeScore,
+        state.awayScore,
+        state.status,
+        state.homeTeamId ?? null,
+        state.awayTeamId ?? null,
+        state.startTime ?? null
+      ]
     );
   }
 

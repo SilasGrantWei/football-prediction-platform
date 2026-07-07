@@ -256,6 +256,42 @@ describe("buildPostMatchCalibration", () => {
     expect(calibration?.notes.join("\n")).toContain("平局陷阱");
   });
 
+  it("learns close one-goal draw-trap breakthroughs from 1-1 predictions", async () => {
+    const closeAwayWin = makeMatch({
+      id: "close-draw-trap-away-win",
+      startTime: "2026-07-02T04:00:00.000Z",
+      homeScore: 0,
+      awayScore: 1,
+      status: "finished",
+      minute: 90,
+      prediction: {
+        ...basePrediction,
+        matchId: "close-draw-trap-away-win",
+        homeWinProb: 0.33,
+        drawProb: 0.34,
+        awayWinProb: 0.33,
+        expectedHomeGoals: 1.08,
+        expectedAwayGoals: 1.14,
+        topScores: [
+          { score: "1-1", probability: 0.13 },
+          { score: "0-1", probability: 0.11 },
+          { score: "1-2", probability: 0.09 }
+        ]
+      }
+    });
+
+    vi.spyOn(matchRepository, "findMatches").mockResolvedValue([closeAwayWin]);
+
+    const calibration = await buildPostMatchCalibration(targetMatch);
+
+    expect(calibration).toBeDefined();
+    expect(calibration?.learnedMatchCount).toBe(1);
+    expect(calibration?.drawTrapBreakthroughRate).toBe(1);
+    expect(calibration?.drawTrapMarginUnderestimate).toBe(1);
+    expect(calibration?.drawDampener).toBeGreaterThan(0.1);
+    expect(calibration?.drawProtectionBoost).toBe(0);
+  });
+
   it("learns when a favorite wins but concedes multiple goals in a high-total miss", async () => {
     const favoriteWonButConceded = makeMatch({
       id: "favorite-won-3-2",

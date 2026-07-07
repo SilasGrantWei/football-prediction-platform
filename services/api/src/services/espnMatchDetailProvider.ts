@@ -62,13 +62,23 @@ type EspnRosterSide = {
   roster?: EspnRosterPlayer[];
 };
 
+type EspnAthleteName = {
+  displayName?: string;
+  fullName?: string;
+  shortName?: string;
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+};
+
 type EspnRosterPlayer = {
   starter?: boolean;
   subbedIn?: boolean;
   jersey?: string;
-  athlete?: {
-    displayName?: string;
-  };
+  displayName?: string;
+  fullName?: string;
+  name?: string;
+  athlete?: EspnAthleteName;
   position?: {
     displayName?: string;
     abbreviation?: string;
@@ -97,9 +107,7 @@ type EspnPlay = {
     displayName?: string;
   };
   participants?: Array<{
-    athlete?: {
-      displayName?: string;
-    };
+    athlete?: EspnAthleteName;
   }>;
   text?: string;
   play?: EspnPlay;
@@ -110,10 +118,22 @@ type EspnCommentary = {
 };
 
 const knownEspnEventIds: Record<string, string> = {
-  "g-h-006": "760479"
+  "g-h-006": "760479",
+  "r16-090": "760502",
+  "r16-089": "760503",
+  "r16-091": "760504",
+  "r16-092": "760505",
+  "r16-093": "760506",
+  "r16-094": "760507",
+  "r16-096": "760508",
+  "r16-095": "760509"
 };
 
 const teamAliases: Record<string, string[]> = {
+  usa: ["usa", "united states", "united states of america", "us"],
+  brazil: ["brazil", "bra"],
+  norway: ["norway", "nor"],
+  mexico: ["mexico", "mex"],
   uruguay: ["uruguay", "uru"],
   spain: ["spain", "esp"],
   austria: ["austria", "aut"],
@@ -121,6 +141,32 @@ const teamAliases: Record<string, string[]> = {
   croatia: ["croatia", "cro"],
   colombia: ["colombia", "col"],
   england: ["england", "eng"],
+  canada: ["canada", "can"],
+  morocco: ["morocco", "mar"],
+  south_africa: ["south africa", "rsa", "zaf"],
+  south_korea: ["south korea", "korea republic", "kor"],
+  czechia: ["czechia", "czech republic", "cze"],
+  bosnia: ["bosnia", "bosnia and herzegovina", "bih"],
+  qatar: ["qatar", "qat"],
+  switzerland: ["switzerland", "sui"],
+  haiti: ["haiti", "hai"],
+  scotland: ["scotland", "sco"],
+  australia: ["australia", "aus"],
+  turkey: ["turkey", "turkiye", "tur"],
+  germany: ["germany", "ger"],
+  curacao: ["curacao", "curaçao", "cuw"],
+  netherlands: ["netherlands", "nederland", "ned"],
+  japan: ["japan", "jpn"],
+  ivory_coast: ["ivory coast", "cote d ivoire", "côte d'ivoire", "civ"],
+  ecuador: ["ecuador", "ecu"],
+  sweden: ["sweden", "swe"],
+  tunisia: ["tunisia", "tun"],
+  belgium: ["belgium", "bel"],
+  egypt: ["egypt", "egy"],
+  iran: ["iran", "irn"],
+  new_zealand: ["new zealand", "nzl"],
+  senegal: ["senegal", "sen"],
+  iraq: ["iraq", "irq"],
   ghana: ["ghana", "gha"],
   panama: ["panama", "pan"],
   algeria: ["algeria", "alg"],
@@ -129,7 +175,9 @@ const teamAliases: Record<string, string[]> = {
   saudi_arabia: ["saudi arabia", "ksa"],
   cape_verde: ["cape verde", "cpv"],
   uzbekistan: ["uzbekistan", "uzb"],
-  dr_congo: ["dr congo", "congo dr", "democratic republic of the congo", "cod"]
+  dr_congo: ["dr congo", "congo dr", "democratic republic of the congo", "cod"],
+  paraguay: ["paraguay", "par"],
+  france: ["france", "fra"]
 };
 
 export async function fetchEspnMatchDetail(fixture: ExternalDetailFixture): Promise<ExternalMatchDetail | null> {
@@ -216,6 +264,8 @@ async function findEspnScoreboardEvent(
     }>;
   };
 
+  let teamOnlyCandidate: ResolvedEspnEvent | null = null;
+
   for (const event of scoreboard.events ?? []) {
     const competitors = event.competitions?.[0]?.competitors ?? [];
     const home = competitors.find((candidate) => candidate.homeAway === "home");
@@ -224,26 +274,30 @@ async function findEspnScoreboardEvent(
 
     const homeScore = Number(home.score);
     const awayScore = Number(away.score);
-    if (!Number.isFinite(homeScore) || !Number.isFinite(awayScore)) continue;
+    const hasScores = Number.isFinite(homeScore) && Number.isFinite(awayScore);
 
-    const directMatch =
+    const directTeamsMatch =
       isSameTeam(fixture.homeTeam.id, home.team) &&
-      isSameTeam(fixture.awayTeam.id, away.team) &&
-      homeScore === fixture.homeScore &&
-      awayScore === fixture.awayScore;
+      isSameTeam(fixture.awayTeam.id, away.team);
 
-    if (directMatch) return { eventId: event.id, league, homeAwaySwapped: false };
+    if (directTeamsMatch) {
+      const candidate = { eventId: event.id, league, homeAwaySwapped: false };
+      if (hasScores && homeScore === fixture.homeScore && awayScore === fixture.awayScore) return candidate;
+      teamOnlyCandidate ??= candidate;
+    }
 
-    const swappedMatch =
+    const swappedTeamsMatch =
       isSameTeam(fixture.homeTeam.id, away.team) &&
-      isSameTeam(fixture.awayTeam.id, home.team) &&
-      awayScore === fixture.homeScore &&
-      homeScore === fixture.awayScore;
+      isSameTeam(fixture.awayTeam.id, home.team);
 
-    if (swappedMatch) return { eventId: event.id, league, homeAwaySwapped: true };
+    if (swappedTeamsMatch) {
+      const candidate = { eventId: event.id, league, homeAwaySwapped: true };
+      if (hasScores && awayScore === fixture.homeScore && homeScore === fixture.awayScore) return candidate;
+      teamOnlyCandidate ??= candidate;
+    }
   }
 
-  return null;
+  return teamOnlyCandidate;
 }
 
 function buildScoreboardUrl(league: EspnLeague, dateKey: string): string {
@@ -319,14 +373,45 @@ function toLineup(side: EspnRosterSide, teamId: string, fallbackName: string): T
 }
 
 function toPlayer(player: EspnRosterPlayer, role: "starter" | "substitute") {
-  const sourceName = player.athlete?.displayName?.trim();
+  const sourceName = extractRosterPlayerName(player);
   return {
     number: Number(player.jersey) || 0,
-    name: localizePlayerName(sourceName, sourceName ?? "未知球员"),
+    name: localizeSourcePlayerName(sourceName, sourceName || "未知球员"),
     position: localizePositionName(player.position?.displayName ?? player.position?.abbreviation),
     role,
     minutesPlayed: null
   };
+}
+
+const playerNamePlaceholders = new Set([
+  "未知球员",
+  "待补中文球员",
+  "未接入中文名",
+  "unknown",
+  "unknown player",
+  "tbd"
+]);
+
+function extractAthleteName(athlete: EspnAthleteName | undefined): string {
+  const fullFromParts = [athlete?.firstName, athlete?.lastName].filter(Boolean).join(" ").trim();
+  return [athlete?.displayName, athlete?.fullName, athlete?.shortName, athlete?.name, fullFromParts]
+    .map((value) => value?.trim())
+    .find((value): value is string => Boolean(value)) ?? "";
+}
+
+function extractRosterPlayerName(player: EspnRosterPlayer): string {
+  return [extractAthleteName(player.athlete), player.displayName, player.fullName, player.name]
+    .map((value) => value?.trim())
+    .find((value): value is string => Boolean(value)) ?? "";
+}
+
+function localizeSourcePlayerName(sourceName: string | undefined, fallback = ""): string {
+  const source = sourceName?.trim() ?? "";
+  const localized = localizePlayerName(source || undefined, source || fallback).trim();
+  if (!localized || playerNamePlaceholders.has(localized.toLowerCase()) || playerNamePlaceholders.has(localized)) {
+    return source || fallback;
+  }
+  return localized;
 }
 
 function parseEvents(summary: EspnSummary, matchId: string): MatchEvent[] {
@@ -415,7 +500,7 @@ function buildEventPlayer(event: EspnPlay, type: EventType, description = ""): s
   if (textPlayer) return textPlayer;
 
   const participants = (event.participants ?? [])
-    .map((participant) => localizePlayerName(participant.athlete?.displayName, ""))
+    .map((participant) => localizeSourcePlayerName(extractAthleteName(participant.athlete), ""))
     .filter(Boolean);
 
   if (type === "substitution" && participants.length >= 2) return `${participants[0]} 替换 ${participants[1]}`;

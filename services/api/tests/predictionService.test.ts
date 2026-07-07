@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { config } from "../src/config.js";
-import type { Match, PostMatchCalibration, TeamRecordComparison } from "../src/models.js";
+import type { Match, MatchEvent, PostMatchCalibration, TeamRecordComparison } from "../src/models.js";
 import { matchRepository } from "../src/repositories/matchRepository.js";
 import { buildPredictionEvaluation, buildPredictionLiveReview } from "../src/services/predictionEvaluation.js";
 import { buildPredictionExplanation } from "../src/services/predictionExplanation.js";
@@ -74,6 +74,12 @@ describe("calculateLocalPrediction", () => {
     expect(total).toBeGreaterThan(0.999);
     expect(total).toBeLessThan(1.001);
     expect(prediction.topScores).toHaveLength(3);
+    expect(prediction.scoreProbabilityMatrix).toHaveLength(36);
+    const matrixTotal = prediction.scoreProbabilityMatrix?.reduce((sum, item) => sum + item.probability, 0) ?? 0;
+    const matrixTopScore = [...(prediction.scoreProbabilityMatrix ?? [])].sort((a, b) => b.probability - a.probability)[0];
+    expect(matrixTotal).toBeGreaterThan(0.999);
+    expect(matrixTotal).toBeLessThan(1.001);
+    expect(prediction.topScores[0].score).toBe(matrixTopScore?.score);
     expect(prediction.topScores[0].probability).toBeGreaterThanOrEqual(prediction.topScores[1].probability);
     expect(prediction.topScores[1].probability).toBeGreaterThanOrEqual(prediction.topScores[2].probability);
     expect(["defensive", "balanced", "open"]).toContain(prediction.gameStyle);
@@ -521,6 +527,75 @@ describe("calculateLocalPrediction", () => {
     expect(awayCandidates.length).toBeGreaterThan(0);
     expect(calibrated.topScores.some((item) => item.score === "1-1")).toBe(false);
     expect(calibrated.postMatchCalibration?.drawTrapBreakthroughRate).toBe(1);
+  });
+
+  it("moves close one-goal draw-trap learning into non-draw score candidates", () => {
+    const nearEvenAwayFavorite: Match = {
+      ...match,
+      id: "close-draw-trap-future",
+      homeTeam: {
+        ...match.homeTeam,
+        fifaRating: 88,
+        recentForm: 80,
+        attackAvg: 1.48,
+        defenseAvg: 80,
+        xga: 1.02
+      },
+      awayTeam: {
+        ...match.awayTeam,
+        fifaRating: 89,
+        recentForm: 83,
+        attackAvg: 1.62,
+        defenseAvg: 82,
+        xga: 0.98
+      },
+      competition: "2026涓栫晫鏉窐姹拌禌",
+      status: "scheduled",
+      minute: 0
+    };
+    const postMatchCalibration: PostMatchCalibration = {
+      version: "unit-test-close-draw-trap-breakthrough",
+      sampleSignature: "close-draw-trap-away-win:2026-07-02T00:00:00.000Z",
+      learnedMatchCount: 1,
+      scoreMissRate: 1,
+      directionMissRate: 1,
+      favoriteMissRate: 0,
+      favoriteCleanSheetBoost: 0,
+      favoriteGoalLift: 0.08,
+      underdogGoalSuppression: 0,
+      drawDampener: 0.13,
+      volatilityLift: 0.02,
+      favoriteOverconfidencePenalty: 0,
+      underdogResilienceBoost: 0,
+      drawProtectionBoost: 0,
+      favoriteDrawMissRate: 0,
+      favoriteMarginOverestimate: 0,
+      drawProtectedFavoriteWinRate: 0,
+      favoriteMarginUnderestimate: 0,
+      drawTrapBreakthroughRate: 1,
+      drawTrapMarginUnderestimate: 1,
+      favoriteCleanSheetBustRate: 0,
+      generatedAt: "2026-07-03T00:00:00.000Z",
+      notes: ["unit-test close draw trap breakthrough calibration"]
+    };
+
+    const baseline = calculateLocalPrediction(nearEvenAwayFavorite);
+    const calibrated = calculateLocalPrediction(nearEvenAwayFavorite, undefined, postMatchCalibration);
+    const [topHomeGoals = 0, topAwayGoals = 0] = calibrated.topScores[0]?.score
+      .split("-")
+      .map((value) => Number.parseInt(value, 10)) ?? [0, 0];
+    const drawCandidates = calibrated.topScores.filter((item) => {
+      const [homeGoals = 0, awayGoals = 0] = item.score.split("-").map((value) => Number.parseInt(value, 10));
+      return homeGoals === awayGoals;
+    });
+
+    expect(calibrated.drawProb).toBeLessThan(baseline.drawProb);
+    expect(calibrated.awayWinProb).toBeGreaterThan(calibrated.homeWinProb);
+    expect(calibrated.topScores).toHaveLength(3);
+    expect(drawCandidates.length).toBeLessThan(2);
+    expect(calibrated.topScores[0]?.score).not.toBe("1-1");
+    expect(topAwayGoals).toBeGreaterThan(topHomeGoals);
+    expect(calibrated.postMatchCalibration?.drawTrapMarginUnderestimate).toBe(1);
   });
 
   it("returns score-specific rationale instead of repeated template text", () => {
@@ -1024,7 +1099,7 @@ describe("buildPredictionEvaluation", () => {
     expect(evaluation?.learningActions.length).toBeGreaterThan(0);
   });
 
-  it("returns failure reasons and learning actions when the 90-minute score is missed", () => {
+  it("returns detailed match context, failure reasons, and learning actions when the 90-minute score is missed", () => {
     const finishedMatch: Match = {
       ...match,
       homeScore: 0,
@@ -1040,20 +1115,102 @@ describe("buildPredictionEvaluation", () => {
         { score: "2-1", probability: 0.11 }
       ]
     };
+    const events: MatchEvent[] = [
+      {
+        id: 1,
+        matchId: finishedMatch.id,
+        minute: 12,
+        type: "offside",
+        team: finishedMatch.homeTeam.name,
+        player: "主队前锋",
+        description: "前插越位，进攻回合被切断",
+        createdAt: "2026-07-01T00:00:00.000Z"
+      },
+      {
+        id: 2,
+        matchId: finishedMatch.id,
+        minute: 18,
+        type: "corner",
+        team: finishedMatch.homeTeam.name,
+        player: "主队边锋",
+        description: "边路传中被解围形成角球，但二点球没有形成射正",
+        createdAt: "2026-07-01T00:01:00.000Z"
+      },
+      {
+        id: 3,
+        matchId: finishedMatch.id,
+        minute: 33,
+        type: "shot_blocked",
+        team: finishedMatch.homeTeam.name,
+        player: "主队前锋",
+        description: "禁区前沿射门被封堵",
+        createdAt: "2026-07-01T00:02:00.000Z"
+      },
+      {
+        id: 4,
+        matchId: finishedMatch.id,
+        minute: 67,
+        type: "goal",
+        team: finishedMatch.awayTeam.name,
+        player: "客队前锋",
+        description: "反击破门",
+        createdAt: "2026-07-01T00:03:00.000Z"
+      }
+    ];
 
-    const evaluation = buildPredictionEvaluation(finishedMatch, prediction);
+    const evaluation = buildPredictionEvaluation(finishedMatch, prediction, events, {
+      sourceLabel: "单元测试真实事件源",
+      stats: {
+        home: {
+          possession: 58,
+          shots: 14,
+          shotsOnTarget: 2,
+          corners: 7,
+          fouls: 15,
+          yellowCards: 2,
+          redCards: 0,
+          xg: 1.1
+        },
+        away: {
+          possession: 42,
+          shots: 7,
+          shotsOnTarget: 4,
+          corners: 3,
+          fouls: 13,
+          yellowCards: 1,
+          redCards: 0,
+          xg: 1.4
+        }
+      }
+    });
 
     expect(evaluation?.status).toBe("failed");
     expect(evaluation?.top3ScoreHit).toBe(false);
     expect(evaluation?.resultHit).toBe(false);
     expect(evaluation?.failureReasons.length).toBeGreaterThan(0);
     expect(evaluation?.learningActions.length).toBeGreaterThan(0);
+    expect(evaluation?.matchSummary?.join(" ")).toContain("事件链概览");
+    const failureTitles = evaluation?.failureBreakdown?.map((item) => item.title) ?? [];
+    expect(failureTitles).toContain("事件链根因");
+    expect(failureTitles).toContain("技术统计根因");
+    const failureText = evaluation?.failureBreakdown?.flatMap((item) => [item.detail, ...item.evidence]).join(" ") ?? "";
+    expect(failureText).toContain("越位");
+    expect(failureText).toContain("角球");
+    expect(failureText).toContain("封堵");
+    expect(failureText).toContain("事件时间段");
+    expect(failureText).toContain("射正转化");
+    expect(failureText).toContain("定位球");
+    expect(failureText).toContain("反击");
+    expect(failureText).toContain("机会质量");
+    expect(failureText).toContain("转化链条");
+    expect(evaluation?.dataGaps?.join(" ")).not.toContain("缺少真实事件时间线");
+    expect(evaluation?.dataGaps?.join(" ")).not.toContain("缺少真实技术统计");
   });
 
-  it("does not evaluate extra-time or penalty outcomes as prediction results", () => {
+  it("evaluates the stored 90-minute score even when the feed later records extra-time metadata", () => {
     const extraTimeMatch: Match = {
       ...match,
-      homeScore: 3,
+      homeScore: 2,
       awayScore: 2,
       status: "finished",
       minute: 120
@@ -1067,7 +1224,11 @@ describe("buildPredictionEvaluation", () => {
       ]
     };
 
-    expect(buildPredictionEvaluation(extraTimeMatch, prediction)).toBeUndefined();
+    const evaluation = buildPredictionEvaluation(extraTimeMatch, prediction);
+
+    expect(evaluation?.status).toBe("success");
+    expect(evaluation?.actualScore).toBe("2-2");
+    expect(evaluation?.conclusion).toContain("不含加时赛和点球大战");
   });
 });
 

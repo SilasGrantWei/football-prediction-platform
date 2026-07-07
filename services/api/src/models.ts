@@ -23,6 +23,35 @@ export interface ScorePrediction {
   probability: number;
 }
 
+export interface ScoreProbabilityMatrixItem extends ScorePrediction {
+  homeGoals: number;
+  awayGoals: number;
+}
+
+export interface EnhancedScorePrediction {
+  score: string;
+  probability: number;
+  modelProbability?: number;
+  historicalProbability?: number;
+  impliedProbability?: number;
+  edge?: number;
+}
+
+export interface WorldCupScoreEnhancement {
+  rawTop3: EnhancedScorePrediction[];
+  adjustedTop3: EnhancedScorePrediction[];
+  keep: boolean;
+  rejectReasons: string[];
+  mass3: number;
+  entropy3: number;
+  scenarioSpan: number;
+  histBucket: string;
+  histTop3Mass: number;
+  histTop3: EnhancedScorePrediction[];
+  matchScore: number;
+  calibratedTop3Hit: boolean | null;
+}
+
 export interface PredictionFactor {
   name: string;
   homeValue: string;
@@ -55,6 +84,12 @@ export interface PredictionExplanation {
 
 export type PredictionEvaluationStatus = "pending" | "success" | "failed";
 
+export interface PredictionFailureBreakdown {
+  title: string;
+  detail: string;
+  evidence: string[];
+}
+
 export interface PredictionEvaluation {
   status: PredictionEvaluationStatus;
   actualScore: string;
@@ -65,6 +100,9 @@ export interface PredictionEvaluation {
   top3Rank?: number;
   resultHit: boolean;
   conclusion: string;
+  matchSummary?: string[];
+  failureBreakdown?: PredictionFailureBreakdown[];
+  dataGaps?: string[];
   goalError: {
     home: number;
     away: number;
@@ -278,6 +316,7 @@ export interface Prediction {
   drawProb: number;
   awayWinProb: number;
   topScores: ScorePrediction[];
+  scoreProbabilityMatrix?: ScoreProbabilityMatrixItem[];
   gameStyle: GameStyle;
   upsetRisk: UpsetRisk;
   expectedHomeGoals: number;
@@ -286,6 +325,7 @@ export interface Prediction {
   lineupProjection?: MatchLineupProjection;
   preMatchContext?: PreMatchContext;
   postMatchCalibration?: PostMatchCalibration;
+  scoreEnhancement?: WorldCupScoreEnhancement;
   explanation?: PredictionExplanation;
   liveReview?: PredictionLiveReview;
   evaluation?: PredictionEvaluation;
@@ -448,4 +488,48 @@ export interface TeamRecordMatchDetail {
     stats: boolean;
     lineups: boolean;
   };
+}
+
+export type OfficialMatchSource = "fifa" | "uefa" | "kaggle";
+
+export interface OfficialMatchRecord {
+  matchId: string;
+  homeTeam: string;
+  awayTeam: string;
+  score90Min: string;
+  stage: string;
+  matchDate: string;
+  isExtraTime: boolean;
+  isPenalty: boolean;
+  source: OfficialMatchSource;
+}
+
+export interface OfficialMatchRecordWire {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  score_90min: string;
+  stage: string;
+  match_date: string;
+  is_extra_time: boolean;
+  is_penalty: boolean;
+  source: OfficialMatchSource;
+}
+
+export interface OfficialMatchResponse {
+  officialMatchRecord: OfficialMatchRecord;
+  official_match_record: OfficialMatchRecordWire;
+  sourceUsed: OfficialMatchSource;
+  source_used: OfficialMatchSource;
+  confidence: number;
+  truthLayer: "Official Football Truth Layer";
+  truth_layer: "Official Football Truth Layer";
+}
+
+export interface OfficialTruthStatus {
+  available: boolean;
+  recordCount: number;
+  sourceCounts: Record<OfficialMatchSource, number>;
+  filePath: string | null;
+  truthLayer: "Official Football Truth Layer";
 }

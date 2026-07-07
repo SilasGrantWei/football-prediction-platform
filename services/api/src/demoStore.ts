@@ -1,5 +1,7 @@
 import type { EventType, Match, MatchEvent, MatchStatus, Prediction, Team, TrendPoint } from "./models.js";
-import type { MatchFilters } from "./repositories/matchRepository.js";
+import type { MatchFilters, MatchStateUpdate } from "./repositories/matchRepository.js";
+import { filterDisplayableMatches } from "./services/matchDisplayPolicy.js";
+import { isTournamentToday, isTournamentTomorrow } from "./services/matchPeriodPolicy.js";
 
 // Verified snapshot: FIFA official match schedule PDF v22, ESPN fixtures/results,
 // and Guardian live report for Belgium 3-2 Senegal. Updated for 2026-07-02 Asia/Shanghai.
@@ -107,15 +109,16 @@ const predictions = new Map<string, Prediction>();
 
 export const demoStore = {
   findMatches(filters: MatchFilters = {}): Match[] {
-    return matches
+    const visibleMatches = filters.displayable ? filterDisplayableMatches(matches) : matches;
+    return visibleMatches
       .filter((item) => {
         if (filters.status) {
           const statuses = Array.isArray(filters.status) ? filters.status : [filters.status];
           if (!statuses.includes(item.status)) return false;
         }
         if (filters.competition && item.competition !== filters.competition) return false;
-        if (filters.period === "today") return isToday(item.startTime);
-        if (filters.period === "tomorrow") return isTomorrow(item.startTime);
+        if (filters.period === "today") return isTournamentToday(item.startTime);
+        if (filters.period === "tomorrow") return isTournamentTomorrow(item.startTime);
         return true;
       })
       .map(withPrediction)
@@ -144,9 +147,12 @@ export const demoStore = {
     nextEventId += 1;
   },
 
-  updateMatchState(matchId: string, state: { minute: number; homeScore: number; awayScore: number; status: MatchStatus }): void {
+  updateMatchState(matchId: string, state: MatchStateUpdate): void {
     const item = matches.find((candidate) => candidate.id === matchId);
     if (!item) return;
+    if (state.homeTeamId) item.homeTeam = resolveTeam(state.homeTeamId, matchId);
+    if (state.awayTeamId) item.awayTeam = resolveTeam(state.awayTeamId, matchId);
+    if (state.startTime) item.startTime = new Date(state.startTime).toISOString();
     item.minute = state.minute;
     item.homeScore = state.homeScore;
     item.awayScore = state.awayScore;
@@ -293,17 +299,17 @@ function roundOf16Matches(): Match[] {
     scheduled("r16-089", "2026世界杯淘汰赛 · 1/8决赛", "paraguay", "france", "2026-07-04T21:00:00.000Z"),
     scheduled("r16-091", "2026世界杯淘汰赛 · 1/8决赛", "brazil", "norway", "2026-07-05T20:00:00.000Z"),
     scheduled("r16-092", "2026世界杯淘汰赛 · 1/8决赛", "mexico", "england", "2026-07-06T00:00:00.000Z"),
-    scheduled("r16-093", "2026世界杯淘汰赛 · 1/8决赛", "winner_m83", "winner_m84", "2026-07-06T19:00:00.000Z"),
-    scheduled("r16-094", "2026世界杯淘汰赛 · 1/8决赛", "usa", "belgium", "2026-07-07T00:00:00.000Z"),
-    scheduled("r16-095", "2026世界杯淘汰赛 · 1/8决赛", "winner_m86", "winner_m88", "2026-07-07T16:00:00.000Z"),
-    scheduled("r16-096", "2026世界杯淘汰赛 · 1/8决赛", "winner_m85", "winner_m87", "2026-07-07T20:00:00.000Z")
+    completed("r16-093", "2026世界杯淘汰赛 · 1/8决赛", "portugal", "spain", 0, 1, "2026-07-06T19:00:00.000Z"),
+    completed("r16-094", "2026世界杯淘汰赛 · 1/8决赛", "usa", "belgium", 1, 4, "2026-07-07T00:00:00.000Z"),
+    scheduled("r16-095", "2026世界杯淘汰赛 · 1/8决赛", "argentina", "egypt", "2026-07-07T16:00:00.000Z"),
+    scheduled("r16-096", "2026世界杯淘汰赛 · 1/8决赛", "switzerland", "colombia", "2026-07-07T20:00:00.000Z")
   ];
 }
 
 function quarterFinalMatches(): Match[] {
   return [
     scheduled("qf-097", "2026世界杯淘汰赛 · 1/4决赛", "winner_m89", "winner_m90", "2026-07-09T20:00:00.000Z"),
-    scheduled("qf-098", "2026世界杯淘汰赛 · 1/4决赛", "winner_m93", "winner_m94", "2026-07-10T19:00:00.000Z"),
+    scheduled("qf-098", "2026世界杯淘汰赛 · 1/4决赛", "spain", "belgium", "2026-07-10T19:00:00.000Z"),
     scheduled("qf-099", "2026世界杯淘汰赛 · 1/4决赛", "winner_m91", "winner_m92", "2026-07-11T21:00:00.000Z"),
     scheduled("qf-100", "2026世界杯淘汰赛 · 1/4决赛", "winner_m95", "winner_m96", "2026-07-12T01:00:00.000Z")
   ];
@@ -373,6 +379,14 @@ function buildMatch(
   };
 }
 
+function resolveTeam(teamId: string, matchId: string): Team {
+  const selectedTeam = teams[teamId];
+  if (!selectedTeam) {
+    throw new Error(`Unknown team in external score sync for ${matchId}: ${teamId}`);
+  }
+  return selectedTeam;
+}
+
 function event(id: number, matchId: string, minute: number, type: EventType, teamName: string, player: string): MatchEvent {
   return {
     id,
@@ -392,19 +406,6 @@ function withPrediction(item: Match): Match {
     awayTeam: { ...item.awayTeam },
     prediction: predictions.get(item.id)
   };
-}
-
-function isToday(value: string): boolean {
-  const target = new Date(value);
-  const now = new Date();
-  return target.toDateString() === now.toDateString();
-}
-
-function isTomorrow(value: string): boolean {
-  const target = new Date(value);
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  return target.toDateString() === tomorrow.toDateString();
 }
 
 function sortMatches(a: Match, b: Match): number {

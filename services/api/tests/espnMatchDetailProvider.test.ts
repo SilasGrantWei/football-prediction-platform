@@ -42,6 +42,27 @@ describe("fetchEspnMatchDetail", () => {
     expect(detail?.lineups?.away.teamName).toBe("阿尔及利亚");
   });
 
+  it("uses team and date fallback when ESPN score differs from local 90-minute score", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(mockScoreMismatchWorldCupDetailFetch);
+
+    const detail = await fetchEspnMatchDetail({
+      id: "mexico-england-score-mismatch",
+      startTime: "2026-07-05T01:00:00.000Z",
+      homeTeam: { id: "mexico", name: "墨西哥" },
+      awayTeam: { id: "england", name: "英格兰" },
+      homeScore: 0,
+      awayScore: 0
+    });
+
+    expect(detail?.sourceUrl).toContain("760505");
+    expect(detail?.lineups?.home.teamId).toBe("mexico");
+    expect(detail?.lineups?.away.teamId).toBe("england");
+    expect(detail?.lineups?.home.starters[0]?.name).toBe("Raul Rangel");
+    expect(detail?.lineups?.away.starters[0]?.name).toBe("Jordan Pickford");
+    expect(detail?.lineups?.home.starters[0]?.name).not.toContain("未知球员");
+    expect(detail?.lineups?.away.starters[0]?.name).not.toContain("未知球员");
+  });
+
   it("keeps detailed ESPN commentary events such as VAR, offside, corner and free kicks", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(mockCommentaryDetailFetch);
 
@@ -118,6 +139,59 @@ async function mockSwappedFriendlyDetailFetch(input: RequestInfo | URL): Promise
   }
 
   return jsonResponse(buildSummary("away"));
+}
+
+async function mockScoreMismatchWorldCupDetailFetch(input: RequestInfo | URL): Promise<Response> {
+  const url = String(input);
+
+  if (url.includes("fifa.world/scoreboard")) {
+    return jsonResponse({
+      events: [
+        {
+          id: "760505",
+          competitions: [
+            {
+              competitors: [
+                { homeAway: "home", score: "3", team: { displayName: "Mexico", abbreviation: "MEX" } },
+                { homeAway: "away", score: "0", team: { displayName: "England", abbreviation: "ENG" } }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+  }
+
+  return jsonResponse({
+    rosters: [
+      rosterSide("home", "Mexico", [
+        "Raul Rangel",
+        "Edson Alvarez",
+        "Cesar Montes",
+        "Jorge Sanchez",
+        "Luis Chavez",
+        "Erick Sanchez",
+        "Uriel Antuna",
+        "Santiago Gimenez",
+        "Alexis Vega",
+        "Orbelin Pineda",
+        "Johan Vasquez"
+      ]),
+      rosterSide("away", "England", [
+        "Jordan Pickford",
+        "Kyle Walker",
+        "John Stones",
+        "Marc Guehi",
+        "Luke Shaw",
+        "Declan Rice",
+        "Jude Bellingham",
+        "Bukayo Saka",
+        "Phil Foden",
+        "Harry Kane",
+        "Anthony Gordon"
+      ])
+    ]
+  });
 }
 
 async function mockCommentaryDetailFetch(input: RequestInfo | URL): Promise<Response> {

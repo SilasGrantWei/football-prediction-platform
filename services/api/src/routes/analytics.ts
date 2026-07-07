@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import type { GameStyle, Match, MatchStatus, UpsetRisk } from "../models.js";
 import { matchRepository } from "../repositories/matchRepository.js";
+import { buildFailureClusterAnalysis } from "../services/failureClusterAnalysis.js";
 import { buildModelQualityGate, type ModelQualityGate } from "../services/modelQualityService.js";
 import { PREDICTION_MODEL_INFO, predictionService, teamStrength } from "../services/predictionService.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -130,18 +131,15 @@ function buildFailureReview(matches: Match[], causalSampleIds: Set<string>) {
   const actionCounts = countStrings(
     failedMatches.flatMap((match) => match.prediction?.evaluation?.learningActions ?? [])
   );
-
-  const summary =
-    failedMatches.length === 0
-      ? "当前已结束样本没有推算失败；模型会继续保留赛后误差复盘入口。"
-      : `已复盘 ${failedMatches.length} 场推算失败：${directionFailures} 场胜平负方向错误，${scoreOnlyFailures} 场方向命中但比分偏差。第九版已启用赛前因果快照、赛前战绩小权重校准、淘汰赛进球压缩和方向校准比分矩阵；已结束比赛只保留赛前快照，不用赛后比分回灌单场推算。`;
+  const failureCluster = buildFailureClusterAnalysis(matches, causalSampleIds);
 
   return {
-    summary,
+    summary: buildFailureReviewSummary(failedMatches.length, directionFailures, scoreOnlyFailures),
     directionFailures,
     scoreOnlyFailures,
     topReasons: reasonCounts.slice(0, 6).map(([reason, count]) => ({ reason, count })),
     recommendedActions: actionCounts.slice(0, 6).map(([action]) => action),
+    failureCluster,
     failedMatches: failedMatches.slice(0, 8).map((match) => {
       const evaluation = match.prediction?.evaluation;
       return {
@@ -155,6 +153,14 @@ function buildFailureReview(matches: Match[], causalSampleIds: Set<string>) {
       };
     })
   };
+}
+
+function buildFailureReviewSummary(failedCount: number, directionFailures: number, scoreOnlyFailures: number): string {
+  if (failedCount === 0) {
+    return "当前没有可复盘的赛前推算失败样本；后续只会用90分钟真实结果做赛后校准，不把加时赛和点球大战写入胜平负命中率。";
+  }
+
+  return `已复盘 ${failedCount} 场赛前推算失败：${directionFailures} 场胜平负方向错误，${scoreOnlyFailures} 场方向命中但比分偏差。现在按比赛事件链解释失败原因：先看进球时间、被封堵射门、越位、角球、犯规、黄红牌和换人窗口，再判断是进攻转化被高估、弱队抗压被低估、比分状态改变节奏，还是数据源缺少首发/技术统计导致不确定。`;
 }
 
 function toPublicQualityGate(qualityGate: ModelQualityGate): ModelQualityGate {

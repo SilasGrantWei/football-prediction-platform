@@ -24,6 +24,7 @@ interface LineupValidationSource {
 
 const pendingSourceLabel = "等待官方首发数据";
 const minimumCredibleStarterCount = 11;
+const minimumUsableStarterNames = 5;
 
 export function buildLineupValidation(
   match: Match,
@@ -63,22 +64,27 @@ function validateTeamLineup(
   const sanitizedActualLineup = sanitizeActualLineup(actualLineup);
 
   if (!projection.starters.length) {
+    const actualStarterNames = sanitizedActualLineup?.starters.map((player) => player.name) ?? [];
+    const actualSubstituteNames = sanitizedActualLineup?.substitutes.map((player) => player.name) ?? [];
+    const actualStarterCount = actualStarterNames.filter(hasUsablePlayerName).length;
+    const hasActualLineup = actualStarterCount >= minimumCredibleStarterCount;
+
     return {
       teamId: projection.teamId,
       teamName: projection.teamName,
-      status: "unavailable",
+      status: hasActualLineup ? "partial" : "unavailable",
       sourceLabel: source.label,
       sourceUrl: source.url,
       verifiedAt: source.verifiedAt,
       predictedStarterCount: 0,
-      actualStarterCount: sanitizedActualLineup?.starters.length ?? 0,
+      actualStarterCount: hasActualLineup ? actualStarterCount : 0,
       matchedStarterCount: 0,
       hitRate: null,
       matchedPlayers: [],
       missedPlayers: [],
-      unexpectedStarters: sanitizedActualLineup?.starters.map((player) => player.name) ?? [],
-      actualStarters: sanitizedActualLineup?.starters.map((player) => player.name) ?? [],
-      actualSubstitutes: sanitizedActualLineup?.substitutes.map((player) => player.name) ?? [],
+      unexpectedStarters: hasActualLineup ? actualStarterNames : [],
+      actualStarters: hasActualLineup ? actualStarterNames : [],
+      actualSubstitutes: hasActualLineup ? actualSubstituteNames : [],
       playerResults: [],
       summary: `${projection.teamName} 没有可验证的推算首发，阵容因子不能参与验证。`,
       reasons: ["模型没有该队推算球员池，不能拿空名单计算命中率。"]
@@ -131,18 +137,38 @@ function validateTeamLineup(
     };
   }
 
-  const actualStarters = new Map(sanitizedActualLineup.starters.map((player) => [normalizePlayerName(player.name), player.name]));
-  const actualSubstitutes = new Map(sanitizedActualLineup.substitutes.map((player) => [normalizePlayerName(player.name), player.name]));
+  const usableActualStarters = sanitizedActualLineup.starters.filter((player) => hasUsablePlayerName(player.name));
+  const usableActualSubstitutes = sanitizedActualLineup.substitutes.filter((player) => hasUsablePlayerName(player.name));
+  const actualStarters = new Map(usableActualStarters.map((player) => [normalizePlayerName(player.name), player.name]));
+  const actualSubstitutes = new Map(usableActualSubstitutes.map((player) => [normalizePlayerName(player.name), player.name]));
   const actualStarterNames = sanitizedActualLineup.starters.map((player) => player.name);
   const actualSubstituteNames = sanitizedActualLineup.substitutes.map((player) => player.name);
   const playerResults = projection.starters.map((player) => validatePlayer(player, actualStarters, actualSubstitutes));
   const matchedPlayers = playerResults.filter((player) => player.matched).map((player) => player.name);
-  const missedPlayers = playerResults.filter((player) => !player.matched).map((player) => player.name);
   const predictedNames = new Set(projection.starters.map((player) => normalizePlayerName(player.name)));
-  const unexpectedStarters = sanitizedActualLineup.starters
+  const unexpectedStarters = usableActualStarters
     .filter((player) => !predictedNames.has(normalizePlayerName(player.name)))
     .map((player) => player.name);
-  const hitRate = projection.starters.length ? round4(matchedPlayers.length / projection.starters.length) : null;
+
+  const isPartialActualLineup = usableActualStarters.length < projection.starters.length;
+  const validationStarterCount = isPartialActualLineup ? usableActualStarters.length : projection.starters.length;
+  const missedPlayers = isPartialActualLineup
+    ? []
+    : playerResults.filter((player) => !player.matched).map((player) => player.name);
+  const hitRate = validationStarterCount ? round4(matchedPlayers.length / validationStarterCount) : null;
+  const reasons = buildTeamReasons(hitRate, missedPlayers, unexpectedStarters);
+
+  if (usableActualStarters.length < sanitizedActualLineup.starters.length) {
+    reasons.push(
+      `${projection.teamName} 的数据源返回了 ${sanitizedActualLineup.starters.length} 个首发位置，其中 ${usableActualStarters.length} 个有可验证姓名；空名位置只作为数据缺口展示，不参与命中率计算。`
+    );
+  }
+
+  if (isPartialActualLineup) {
+    reasons.push(
+      `${projection.teamName} 当前只拿到 ${usableActualStarters.length} 个可验证真实首发姓名，本次命中率按真实返回姓名计算，未返回姓名不会算作推算失败。`
+    );
+  }
 
   return {
     teamId: projection.teamId,
@@ -151,8 +177,8 @@ function validateTeamLineup(
     sourceLabel: source.label,
     sourceUrl: source.url,
     verifiedAt: source.verifiedAt,
-    predictedStarterCount: projection.starters.length,
-    actualStarterCount: sanitizedActualLineup.starters.length,
+    predictedStarterCount: validationStarterCount,
+    actualStarterCount: usableActualStarters.length,
     matchedStarterCount: matchedPlayers.length,
     hitRate,
     matchedPlayers,
@@ -164,23 +190,48 @@ function validateTeamLineup(
     summary:
       hitRate === null
         ? `${projection.teamName} 阵容验证样本不足。`
-        : `${projection.teamName} 推算首发命中 ${matchedPlayers.length}/${projection.starters.length}，命中率 ${Math.round(hitRate * 100)}%。`,
-    reasons: buildTeamReasons(hitRate, missedPlayers, unexpectedStarters)
+        : `${projection.teamName} 推算首发命中 ${matchedPlayers.length}/${validationStarterCount}，命中率 ${Math.round(hitRate * 100)}%。`,
+    reasons
   };
 }
 
 function sanitizeActualLineup(lineup: TeamRecordLineup | null): TeamRecordLineup | null {
   if (!lineup) return null;
 
-  const starters = sanitizePlayers(lineup.starters);
+  const starters = normalizePlayersKeepingSlots(lineup.starters);
   const substitutes = sanitizePlayers(lineup.substitutes);
-  if (starters.length < minimumCredibleStarterCount) return null;
+  const usableStarterCount = starters.filter((player) => hasUsablePlayerName(player.name)).length;
+  if (lineup.starters.length < minimumCredibleStarterCount) return null;
+  if (usableStarterCount < minimumUsableStarterNames) return null;
 
   return {
     ...lineup,
     starters,
     substitutes
   };
+}
+
+function normalizePlayersKeepingSlots(players: TeamRecordLineup["starters"]): TeamRecordLineup["starters"] {
+  const seen = new Set<string>();
+  return players.slice(0, minimumCredibleStarterCount).map((player, index) => {
+    if (!hasUsablePlayerName(player.name)) {
+      return {
+        ...player,
+        number: player.number || index + 1,
+        name: player.number ? `${player.number}号球员（数据源未返回姓名）` : `第${index + 1}位球员（数据源未返回姓名）`
+      };
+    }
+
+    const key = basicNormalizeName(player.name);
+    if (seen.has(key)) {
+      return {
+        ...player,
+        name: player.number ? `${player.number}号球员（数据源重复姓名）` : `第${index + 1}位球员（数据源重复姓名）`
+      };
+    }
+    seen.add(key);
+    return player;
+  });
 }
 
 function sanitizePlayers(players: TeamRecordLineup["starters"]): TeamRecordLineup["starters"] {
@@ -201,10 +252,19 @@ function hasUsablePlayerName(value: string | undefined): boolean {
     "未知球员",
     "待补中文球员",
     "未接入中文名",
+    "未知球员",
+    "待补中文球员",
+    "未接入中文名",
+    "数据源未返回姓名",
+    "数据源重复姓名",
+    "占位",
     "unknown",
     "unknown player",
+    "placeholder",
     "tbd",
-    "待定球员"
+    "待定球员",
+    "数据源未返回姓名",
+    "数据源重复姓名"
   ].some((placeholder) => normalized.includes(placeholder));
 }
 
@@ -246,7 +306,7 @@ function playerNote(status: LineupActualStatus): string {
 
 function overallStatus(home: TeamLineupValidation["status"], away: TeamLineupValidation["status"]): MatchLineupValidation["status"] {
   if (home === "verified" && away === "verified") return "verified";
-  if (home === "verified" || away === "verified") return "partial";
+  if (home === "verified" || away === "verified" || home === "partial" || away === "partial") return "partial";
   if (home === "unavailable" && away === "unavailable") return "unavailable";
   return "pending";
 }

@@ -1,21 +1,28 @@
 import { Router } from "express";
 
 import { ApiError } from "../middleware/errorHandler.js";
-import type { LineupValidationProviderAttempt, Match, MatchEvent, MatchStatus } from "../models.js";
+import type { LineupValidationProviderAttempt, Match, MatchStatus } from "../models.js";
 import { matchRepository } from "../repositories/matchRepository.js";
 import {
+  buildExternalFixtureFromMatch,
   describeExternalMatchDetailSources,
   fetchExternalMatchDetail,
-  fetchExternalMatchDetailWithDiagnostics
+  fetchExternalMatchDetailWithDiagnostics,
+  mergeExternalMatchEvents
 } from "../services/externalMatchDetailProvider.js";
-import type { ExternalDetailFixture } from "../services/espnMatchDetailProvider.js";
 import { buildMatchLineupProjection } from "../services/lineupProjectionService.js";
 import { buildLineupValidation } from "../services/lineupValidationService.js";
+import { syncTournamentScoresOnce } from "../services/liveSimulator.js";
+import { filterDisplayableMatches } from "../services/matchDisplayPolicy.js";
 import { isFutureScheduledPredictionTarget, predictionService } from "../services/predictionService.js";
 import { buildTeamRecordComparison, buildTeamRecordMatchDetail } from "../services/teamRecordService.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const matchesRouter = Router();
+
+let lastScoreRefreshAt = 0;
+const scoreRefreshTtlMs = 30_000;
+const staleStartedGraceMs = 10 * 60 * 1000;
 
 matchesRouter.get(
   "/",
@@ -23,8 +30,9 @@ matchesRouter.get(
     const status = parseStatus(req.query.status);
     const competition = typeof req.query.competition === "string" ? req.query.competition : undefined;
     const period = parsePeriod(req.query.period);
-    const matches = await matchRepository.findMatches({ status, competition, period });
-    const data = await predictionService.enrichMatches(matches);
+    await ensureScoresFreshForStartedMatches();
+    const matches = await matchRepository.findMatches({ status, competition, period, displayable: true });
+    const data = await predictionService.enrichMatches(filterDisplayableMatches(matches));
 
     res.json({ data });
   })
@@ -33,6 +41,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/live",
   asyncHandler(async (_req, res) => {
+    await ensureScoresFreshForStartedMatches();
     const matches = await matchRepository.findMatches({ status: ["live", "halftime"] });
     const data = await predictionService.enrichMatches(matches);
     res.json({ data, refreshSeconds: 30 });
@@ -42,7 +51,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const prediction = await predictionService.getPrediction(match);
@@ -53,15 +62,15 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id/events",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const storedEvents = await matchRepository.findEvents(req.params.id);
     const externalDetail =
       match.status === "scheduled" && new Date(match.startTime).getTime() - Date.now() > 2 * 60 * 60 * 1000
         ? null
-        : await withTimeout(fetchExternalMatchDetail(buildExternalFixture(match)), 4_000);
-    const events = mergeMatchEvents(storedEvents, externalDetail?.events ?? []);
+        : await withTimeout(fetchExternalMatchDetail(buildExternalFixtureFromMatch(match)), 4_000);
+    const events = mergeExternalMatchEvents(storedEvents, externalDetail?.events ?? []);
     res.json({ data: events });
   })
 );
@@ -69,7 +78,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id/team-records",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const data = await buildTeamRecordComparison(match);
@@ -80,7 +89,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id/team-records/:recordMatchId",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const data = await buildTeamRecordMatchDetail(match, req.params.recordMatchId);
@@ -93,7 +102,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id/trend",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const data = await matchRepository.buildTrend(req.params.id);
@@ -104,7 +113,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id/prediction",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const prediction = await predictionService.getPrediction(match);
@@ -115,7 +124,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id/projected-lineup",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     res.json({ data: buildMatchLineupProjection(match) });
@@ -125,7 +134,7 @@ matchesRouter.get(
 matchesRouter.get(
   "/:id/lineup-validation",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const data = await buildLineupValidationResponse(match, false);
@@ -136,7 +145,7 @@ matchesRouter.get(
 matchesRouter.post(
   "/:id/lineup-validation/refresh",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
 
     const data = await buildLineupValidationResponse(match, true);
@@ -147,7 +156,7 @@ matchesRouter.post(
 matchesRouter.post(
   "/:id/recalculate",
   asyncHandler(async (req, res) => {
-    const match = await matchRepository.findById(req.params.id);
+    const match = await findMatchAfterScoreRefresh(req.params.id);
     if (!match) throw new ApiError(404, "Match not found", "match_not_found");
     if (match.status === "finished") {
       throw new ApiError(
@@ -169,6 +178,37 @@ matchesRouter.post(
   })
 );
 
+async function ensureScoresFreshForStartedMatches(): Promise<void> {
+  const now = Date.now();
+  if (now - lastScoreRefreshAt < scoreRefreshTtlMs) return;
+
+  const matches = await matchRepository.findMatches();
+  if (!matches.some(shouldRefreshFromScoreboard)) return;
+
+  lastScoreRefreshAt = now;
+  await syncTournamentScoresOnce();
+}
+
+async function findMatchAfterScoreRefresh(id: string): Promise<Match | null> {
+  let match = await matchRepository.findById(id);
+  if (!match || !shouldRefreshFromScoreboard(match)) return match;
+
+  const now = Date.now();
+  if (now - lastScoreRefreshAt >= scoreRefreshTtlMs) {
+    lastScoreRefreshAt = now;
+    await syncTournamentScoresOnce();
+    match = await matchRepository.findById(id);
+  }
+
+  return match;
+}
+
+function shouldRefreshFromScoreboard(match: Match): boolean {
+  if (match.status === "finished") return false;
+  const startTime = new Date(match.startTime).getTime();
+  return Number.isFinite(startTime) && startTime <= Date.now() - staleStartedGraceMs;
+}
+
 async function buildLineupValidationResponse(match: Match, forceRefresh: boolean) {
   const projection = buildMatchLineupProjection(match);
   const skipForPreMatchWindow =
@@ -185,7 +225,10 @@ async function buildLineupValidationResponse(match: Match, forceRefresh: boolean
 
   const diagnostics = skipForPreMatchWindow
     ? { detail: null, attempts: skippedAttempts }
-    : await withTimeout(fetchExternalMatchDetailWithDiagnostics(buildExternalFixture(match)), 6_000);
+    : await withTimeout(
+        fetchExternalMatchDetailWithDiagnostics(buildExternalFixtureFromMatch(match), { requireCredibleLineup: true }),
+        6_000
+      );
   const attempts = diagnostics?.attempts.length
     ? diagnostics.attempts
     : [
@@ -223,18 +266,6 @@ async function buildLineupValidationResponse(match: Match, forceRefresh: boolean
   );
 }
 
-function buildExternalFixture(match: Match): ExternalDetailFixture {
-  return {
-    id: match.id,
-    startTime: match.startTime,
-    homeTeam: match.homeTeam,
-    awayTeam: match.awayTeam,
-    homeScore: match.homeScore,
-    awayScore: match.awayScore,
-    externalLeague: "fifa.world"
-  };
-}
-
 function summarizeAttempts(attempts: LineupValidationProviderAttempt[]): string {
   return attempts.map((attempt) => `${attempt.label}：${attempt.reason}`).join("；");
 }
@@ -263,12 +294,4 @@ async function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T
   } finally {
     if (timeout) clearTimeout(timeout);
   }
-}
-
-function mergeMatchEvents(storedEvents: MatchEvent[], externalEvents: MatchEvent[]): MatchEvent[] {
-  const byKey = new Map<string, MatchEvent>();
-  for (const event of [...storedEvents, ...externalEvents]) {
-    byKey.set(`${event.minute}:${event.type}:${event.team}:${event.player}`, event);
-  }
-  return Array.from(byKey.values()).sort((a, b) => a.minute - b.minute || a.id - b.id);
 }

@@ -17,19 +17,26 @@ import { matchRepository } from "../repositories/matchRepository.js";
 import { buildLineupImpactSignal, buildMatchLineupProjection } from "./lineupProjectionService.js";
 import { buildPredictionEvaluation, buildPredictionLiveReview } from "./predictionEvaluation.js";
 import { buildPredictionExplanation } from "./predictionExplanation.js";
+import {
+  buildExternalFixtureFromMatch,
+  fetchExternalMatchDetail,
+  mergeExternalMatchEvents
+} from "./externalMatchDetailProvider.js";
+import { buildExactScoreDistribution, poissonOutcomeProbabilities } from "./exactScorePoisson.js";
 import { buildPreMatchContextSignal } from "./preMatchContextService.js";
 import { buildPostMatchCalibration } from "./postMatchCalibrationService.js";
 import { buildTeamRecordComparison } from "./teamRecordService.js";
+import { attachWorldCupScoreEnhancement } from "./worldCupScoreEnhancer.js";
 import { buildWorldCupFactors, type TeamTournamentFactors, type WorldCupFactors } from "./worldCupFactors.js";
 
-export const LOCAL_MODEL_VERSION = "poisson-worldcup-90min-prematch-context-v23";
+export const LOCAL_MODEL_VERSION = "poisson-elo-fifa-prior-distribution-v2";
 const AI_MODEL_VERSION = "worldcup-90min-lightgbm-elo-poisson-causal-v8";
 const DEFAULT_DIXON_COLES_RHO = -0.1;
 
 export const PREDICTION_MODEL_INFO = {
   name: "世界杯九十分钟因果融合模型",
-  version: "第十六版",
-  type: "赛前大数据推算、等级分模型、泊松比分矩阵和世界杯上下文规则校准",
+  version: "第十七版",
+  type: "赛前大数据推算、等级分模型、泊松比分矩阵、世界杯历史画像后处理和世界杯上下文规则校准",
   description:
     "只推算90分钟比赛结果（包含裁判加计的伤停补时），不计入加时赛与点球大战。第十六版禁止使用实时比分、分钟和本场赛果作为比分输入：小组赛按赛前因果快照处理，淘汰赛才使用已经发生的小组赛表现；同时把开赛前已结束的本年世界杯赛果、公开赛事数据源已完赛国际友谊赛、赛前气候/温度、休息旅行、赛程阶段压力、非官方推算首发和赛后错题本校准作为赛前可用特征。新版本把平局保护被打穿、强队零封假设被打破、大比分幅度高估/低估拆成独立误差信号，只影响后续未开赛比赛，不回写已结束预测。",
   dimensions: [
@@ -50,7 +57,8 @@ export const PREDICTION_MODEL_INFO = {
     "休息差、旅行消耗和主办地环境",
     "推算首发/球星影响因子（非官方阵容，低权重校准）",
     "赛后误差错题本校准（只影响后续未开赛比赛）",
-    "平局陷阱、零封假设和大比分幅度误差的因果校准"
+    "平局陷阱、零封假设和大比分幅度误差的因果校准",
+    "世界杯历史90分钟比分画像后处理"
   ]
 };
 
@@ -148,6 +156,13 @@ export class PredictionService {
     const force = options.force ?? false;
     const detail = options.detail ?? true;
     const cacheKey = `prediction:${match.id}`;
+
+    if (match.status === "finished" && !detail) {
+      const frozenPrediction = isCausalPredictionSnapshot(match, match.prediction) ? match.prediction : undefined;
+      const prediction = frozenPrediction ?? (config.demoMode ? reconstructDemoPreMatchPrediction(match) : undefined);
+      return prediction ? withFinishedListContext(match, prediction) : undefined;
+    }
+
     const factors = buildWorldCupFactors(match);
     const postMatchCalibration =
       match.status === "finished"
@@ -284,18 +299,31 @@ export class PredictionService {
       throw new Error("智能推算服务响应缺少主队或客队概率");
     }
 
+    const [normalizedHome, normalizedDraw, normalizedAway] = normalize([homeWinProb, parsed.draw_prob, awayWinProb]);
+    const poissonOutcome = poissonOutcomeProbabilities(parsed.expected_home_goals, parsed.expected_away_goals);
+    const exactScore = buildExactScoreDistribution({
+      homeLambda: parsed.expected_home_goals,
+      awayLambda: parsed.expected_away_goals,
+      homeElo: fifaToElo(match.homeTeam.fifaRating),
+      awayElo: fifaToElo(match.awayTeam.fifaRating),
+      stage: match.competition,
+      calibratedOutcome: { home: normalizedHome, draw: normalizedDraw, away: normalizedAway },
+      poissonOutcome
+    });
+
     return {
       matchId: parsed.match_id ?? match.id,
-      homeWinProb,
-      drawProb: parsed.draw_prob,
-      awayWinProb,
-      topScores: parsed.top_scores.slice(0, 3),
-      gameStyle: parsed.game_style,
+      homeWinProb: round4(exactScore.outcome.home),
+      drawProb: round4(exactScore.outcome.draw),
+      awayWinProb: round4(exactScore.outcome.away),
+      topScores: exactScore.top3Scores,
+      scoreProbabilityMatrix: exactScore.probabilityMatrix,
+      gameStyle: classifyStyle(exactScore.expectedGoalsHome + exactScore.expectedGoalsAway) ?? parsed.game_style,
       upsetRisk: parsed.upset_risk,
-      expectedHomeGoals: parsed.expected_home_goals,
-      expectedAwayGoals: parsed.expected_away_goals,
+      expectedHomeGoals: round2(exactScore.expectedGoalsHome),
+      expectedAwayGoals: round2(exactScore.expectedGoalsAway),
       generatedAt: parsed.generated_at ?? new Date().toISOString(),
-      modelVersion: parsed.model_version ?? AI_MODEL_VERSION
+      modelVersion: LOCAL_MODEL_VERSION
     };
   }
 }
@@ -321,28 +349,30 @@ function predictionRefreshEligibility(
   return { allowed: true };
 }
 
-function withExplanation(
+async function withExplanation(
   match: Match,
   prediction: Prediction,
   factors: WorldCupFactors,
   recordComparison?: TeamRecordComparison
-): Prediction {
+): Promise<Prediction> {
   const lineupProjection = prediction.lineupProjection ?? buildMatchLineupProjection(match);
   const predictionWithLineup = {
     ...prediction,
     lineupProjection,
     preMatchContext: prediction.preMatchContext ?? buildPreMatchContextSignal(match, factors, lineupProjection)
   };
+  const enhancedPrediction = attachWorldCupScoreEnhancement(match, predictionWithLineup);
+  const evaluation = await buildEvaluationWithEvents(match, enhancedPrediction);
 
   return {
-    ...predictionWithLineup,
-    explanation: buildPredictionExplanation(match, predictionWithLineup, factors, recordComparison),
-    liveReview: prediction.liveReview ?? buildPredictionLiveReview(match, predictionWithLineup),
-    evaluation: buildPredictionEvaluation(match, predictionWithLineup) ?? prediction.evaluation
+    ...enhancedPrediction,
+    explanation: buildPredictionExplanation(match, enhancedPrediction, factors, recordComparison),
+    liveReview: prediction.liveReview ?? buildPredictionLiveReview(match, enhancedPrediction),
+    evaluation: evaluation ?? (match.status === "finished" ? undefined : enhancedPrediction.evaluation)
   };
 }
 
-function withListContext(match: Match, prediction: Prediction): Prediction {
+async function withListContext(match: Match, prediction: Prediction): Promise<Prediction> {
   const lineupProjection = prediction.lineupProjection ?? buildMatchLineupProjection(match);
   const factors = buildWorldCupFactors(match);
   const predictionWithLineup = {
@@ -350,12 +380,54 @@ function withListContext(match: Match, prediction: Prediction): Prediction {
     lineupProjection,
     preMatchContext: prediction.preMatchContext ?? buildPreMatchContextSignal(match, factors, lineupProjection)
   };
+  const enhancedPrediction = attachWorldCupScoreEnhancement(match, predictionWithLineup);
+  const evaluation = buildPredictionEvaluation(match, enhancedPrediction);
 
   return {
-    ...predictionWithLineup,
-    liveReview: prediction.liveReview ?? buildPredictionLiveReview(match, predictionWithLineup),
-    evaluation: buildPredictionEvaluation(match, predictionWithLineup) ?? prediction.evaluation
+    ...enhancedPrediction,
+    liveReview: prediction.liveReview ?? buildPredictionLiveReview(match, enhancedPrediction),
+    evaluation: evaluation ?? (match.status === "finished" ? undefined : enhancedPrediction.evaluation)
   };
+}
+
+function withFinishedListContext(match: Match, prediction: Prediction): Prediction {
+  const evaluation = buildPredictionEvaluation(match, prediction);
+
+  return {
+    ...prediction,
+    liveReview: prediction.liveReview ?? buildPredictionLiveReview(match, prediction),
+    evaluation: evaluation ?? prediction.evaluation
+  };
+}
+
+async function buildEvaluationWithEvents(match: Match, prediction: Prediction): Promise<Prediction["evaluation"]> {
+  if (match.status !== "finished") {
+    return buildPredictionEvaluation(match, prediction);
+  }
+
+  const storedEvents = await matchRepository.findEvents(match.id).catch(() => []);
+  const externalDetail = await withEvaluationTimeout(fetchExternalMatchDetail(buildExternalFixtureFromMatch(match)), 4_000);
+  const events = mergeExternalMatchEvents(storedEvents, externalDetail?.events ?? []);
+
+  return buildPredictionEvaluation(match, prediction, events, {
+    stats: externalDetail?.stats ?? null,
+    sourceLabel: externalDetail?.sourceLabel,
+    sourceUrl: externalDetail?.sourceUrl
+  });
+}
+
+async function withEvaluationTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T | null> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise.catch(() => null),
+      new Promise<null>((resolve) => {
+        timeout = setTimeout(() => resolve(null), timeoutMs);
+      })
+    ]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
 }
 
 function isCausalPredictionSnapshot(match: Match, prediction: Prediction | undefined | null): prediction is Prediction {
@@ -370,6 +442,7 @@ function hasCurrentCalibrationSignature(
   calibration: PostMatchCalibration | undefined
 ): boolean {
   if (!prediction) return false;
+  if (prediction.modelVersion === LOCAL_MODEL_VERSION && (prediction.scoreProbabilityMatrix?.length ?? 0) < 36) return false;
   if (!calibration) return !prediction.postMatchCalibration;
   return prediction.postMatchCalibration?.sampleSignature === calibration.sampleSignature;
 }
@@ -560,8 +633,7 @@ export function calculateLocalPrediction(
     awayStrength,
     postMatchCalibration
   );
-  const dixonColesRhoValue = dixonColesRho(homeExpectedGoals, awayExpectedGoals, factors, postMatchCalibration);
-  const poissonOutcome = outcomeProbabilities(homeExpectedGoals, awayExpectedGoals, dixonColesRhoValue);
+  const poissonOutcome = poissonOutcomeProbabilities(homeExpectedGoals, awayExpectedGoals);
   const priorOutcome = strengthOutcomePrior(homeStrength, awayStrength, factors);
   const rawOutcome = normalize([
     poissonOutcome.home * 0.74 + priorOutcome.home * 0.26,
@@ -575,7 +647,18 @@ export function calculateLocalPrediction(
     postMatchCalibration
   );
   const contextualOutcome = calibrateOutcomeForPreMatchContext(calibratedOutcome, preMatchContext);
-  const { home: homeWinProb, draw: drawProb, away: awayWinProb } = contextualOutcome;
+  const exactScore = buildExactScoreDistribution({
+    homeLambda: homeExpectedGoals,
+    awayLambda: awayExpectedGoals,
+    homeElo: fifaToElo(match.homeTeam.fifaRating),
+    awayElo: fifaToElo(match.awayTeam.fifaRating),
+    stage: match.competition,
+    isHome: factors.home.hostAdvantage > 0,
+    calibratedOutcome: contextualOutcome,
+    poissonOutcome,
+    scoreAdjuster: (score) => postMatchScoreCalibrationMultiplier(score, contextualOutcome, postMatchCalibration)
+  });
+  const { home: homeWinProb, draw: drawProb, away: awayWinProb } = exactScore.outcome;
   const upsetRisk = classifyUpsetRisk(match, homeStrength, awayStrength, homeWinProb, awayWinProb, factors);
 
   return {
@@ -583,19 +666,12 @@ export function calculateLocalPrediction(
     homeWinProb: round4(homeWinProb),
     drawProb: round4(drawProb),
     awayWinProb: round4(awayWinProb),
-    topScores: topScores(
-      homeExpectedGoals,
-      awayExpectedGoals,
-      contextualOutcome,
-      poissonOutcome,
-      factors,
-      postMatchCalibration,
-      dixonColesRhoValue
-    ),
-    gameStyle: classifyStyle(homeExpectedGoals + awayExpectedGoals),
+    topScores: exactScore.top3Scores,
+    scoreProbabilityMatrix: exactScore.probabilityMatrix,
+    gameStyle: classifyStyle(exactScore.expectedGoalsHome + exactScore.expectedGoalsAway),
     upsetRisk,
-    expectedHomeGoals: round2(homeExpectedGoals),
-    expectedAwayGoals: round2(awayExpectedGoals),
+    expectedHomeGoals: round2(exactScore.expectedGoalsHome),
+    expectedAwayGoals: round2(exactScore.expectedGoalsAway),
     generatedAt: new Date().toISOString(),
     modelVersion: LOCAL_MODEL_VERSION,
     lineupProjection,
@@ -715,11 +791,11 @@ function expectedGoals(
   const strengthFactor = clamp(1 + (attackStrength - defenseStrength) / 155, 0.78, 1.30);
   const pressureFactor = worldCupFactors.isKnockout ? 1 - attackFactors.knockoutPressure * 0.045 : 1.02;
   const venueFactor = 1 + attackFactors.hostAdvantage * 0.10;
-  const stageGoalFactor = worldCupFactors.isKnockout ? 0.91 : 1.02;
+  const stageGoalFactor = worldCupFactors.isKnockout ? 0.95 : 1.02;
   const underdogConversionFactor =
     attackStrength < defenseStrength
-      ? 1 - clamp((defenseStrength - attackStrength) / 180, 0, 0.13)
-      : 1 + clamp((attackStrength - defenseStrength) / 260, 0, 0.05);
+      ? 1 - clamp((defenseStrength - attackStrength) / 210, 0, 0.08)
+      : 1 + clamp((attackStrength - defenseStrength) / 245, 0, 0.07);
   const defensiveResistance =
     1 -
     clamp(
@@ -730,7 +806,7 @@ function expectedGoals(
       0.12
     );
   const knockoutConservatism = worldCupFactors.isKnockout
-    ? 1 - worldCupFactors.extraTimeRisk * 0.10 - defenseFactors.knockoutPressure * 0.035
+    ? 1 - worldCupFactors.extraTimeRisk * 0.07 - defenseFactors.knockoutPressure * 0.025
     : 1;
 
   return clamp(
@@ -837,19 +913,11 @@ function favoriteSideForGoalCalibration(
 
 function strengthOutcomePrior(homeStrength: number, awayStrength: number, worldCupFactors: WorldCupFactors) {
   const diff = homeStrength - awayStrength;
-  // This draw prior is for the score after 90 minutes plus stoppage time. Extra time and penalties are not modelled.
-  const drawBase = worldCupFactors.isKnockout ? 0.15 + worldCupFactors.extraTimeRisk * 0.20 : 0.10;
-  const [home, draw, away] = softmax([diff / 9 + 0.16, drawBase - Math.abs(diff) / 25, -diff / 9]);
-  return { home, draw, away };
-}
-
-function outcomeProbabilities(homeLambda: number, awayLambda: number, rho = DEFAULT_DIXON_COLES_RHO) {
-  const matrix = calculateDixonColesScoreMatrix(homeLambda, awayLambda, 7, rho);
-  const total = matrix.reduce((sum, item) => sum + item.probability, 0);
-  const home = matrix.filter((item) => item.homeGoals > item.awayGoals).reduce((sum, item) => sum + item.probability, 0) / total;
-  const draw = matrix.filter((item) => item.homeGoals === item.awayGoals).reduce((sum, item) => sum + item.probability, 0) / total;
-  const away = matrix.filter((item) => item.homeGoals < item.awayGoals).reduce((sum, item) => sum + item.probability, 0) / total;
-  return { home, draw, away };
+  const drawBase = worldCupFactors.isKnockout ? 0.22 + worldCupFactors.extraTimeRisk * 0.10 : 0.18;
+  const draw = clamp(drawBase - Math.min(Math.abs(diff), 9) * 0.010, 0.10, 0.30);
+  const homeShare = clamp(0.5 + diff / 18, 0.16, 0.84);
+  const nonDraw = 1 - draw;
+  return { home: nonDraw * homeShare, draw, away: nonDraw * (1 - homeShare) };
 }
 
 function calibrateOutcomeForTournament(
@@ -998,10 +1066,10 @@ function calibrateOutcomeByPostMatchErrors(
   const breakthroughRate =
     favoriteBreakthrough * 0.10 +
     marginUnderestimate * 0.02 +
-    drawTrapBreakthrough * 0.13 +
-    drawTrapMarginUnderestimate * 0.018;
-  if (breakthroughRate > 0 && favoriteGap >= 0.03) {
-    const drawShift = draw * breakthroughRate * clamp(favoriteGap * 2.2, 0.25, 1);
+    drawTrapBreakthrough * 0.18 +
+    drawTrapMarginUnderestimate * 0.022;
+  if (breakthroughRate > 0) {
+    const drawShift = draw * breakthroughRate * clamp(0.30 + favoriteGap * 2.1, 0.30, 1);
     if (favorite === "home") {
       home += drawShift * 1.08;
       away += drawShift * 0.10;
@@ -1042,13 +1110,6 @@ function calibrateOutcomeByPostMatchErrors(
   const [normalizedHome, normalizedDraw, normalizedAway] = normalize([home, Math.max(0.08, draw), away]);
 
   return { home: normalizedHome, draw: normalizedDraw, away: normalizedAway };
-}
-
-function softmax(values: number[]): number[] {
-  const max = Math.max(...values);
-  const exps = values.map((value) => Math.exp(value - max));
-  const total = exps.reduce((sum, value) => sum + value, 0);
-  return exps.map((value) => value / total);
 }
 
 function poisson(k: number, lambda: number): number {
@@ -1116,46 +1177,6 @@ function dixonColesRho(
   if (goalGap > 1.05) rho += 0.025;
 
   return clamp(rho, -0.18, -0.03);
-}
-
-function topScores(
-  homeLambda: number,
-  awayLambda: number,
-  calibratedOutcome?: OutcomeProbability,
-  poissonOutcome?: OutcomeProbability,
-  worldCupFactors?: WorldCupFactors,
-  postMatchCalibration?: PostMatchCalibration,
-  rho = DEFAULT_DIXON_COLES_RHO
-) {
-  const scores = calculateDixonColesScoreMatrix(homeLambda, awayLambda, 7, rho).map((item) => {
-    const direction = scoreDirection(item);
-    let probability = item.probability;
-
-    if (calibratedOutcome && poissonOutcome) {
-      const directionRatio = calibratedOutcome[direction] / Math.max(poissonOutcome[direction], 0.001);
-      probability *= Math.pow(directionRatio, 0.42);
-    }
-
-    if (worldCupFactors?.isKnockout) {
-      const totalGoals = item.homeGoals + item.awayGoals;
-      if (totalGoals >= 5) probability *= 0.84;
-      if (item.homeGoals === item.awayGoals) probability *= 1 + worldCupFactors.extraTimeRisk * 0.18;
-      if (Math.abs(item.homeGoals - item.awayGoals) >= 3) probability *= 0.90;
-    }
-
-    probability *= postMatchScoreCalibrationMultiplier(item, calibratedOutcome, postMatchCalibration);
-
-    return { ...item, probability };
-  });
-  const total = scores.reduce((sum, item) => sum + item.probability, 0);
-
-  return scores
-    .sort((a, b) => b.probability - a.probability)
-    .slice(0, 3)
-    .map((item) => ({
-      score: item.score,
-      probability: round4(item.probability / total)
-    }));
 }
 
 function postMatchScoreCalibrationMultiplier(
@@ -1232,21 +1253,27 @@ function postMatchScoreCalibrationMultiplier(
   }
 
   if (scoreDirectionValue === "draw" && favoriteBreakthrough > 0) {
-    multiplier *= 1 - (favoriteBreakthrough * 0.45 + marginUnderestimate * 0.08) * clamp(favoriteGap * 2, 0.35, 1);
+    multiplier *= 1 - (favoriteBreakthrough * 0.45 + marginUnderestimate * 0.08) * clamp(0.30 + favoriteGap * 2, 0.35, 1);
   }
 
-  if (scoreDirectionValue === "draw" && drawTrapBreakthrough > 0 && favoriteGap >= 0.03) {
-    multiplier *= 1 - (drawTrapBreakthrough * 0.55 + drawTrapMarginUnderestimate * 0.07) * clamp(favoriteGap * 2, 0.25, 1);
+  if (scoreDirectionValue === "draw" && drawTrapBreakthrough > 0) {
+    const lowScoreDrawShape = item.homeGoals === item.awayGoals && item.homeGoals <= 1 ? 1.25 : 0.75;
+    multiplier *=
+      1 -
+      (drawTrapBreakthrough * 0.68 + drawTrapMarginUnderestimate * 0.08) *
+        clamp(0.34 + favoriteGap * 2.1, 0.34, 1) *
+        lowScoreDrawShape;
   }
 
   if (scoreDirectionValue === "draw" && drawProtection > 0) {
     multiplier *= 1 + drawProtection * clamp(1 - favoriteGap, 0.35, 0.90);
   }
 
-  if (scoreDirectionValue === "draw" && favoriteDrawMiss > 0) {
+  const effectiveFavoriteDrawMiss = Math.max(0, favoriteDrawMiss - drawTrapBreakthrough * 0.55 - favoriteBreakthrough * 0.35);
+  if (scoreDirectionValue === "draw" && effectiveFavoriteDrawMiss > 0) {
     const totalGoals = item.homeGoals + item.awayGoals;
     const drawShape = totalGoals <= 4 ? 1 : 0.45;
-    multiplier *= 1 + favoriteDrawMiss * 0.95 * drawShape + marginOverestimate * 0.12 * drawShape;
+    multiplier *= 1 + effectiveFavoriteDrawMiss * 0.95 * drawShape + marginOverestimate * 0.12 * drawShape;
   }
 
   if (scoreDirectionValue !== favorite && scoreDirectionValue !== "draw" && favoriteGap >= 0.22) {

@@ -32,7 +32,7 @@ interface CalibrationSample {
   drawUnderweighted: boolean;
 }
 
-const CALIBRATION_VERSION = "post-match-causal-calibration-v6";
+const CALIBRATION_VERSION = "post-match-causal-calibration-v7";
 const MAX_SAMPLE_COUNT = 12;
 const MIN_SAMPLE_COUNT = 1;
 
@@ -271,12 +271,11 @@ function toCalibrationSample(match: Match, prediction: Prediction): CalibrationS
   const predictedMargin = Math.abs(predictedHomeGoals - predictedAwayGoals);
   const actualWinnerProbability =
     actualDirection === "home" ? prediction.homeWinProb : actualDirection === "away" ? prediction.awayWinProb : prediction.drawProb;
+  const strongDrawSignal = predictedTopDirection === "draw" || prediction.drawProb >= 0.27;
+  const winnerWasLive = actualWinnerProbability >= (actualMargin === 1 ? 0.30 : 0.25);
   const drawTrapBreakthrough =
-    actualDirection !== "draw" &&
-    (predictedTopDirection === "draw" || prediction.drawProb >= 0.27) &&
-    actualMargin >= 2 &&
-    actualWinnerProbability >= 0.25;
-  const drawTrapMarginUnderestimate = drawTrapBreakthrough ? Math.max(0, actualMargin - predictedMargin) : 0;
+    actualDirection !== "draw" && strongDrawSignal && actualMargin >= 1 && winnerWasLive;
+  const drawTrapMarginUnderestimate = drawTrapBreakthrough ? Math.max(0.5, actualMargin - predictedMargin) : 0;
   const favoriteCleanSheetBust =
     Boolean(favoriteDirection) &&
     predictedTopDirection === favoriteDirection &&

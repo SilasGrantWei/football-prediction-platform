@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Match, TeamRecordLineup } from "../src/models.js";
+import { describeLineupQuality } from "../src/services/externalMatchDetailProvider.js";
 import { buildLineupImpactSignal, buildMatchLineupProjection } from "../src/services/lineupProjectionService.js";
 import { buildLineupValidation } from "../src/services/lineupValidationService.js";
 
@@ -164,6 +165,127 @@ describe("lineupProjectionService", () => {
     expect(validation.home.playerResults.every((player) => player.actualStatus === "unknown")).toBe(true);
     expect(validation.home.reasons.join(" ")).toContain("占位");
     expect(validation.summary).toContain("没有真实首发名单");
+  });
+
+  it("does not accept external match details whose starters are only placeholder names", () => {
+    const placeholderPlayers = Array.from({ length: 11 }, (_, index) => ({
+      id: `placeholder-${index}`,
+      name: `${index + 1}号未知球员`,
+      position: "未知",
+      number: index + 1,
+      status: "starter" as const
+    }));
+
+    const quality = describeLineupQuality({
+      source: "espn",
+      sourceLabel: "公开赛事数据源",
+      sourceUrl: "https://example.test/match",
+      verifiedAt: "2026-07-06T00:00:00.000Z",
+      events: [],
+      statistics: null,
+      lineups: {
+        home: {
+          teamId: "brazil",
+          teamName: "巴西",
+          formation: "待定",
+          starters: placeholderPlayers,
+          substitutes: []
+        },
+        away: {
+          teamId: "norway",
+          teamName: "挪威",
+          formation: "待定",
+          starters: placeholderPlayers,
+          substitutes: []
+        }
+      }
+    });
+
+    expect(quality.credible).toBe(false);
+    expect(quality.reason).toContain("占位");
+    expect(quality.reason).toContain("0 人");
+  });
+
+  it("exposes real reported starters even when a team has no projected player pool", () => {
+    const finishedMatch: Match = {
+      ...portugalCroatia,
+      status: "finished",
+      homeScore: 2,
+      awayScore: 1,
+      minute: 90,
+      homeTeam: {
+        ...portugalCroatia.homeTeam,
+        id: "winner_m101",
+        name: "Brazil"
+      },
+      awayTeam: {
+        ...portugalCroatia.awayTeam,
+        id: "winner_m102",
+        name: "Norway"
+      }
+    };
+    const projection = buildMatchLineupProjection(finishedMatch);
+    const actualHome: TeamRecordLineup = {
+      teamId: "winner_m101",
+      teamName: "Brazil",
+      formation: "4-3-3",
+      starters: [
+        "Alisson Becker",
+        "Danilo",
+        "Marquinhos",
+        "Gabriel Magalhaes",
+        "Alex Sandro",
+        "Casemiro",
+        "Bruno Guimaraes",
+        "Lucas Paqueta",
+        "Raphinha",
+        "Richarlison",
+        "Vinicius Junior"
+      ].map((name) => appearance(name)),
+      substitutes: ["Endrick", "Rodrygo"].map((name) => appearance(name, "substitute")),
+      confidence: "reported"
+    };
+    const actualAway: TeamRecordLineup = {
+      teamId: "winner_m102",
+      teamName: "Norway",
+      formation: "4-4-2",
+      starters: [
+        "Orjan Nyland",
+        "Julian Ryerson",
+        "Kristoffer Ajer",
+        "Leo Ostigard",
+        "David Moller Wolfe",
+        "Martin Odegaard",
+        "Sander Berge",
+        "Patrick Berg",
+        "Antonio Nusa",
+        "Erling Haaland",
+        "Alexander Sorloth"
+      ].map((name) => appearance(name)),
+      substitutes: ["Oscar Bobb"].map((name) => appearance(name, "substitute")),
+      confidence: "reported"
+    };
+
+    const validation = buildLineupValidation(
+      finishedMatch,
+      projection,
+      { home: actualHome, away: actualAway },
+      { label: "ESPN public lineup", verifiedAt: "2026-07-06T00:00:00.000Z" }
+    );
+
+    expect(projection.home.starters).toHaveLength(0);
+    expect(projection.away.starters).toHaveLength(0);
+    expect(validation.status).toBe("partial");
+    expect(validation.overallHitRate).toBeNull();
+    expect(validation.home.status).toBe("partial");
+    expect(validation.home.actualStarterCount).toBe(11);
+    expect(validation.home.hitRate).toBeNull();
+    expect(validation.home.actualStarters).toContain("Alisson Becker");
+    expect(validation.home.unexpectedStarters).toContain("Alisson Becker");
+    expect(validation.home.actualSubstitutes).toContain("Endrick");
+    expect(validation.away.status).toBe("partial");
+    expect(validation.away.actualStarterCount).toBe(11);
+    expect(validation.away.actualStarters).toContain("Erling Haaland");
   });
 
   it("has local projected player pools for France and Paraguay", () => {

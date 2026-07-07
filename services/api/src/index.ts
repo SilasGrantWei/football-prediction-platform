@@ -10,6 +10,7 @@ import { getRedis } from "./redis.js";
 import { analyticsRouter } from "./routes/analytics.js";
 import { matchesRouter } from "./routes/matches.js";
 import { oddsRouter } from "./routes/odds.js";
+import { officialRouter } from "./routes/official.js";
 import { simulationRouter } from "./routes/simulation.js";
 import { syncRouter } from "./routes/sync.js";
 import { matchRepository } from "./repositories/matchRepository.js";
@@ -42,8 +43,12 @@ app.get(
       redis: config.demoMode ? "demo" : redis?.isOpen ? "ok" : "degraded",
       aiServiceUrl: config.aiServiceUrl,
       features: {
+        apiFeatureVersion: "2026-07-07-beijing-day-real-bracket-v3",
         lineupValidationDiagnostics: true,
-        lineupValidationRefresh: true
+        lineupValidationRefresh: true,
+        officialTruthLayer: true,
+        exactScorePoissonFifaPrior: true,
+        scoreProbabilityMatrix: true
       }
     });
   })
@@ -54,6 +59,8 @@ app.use("/matches", matchesRouter);
 app.use("/api/analytics", analyticsRouter);
 app.use("/api/odds", oddsRouter);
 app.use("/odds", oddsRouter);
+app.use("/api/official", officialRouter);
+app.use("/official", officialRouter);
 app.use("/api/simulation", simulationRouter);
 app.use("/simulate", simulationRouter);
 app.use("/api/sync", syncRouter);
