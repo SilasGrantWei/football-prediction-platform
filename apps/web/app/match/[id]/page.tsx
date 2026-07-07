@@ -1,5 +1,6 @@
 import { Activity, AlertTriangle, CheckCircle2, Gauge, ShieldCheck } from "lucide-react";
 
+import { BackendRetryPanel } from "@/components/BackendRetryPanel";
 import { EventTimeline } from "@/components/EventTimeline";
 import { MatchRealtimeRefresh } from "@/components/MatchRealtimeRefresh";
 import { OddsComparisonPanel } from "@/components/OddsComparisonPanel";
@@ -13,9 +14,11 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { TeamRecordsPanel } from "@/components/TeamRecordsPanel";
 import { TrendChart } from "@/components/TrendChart";
 import { UpsetBadge } from "@/components/UpsetBadge";
-import { getMatch, getMatchEvents, getMatchLineupValidation, getMatchTeamRecords, getMatchTrend } from "@/lib/api";
+import { WorldCupScoreEnhancementPanel } from "@/components/WorldCupScoreEnhancementPanel";
 import { toChineseDisplay } from "@/lib/chineseDisplay";
+import { formatOfficialKickoffTime } from "@/lib/kickoffDisplay";
 import { getRecalculateState } from "@/lib/predictionRecalculation";
+import { getMatch, getMatchEvents, getMatchLineupValidation, getMatchTeamRecords, getMatchTrend } from "@/lib/serverApi";
 
 export const dynamic = "force-dynamic";
 
@@ -150,6 +153,8 @@ export default async function MatchDetailPage({
         </section>
       ) : null}
 
+      {prediction?.scoreEnhancement ? <WorldCupScoreEnhancementPanel enhancement={prediction.scoreEnhancement} /> : null}
+
       {prediction ? <OddsComparisonPanel matchId={match.id} prediction={prediction} /> : null}
 
       {prediction?.lineupProjection ? <ProjectedLineupPanel projection={prediction.lineupProjection} validation={lineupValidation} /> : null}
@@ -237,12 +242,13 @@ function BackendUnavailable({ matchId }: { matchId: string }) {
     <section className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-900 shadow-panel">
       <div className="mb-3 flex items-center gap-2">
         <AlertTriangle size={20} aria-hidden />
-        <h1 className="text-lg font-semibold">后端数据服务未连接</h1>
+        <h1 className="text-lg font-semibold">后端数据服务暂时不可用</h1>
       </div>
       <p className="text-sm leading-6">
-        当前无法读取比赛 {matchId} 的实时数据。请先启动本地接口服务，然后刷新页面。
+        当前无法读取比赛 {matchId} 的实时数据。页面会自动检测本地 API，服务恢复后会重新加载比赛详情。
       </p>
-      <div className="mt-4 rounded-md bg-white/70 px-3 py-2 text-sm text-amber-950">可使用项目提供的本地启动脚本。</div>
+      <div className="mt-4 rounded-md bg-white/70 px-3 py-2 text-sm text-amber-950">本地启动命令：npm run start:local</div>
+      <BackendRetryPanel matchId={matchId} />
     </section>
   );
 }
@@ -282,12 +288,7 @@ function TeamBlock({
 }
 
 function formatTime(value: string): string {
-  return new Intl.DateTimeFormat("zh-CN", {
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(new Date(value));
+  return formatOfficialKickoffTime(value);
 }
 
 function matchClockLabel(match: Awaited<ReturnType<typeof getMatch>>): string {

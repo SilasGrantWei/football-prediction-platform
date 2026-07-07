@@ -53,7 +53,7 @@ export function EventTimeline({ events, matchStatus }: { events: MatchEvent[]; m
         return (
           <article
             key={`${event.id}-${event.minute}-${event.type}-${event.team}-${event.player}`}
-            className="grid grid-cols-[56px_auto_1fr] gap-3 rounded-lg border border-slate-200 bg-white px-3 py-3"
+            className="perf-row grid grid-cols-[56px_auto_1fr] gap-3 rounded-lg border border-slate-200 bg-white px-3 py-3"
           >
             <span className="score-text text-sm font-bold text-ink">{formatMinute(event.minute)}</span>
             <span className={`flex h-8 w-8 items-center justify-center rounded-full ${style.iconBg}`}>

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { CheckCircle2, Clock3, ShieldAlert, Sparkles, Star, UsersRound, XCircle } from "lucide-react";
 
-import { toChineseDisplay } from "@/lib/chineseDisplay";
+import { toChineseDisplay, toChineseDisplayOrOriginal } from "@/lib/chineseDisplay";
 import { LineupValidationRefreshControl } from "./LineupValidationRefreshControl";
 import type {
   LineupPlayerValidation,
@@ -11,6 +11,8 @@ import type {
   TeamLineupValidation,
   TeamLineupProjection
 } from "@/lib/types";
+
+const minimumDisplayableActualNames = 5;
 
 export function ProjectedLineupPanel({
   projection,
@@ -127,8 +129,8 @@ function TeamProjectionCard({ team, validation }: { team: TeamLineupProjection; 
   const validationByName = new Map(validation?.playerResults.map((result) => [result.name, result]) ?? []);
   const actualStarters = displayableActualNames(validation?.actualStarters);
   const actualSubstitutes = displayableActualNames(validation?.actualSubstitutes);
-  const hasActualLineup = isValidatedStatus(validation?.status) && actualStarters.length >= 11;
-  const rejectedActualDisplay = isValidatedStatus(validation?.status) && !hasActualLineup && Boolean(validation?.actualStarters.length);
+  const hasActualLineup = Boolean(validation && actualStarters.length >= minimumDisplayableActualNames);
+  const rejectedActualDisplay = Boolean(validation?.actualStarters.length) && !hasActualLineup;
 
   return (
     <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
@@ -362,11 +364,7 @@ function validationStatusLabel(status: TeamLineupValidation["status"]): string {
 }
 
 function hasDisplayableActualLineup(validation: TeamLineupValidation): boolean {
-  return isValidatedStatus(validation.status) && displayableActualNames(validation.actualStarters).length >= 11;
-}
-
-function isValidatedStatus(status: TeamLineupValidation["status"] | undefined): boolean {
-  return status === "verified" || status === "partial";
+  return displayableActualNames(validation.actualStarters).length >= minimumDisplayableActualNames;
 }
 
 function displayableActualNames(values: string[] | undefined): string[] {
@@ -382,8 +380,10 @@ function displayableActualNames(values: string[] | undefined): string[] {
 }
 
 function toDisplayableActualName(value: string | undefined): string {
-  const translated = toChineseDisplay(value, "待补中文球员").trim();
-  if (!isUsableActualDisplayName(translated)) return "";
+  const raw = String(value ?? "").trim();
+  if (!isUsableActualDisplayName(raw)) return "";
+  const translated = toChineseDisplayOrOriginal(raw).trim();
+  if (!isUsableActualDisplayName(translated)) return raw;
   return translated;
 }
 
@@ -394,6 +394,16 @@ function isUsableActualDisplayName(value: string): boolean {
     "未知球员",
     "待补中文球员",
     "未接入中文名",
+    "数据源未返回姓名",
+    "数据源重复姓名",
+    "占位",
+    "未知球员",
+    "待补中文球员",
+    "未接入中文名",
+    "数据源未返回姓名",
+    "数据源重复姓名",
+    "占位",
+    "placeholder",
     "unknown",
     "unknown player",
     "tbd",

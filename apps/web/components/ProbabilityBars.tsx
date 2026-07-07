@@ -26,4 +26,3 @@ export function ProbabilityBars({ prediction }: { prediction: Prediction }) {
     </div>
   );
 }
-

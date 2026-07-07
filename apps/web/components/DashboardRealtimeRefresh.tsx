@@ -16,10 +16,10 @@ export function DashboardRealtimeRefresh() {
     let disposed = false;
 
     const refresh = () => {
-      if (!disposed) router.refresh();
+      if (!disposed && document.visibilityState === "visible") router.refresh();
     };
 
-    const timer = window.setInterval(refresh, 15_000);
+    const timer = window.setInterval(refresh, 30_000);
     const socket = new WebSocket(publicWsUrl());
 
     socket.addEventListener("message", (event) => {
@@ -30,8 +30,6 @@ export function DashboardRealtimeRefresh() {
         refresh();
       }
     });
-
-    socket.addEventListener("close", refresh);
 
     return () => {
       disposed = true;

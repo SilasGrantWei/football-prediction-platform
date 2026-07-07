@@ -17,7 +17,7 @@ import { AnalyticsCharts } from "@/components/AnalyticsCharts";
 import { UpsetBadge } from "@/components/UpsetBadge";
 import { getAnalyticsOverview } from "@/lib/api";
 import { toChineseDisplay } from "@/lib/chineseDisplay";
-import type { ModelQualityGate } from "@/lib/types";
+import type { FailureClusterAnalysis, FailureClusterTag, ModelQualityGate } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +26,7 @@ export default async function AnalyticsPage() {
   const evaluation = overview.evaluationSummary;
   const review = overview.failureReview;
   const qualityGate = overview.qualityGate;
+  const failureCluster = review.failureCluster;
 
   return (
     <div className="space-y-6">
@@ -77,6 +78,8 @@ export default async function AnalyticsPage() {
       </section>
 
       <QualityGatePanel qualityGate={qualityGate} />
+
+      <FailureClusterPanel cluster={failureCluster} />
 
       <section className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
@@ -250,6 +253,86 @@ function QualityGatePanel({ qualityGate }: { qualityGate: ModelQualityGate }) {
         </div>
       </div>
     </section>
+  );
+}
+
+function FailureClusterPanel({ cluster }: { cluster: FailureClusterAnalysis }) {
+  return (
+    <section className="rounded-lg border border-red-200 bg-white p-5 shadow-panel">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <AlertTriangle size={18} className="text-red-600" aria-hidden />
+            <h2 className="text-base font-semibold text-ink">最近失败簇归因</h2>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            {toChineseDisplay(cluster.summary, "最近失败样本还没有形成可解释归因。")}
+          </p>
+        </div>
+        <span className="rounded-full bg-red-50 px-3 py-1 text-sm font-bold text-red-700">
+          {cluster.inspectedFailureCount} 场失败样本
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {cluster.tags.length ? (
+            cluster.tags.map((tag) => <FailureClusterTagCard key={tag.key} tag={tag} />)
+          ) : (
+            <EmptyText>暂无可聚类失败原因。</EmptyText>
+          )}
+        </div>
+
+        <div className="rounded-md bg-slate-50 p-4">
+          <div className="text-sm font-semibold text-ink">已经写入下一轮动作</div>
+          <div className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+            {(cluster.recommendedActions.length ? cluster.recommendedActions : ["继续冻结赛前快照，只把结果写入复盘样本。"]).map((action) => (
+              <div key={action}>{toChineseDisplay(action, "失败簇动作未返回中文版本。")}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {cluster.matches.length ? (
+        <div className="mt-4 overflow-hidden rounded-md border border-slate-100">
+          {cluster.matches.slice(0, 8).map((match) => (
+            <Link key={match.id} href={`/match/${match.id}`} className="grid gap-2 border-b border-slate-100 px-4 py-3 last:border-b-0 md:grid-cols-[1fr_auto]">
+              <div>
+                <div className="font-semibold text-ink">{toChineseDisplay(match.title, "比赛")}</div>
+                <div className="mt-1 flex flex-wrap gap-2 text-xs font-semibold text-slate-500">
+                  {match.tags.map((tag) => (
+                    <span key={`${match.id}-${tag.key}`} className="rounded-full bg-slate-100 px-2 py-0.5">
+                      {toChineseDisplay(tag.label, "失败归因")}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="score-text text-sm font-bold text-slate-700 md:text-right">
+                推算 {match.predictedScore} / 实际 {match.actualScore}
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function FailureClusterTagCard({ tag }: { tag: FailureClusterTag }) {
+  const tone = {
+    high: "border-red-200 bg-red-50 text-red-800",
+    medium: "border-amber-200 bg-amber-50 text-amber-800",
+    low: "border-slate-200 bg-slate-50 text-slate-700"
+  }[tag.severity];
+
+  return (
+    <div className={`rounded-md border p-3 ${tone}`}>
+      <div className="flex items-center justify-between gap-3">
+        <div className="text-sm font-bold">{toChineseDisplay(tag.label, "失败归因")}</div>
+        <div className="score-text text-lg font-black">{tag.count}</div>
+      </div>
+      <p className="mt-2 text-xs leading-5">{toChineseDisplay(tag.detail, "归因说明未返回中文版本。")}</p>
+    </div>
   );
 }
 

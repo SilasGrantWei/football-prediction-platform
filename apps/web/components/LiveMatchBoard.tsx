@@ -25,6 +25,8 @@ export function LiveMatchBoard({ initialMatches }: { initialMatches: Match[] }) 
       const nextMatches = await getLiveMatchesClient();
       setMatches(nextMatches);
       setUpdatedAt(new Date().toISOString());
+    } catch {
+      setConnected(false);
     } finally {
       setLoading(false);
     }
@@ -49,8 +51,8 @@ export function LiveMatchBoard({ initialMatches }: { initialMatches: Match[] }) 
     });
 
     const timer = window.setInterval(() => {
-      void refresh();
-    }, 15_000);
+      if (document.visibilityState === "visible") void refresh();
+    }, 30_000);
 
     return () => {
       window.clearInterval(timer);

@@ -3,6 +3,10 @@ import { Target } from "lucide-react";
 import type { ScorePrediction } from "@/lib/types";
 
 export function ScoreTop3({ scores }: { scores: ScorePrediction[] }) {
+  if (!scores.length) {
+    return <div className="rounded-lg border border-dashed border-slate-300 p-4 text-sm text-slate-500">暂无比分候选。</div>;
+  }
+
   return (
     <div className="space-y-2">
       {scores.map((score, index) => (
@@ -15,7 +19,7 @@ export function ScoreTop3({ scores }: { scores: ScorePrediction[] }) {
             <span className="score-text text-sm font-bold text-field">{formatProbability(score.probability)}</span>
           </div>
           <div className="h-2 rounded-full bg-slate-100">
-            <div className="h-2 rounded-full bg-field" style={{ width: `${Math.max(score.probability * 100, 3)}%` }} />
+            <div className="h-2 rounded-full bg-field" style={{ width: `${Math.max(normalizedProbability(score.probability) * 100, 3)}%` }} />
           </div>
         </div>
       ))}
@@ -23,6 +27,11 @@ export function ScoreTop3({ scores }: { scores: ScorePrediction[] }) {
   );
 }
 
+function normalizedProbability(value: number): number {
+  if (!Number.isFinite(value)) return 0;
+  return value > 1 ? value / 100 : value;
+}
+
 function formatProbability(value: number): string {
-  return `${(Math.round(value * 1000) / 10).toFixed(1)}%`;
+  return `${(Math.round(normalizedProbability(value) * 1000) / 10).toFixed(1)}%`;
 }

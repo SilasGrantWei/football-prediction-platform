@@ -23,6 +23,35 @@ export interface ScorePrediction {
   probability: number;
 }
 
+export interface ScoreProbabilityMatrixItem extends ScorePrediction {
+  homeGoals: number;
+  awayGoals: number;
+}
+
+export interface EnhancedScorePrediction {
+  score: string;
+  probability: number;
+  modelProbability?: number;
+  historicalProbability?: number;
+  impliedProbability?: number;
+  edge?: number;
+}
+
+export interface WorldCupScoreEnhancement {
+  rawTop3: EnhancedScorePrediction[];
+  adjustedTop3: EnhancedScorePrediction[];
+  keep: boolean;
+  rejectReasons: string[];
+  mass3: number;
+  entropy3: number;
+  scenarioSpan: number;
+  histBucket: string;
+  histTop3Mass: number;
+  histTop3: EnhancedScorePrediction[];
+  matchScore: number;
+  calibratedTop3Hit: boolean | null;
+}
+
 export interface PredictionFactor {
   name: string;
   homeValue: string;
@@ -55,6 +84,12 @@ export interface PredictionExplanation {
 
 export type PredictionEvaluationStatus = "pending" | "success" | "failed";
 
+export interface PredictionFailureBreakdown {
+  title: string;
+  detail: string;
+  evidence: string[];
+}
+
 export interface PredictionEvaluation {
   status: PredictionEvaluationStatus;
   actualScore: string;
@@ -65,6 +100,9 @@ export interface PredictionEvaluation {
   top3Rank?: number;
   resultHit: boolean;
   conclusion: string;
+  matchSummary?: string[];
+  failureBreakdown?: PredictionFailureBreakdown[];
+  dataGaps?: string[];
   goalError: {
     home: number;
     away: number;
@@ -275,6 +313,7 @@ export interface Prediction {
   drawProb: number;
   awayWinProb: number;
   topScores: ScorePrediction[];
+  scoreProbabilityMatrix?: ScoreProbabilityMatrixItem[];
   gameStyle: GameStyle;
   upsetRisk: UpsetRisk;
   expectedHomeGoals: number;
@@ -283,6 +322,7 @@ export interface Prediction {
   lineupProjection?: MatchLineupProjection;
   preMatchContext?: PreMatchContext;
   postMatchCalibration?: PostMatchCalibration;
+  scoreEnhancement?: WorldCupScoreEnhancement;
   explanation?: PredictionExplanation;
   liveReview?: PredictionLiveReview;
   evaluation?: PredictionEvaluation;
@@ -546,6 +586,43 @@ export interface ModelQualityGate {
   samples: ModelQualitySample[];
 }
 
+export interface FailureClusterTag {
+  key:
+    | "draw_anchor"
+    | "away_breakthrough"
+    | "score_outcome_decoupling"
+    | "favorite_overfit"
+    | "total_goals_underestimated"
+    | "total_goals_overestimated"
+    | "data_gap";
+  label: string;
+  detail: string;
+  count: number;
+  severity: "high" | "medium" | "low";
+  matchIds: string[];
+}
+
+export interface FailureClusterAnalysis {
+  inspectedFailureCount: number;
+  recentFinishedWindowCount: number;
+  summary: string;
+  tags: FailureClusterTag[];
+  matches: Array<{
+    id: string;
+    title: string;
+    kickoffTime: string;
+    actualScore: string;
+    predictedScore: string;
+    resultHit: boolean;
+    top3ScoreHit: boolean;
+    tags: Array<{
+      key: FailureClusterTag["key"];
+      label: string;
+    }>;
+  }>;
+  recommendedActions: string[];
+}
+
 export interface AnalyticsOverview {
   totalMatches: number;
   statusCounts: Array<{ name: MatchStatus; value: number }>;
@@ -585,6 +662,7 @@ export interface AnalyticsOverview {
     scoreOnlyFailures: number;
     topReasons: Array<{ reason: string; count: number }>;
     recommendedActions: string[];
+    failureCluster: FailureClusterAnalysis;
     failedMatches: Array<{
       id: string;
       title: string;

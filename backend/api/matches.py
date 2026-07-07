@@ -5,6 +5,7 @@ from fastapi import APIRouter, Query
 from db import db_connection
 
 router = APIRouter()
+STALE_SCHEDULED_DISPLAY_CUTOFF = "150 minutes"
 
 
 @router.get("/matches")
@@ -15,12 +16,17 @@ async def list_matches(status: str | None = Query(default=None), period: str | N
         if status:
             values.append(status)
             clauses.append("m.status = %s")
+        utc_today_start = "(date_trunc('day', NOW() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC')"
         if period == "today":
-            clauses.append("COALESCE(m.kickoff_time, m.start_time) >= date_trunc('day', NOW())")
-            clauses.append("COALESCE(m.kickoff_time, m.start_time) < date_trunc('day', NOW()) + INTERVAL '1 day'")
+            clauses.append(f"COALESCE(m.kickoff_time, m.start_time) >= {utc_today_start}")
+            clauses.append(f"COALESCE(m.kickoff_time, m.start_time) < {utc_today_start} + INTERVAL '1 day'")
         elif period == "tomorrow":
-            clauses.append("COALESCE(m.kickoff_time, m.start_time) >= date_trunc('day', NOW()) + INTERVAL '1 day'")
-            clauses.append("COALESCE(m.kickoff_time, m.start_time) < date_trunc('day', NOW()) + INTERVAL '2 days'")
+            clauses.append(f"COALESCE(m.kickoff_time, m.start_time) >= {utc_today_start} + INTERVAL '1 day'")
+            clauses.append(f"COALESCE(m.kickoff_time, m.start_time) < {utc_today_start} + INTERVAL '2 days'")
+        clauses.append(
+            "NOT (m.status = 'scheduled' AND COALESCE(m.kickoff_time, m.start_time) < NOW() - %s::interval)"
+        )
+        values.append(STALE_SCHEDULED_DISPLAY_CUTOFF)
         where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
 
         with db_connection() as conn:
@@ -83,7 +89,13 @@ async def live_matches():
                 JOIN teams ht ON ht.id = m.home_team_id
                 JOIN teams at ON at.id = m.away_team_id
                 WHERE m.status IN ('live', 'halftime')
-                   OR m.updated_at >= NOW() - INTERVAL '10 minutes'
+                   OR (
+                     m.updated_at >= NOW() - INTERVAL '10 minutes'
+                     AND NOT (
+                       m.status = 'scheduled'
+                       AND COALESCE(m.kickoff_time, m.start_time) < NOW() - INTERVAL '150 minutes'
+                     )
+                   )
                 ORDER BY COALESCE(m.kickoff_time, m.start_time) ASC
                 """
             ).fetchall()

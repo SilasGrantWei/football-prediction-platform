@@ -10,6 +10,7 @@ import type {
   TrendPoint,
   WorldCupSimulation
 } from "./types";
+import { filterDisplayableMatches } from "./matchDisplayPolicy";
 
 interface ApiEnvelope<T> {
   data: T;
@@ -23,9 +24,15 @@ interface ApiErrorEnvelope {
 }
 
 const serverBaseUrl = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:4000";
+const fallbackServerBaseUrls = unique([
+  serverBaseUrl,
+  process.env.NEXT_PUBLIC_API_BASE_URL,
+  "http://127.0.0.1:4000",
+  "http://localhost:4000"
+]);
 const dataApiBaseUrl = process.env.DATA_API_BASE_URL ?? process.env.NEXT_PUBLIC_DATA_API_BASE_URL ?? "http://localhost:8000";
-const serverRequestTimeoutMs = Number(process.env.API_REQUEST_TIMEOUT_MS ?? 4_500);
-const dataRequestTimeoutMs = Number(process.env.DATA_API_REQUEST_TIMEOUT_MS ?? 4_500);
+const serverRequestTimeoutMs = Number(process.env.API_REQUEST_TIMEOUT_MS ?? 8_000);
+const dataRequestTimeoutMs = Number(process.env.DATA_API_REQUEST_TIMEOUT_MS ?? 1_800);
 
 export function publicApiBaseUrl(): string {
   return process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:4000";
@@ -40,11 +47,11 @@ export function publicDataWsBaseUrl(): string {
 }
 
 export async function getMatches(params: Record<string, string | undefined> = {}): Promise<Match[]> {
-  return request<Match[]>(`/api/matches${toQuery(params)}`);
+  return filterDisplayableMatches(await request<Match[]>(`/api/matches${toQuery(params)}`));
 }
 
 export async function getLiveMatches(): Promise<Match[]> {
-  return request<Match[]>("/api/matches/live");
+  return filterDisplayableMatches(await request<Match[]>("/api/matches/live"));
 }
 
 export async function getMatch(id: string): Promise<Match> {
@@ -84,10 +91,13 @@ export async function getAnalyticsOverview(): Promise<AnalyticsOverview> {
 }
 
 export async function getLiveMatchesClient(): Promise<Match[]> {
-  const response = await fetch(`${publicApiBaseUrl()}/api/matches/live`, { cache: "no-store" });
+  const response = await fetch(`${publicApiBaseUrl()}/api/matches/live`, {
+    cache: "no-store",
+    signal: AbortSignal.timeout(serverRequestTimeoutMs)
+  });
   if (!response.ok) throw new Error(`API returned ${response.status}`);
   const payload = (await response.json()) as ApiEnvelope<Match[]>;
-  return payload.data;
+  return filterDisplayableMatches(payload.data);
 }
 
 export async function getWorldCupSimulation(iterations = 10_000): Promise<WorldCupSimulation> {
@@ -101,16 +111,27 @@ export async function getBacktest(): Promise<BacktestResult> {
 }
 
 async function request<T>(path: string): Promise<T> {
-  const response = await fetch(`${serverBaseUrl}${path}`, {
-    cache: "no-store",
-    signal: AbortSignal.timeout(serverRequestTimeoutMs)
-  });
-  if (!response.ok) {
-    throw new Error(`API ${path} returned ${response.status}`);
+  const errors: string[] = [];
+
+  for (const baseUrl of fallbackServerBaseUrls) {
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        cache: "no-store",
+        signal: AbortSignal.timeout(serverRequestTimeoutMs)
+      });
+      if (!response.ok) {
+        errors.push(`${baseUrl} returned ${response.status}`);
+        continue;
+      }
+
+      const payload = (await response.json()) as ApiEnvelope<T>;
+      return payload.data;
+    } catch (error) {
+      errors.push(`${baseUrl} ${error instanceof Error ? error.message : "request failed"}`);
+    }
   }
 
-  const payload = (await response.json()) as ApiEnvelope<T>;
-  return payload.data;
+  throw new Error(`API ${path} unavailable: ${errors.join("; ")}`);
 }
 
 async function requestDataApi<T>(path: string): Promise<T> {
@@ -154,4 +175,8 @@ function toQuery(params: Record<string, string | undefined>): string {
 
   const query = searchParams.toString();
   return query ? `?${query}` : "";
+}
+
+function unique(values: Array<string | undefined>): string[] {
+  return Array.from(new Set(values.filter((value): value is string => Boolean(value))));
 }
