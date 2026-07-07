@@ -50,7 +50,7 @@ function Test-IncludedPath {
     return $false
   }
 
-  if ($File.Name -like "*.pyc" -or $File.Name -like "*.log" -or $File.Name -like "*.zip") {
+  if ($File.Name -like "*.pyc" -or $File.Name -like "*.log" -or $File.Name -like "*.zip" -or $File.Name -like "*.tsbuildinfo") {
     return $false
   }
 

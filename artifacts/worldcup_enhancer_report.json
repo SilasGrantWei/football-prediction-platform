@@ -1,0 +1,78 @@
+{
+  "status": "ok",
+  "folds": [
+    {
+      "fold": {
+        "train_lte": 2014,
+        "test": 2018
+      },
+      "status": "ok",
+      "matches": 64,
+      "kept_matches": 14,
+      "base_top3_hit": 0.40625,
+      "filtered_top3_hit": 0.42857142857142855,
+      "lift": 0.022321428571428548,
+      "coverage": 0.21875,
+      "combo_3x1_hit": 0.064,
+      "combo_count": 250,
+      "promotion_ready": true,
+      "calibration_table": [
+        {
+          "bucket": ">=0.55",
+          "n": 64,
+          "hit_rate": 0.4375
+        }
+      ]
+    },
+    {
+      "fold": {
+        "train_lte": 2018,
+        "test": 2022
+      },
+      "status": "ok",
+      "matches": 64,
+      "kept_matches": 10,
+      "base_top3_hit": 0.265625,
+      "filtered_top3_hit": 0.2,
+      "lift": -0.06562499999999999,
+      "coverage": 0.15625,
+      "combo_3x1_hit": 0.0,
+      "combo_count": 120,
+      "promotion_ready": false,
+      "calibration_table": [
+        {
+          "bucket": ">=0.55",
+          "n": 64,
+          "hit_rate": 0.1875
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "base_top3_hit": 0.3359375,
+    "filtered_top3_hit": 0.3333333333333333,
+    "coverage": 0.1875,
+    "combo_3x1_hit": 0.032,
+    "lift": -0.002604166666666685
+  },
+  "promotion_gate": {
+    "decision": "advisory_only",
+    "can_affect_recommendations": false,
+    "failures": [
+      "aggregate_lift_below_gate",
+      "one_or_more_folds_negative_lift"
+    ],
+    "thresholds": {
+      "min_lift": 0.0,
+      "min_coverage": 0.15,
+      "require_all_fold_lift_nonnegative": true
+    },
+    "reason": "World Cup historical enhancer did not beat the baseline in rolling backtest, so it must stay as an explanation and analysis layer."
+  },
+  "data_contract": {
+    "score_target": "90-minute regulation result including stoppage time; extra time and penalties excluded",
+    "split_policy": "rolling leave-one-tournament-out: train <= 2014 test 2018, train <= 2018 test 2022",
+    "leakage_guard": "historical priors are rebuilt from train folds only; test tournament rows are not used in priors",
+    "backtest_baseline_note": "Backtest uses an Elo-derived Poisson proxy PMF when the production exact-score model output is unavailable."
+  }
+}

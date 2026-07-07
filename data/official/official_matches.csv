@@ -1,0 +1,1249 @@
+match_id,home_team,away_team,score_90min,stage,match_date,is_extra_time,is_penalty,source,source_priority,source_url,confidence
+M-1930-01,France,Mexico,4-1,group stage,1930-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-02,United States,Belgium,3-0,group stage,1930-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-03,Yugoslavia,Brazil,2-1,group stage,1930-07-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-04,Romania,Peru,3-1,group stage,1930-07-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-05,Argentina,France,1-0,group stage,1930-07-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-06,Chile,Mexico,2-1,group stage,1930-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-07,Yugoslavia,Bolivia,4-0,group stage,1930-07-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-08,United States,Paraguay,3-0,group stage,1930-07-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-09,Uruguay,Peru,1-0,group stage,1930-07-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-10,Chile,France,1-0,group stage,1930-07-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-11,Argentina,Mexico,6-3,group stage,1930-07-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-12,Brazil,Bolivia,4-0,group stage,1930-07-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-13,Paraguay,Belgium,1-0,group stage,1930-07-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-14,Uruguay,Romania,4-0,group stage,1930-07-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-15,Argentina,Chile,3-1,group stage,1930-07-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-16,Argentina,United States,6-1,semi-finals,1930-07-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-17,Uruguay,Yugoslavia,6-1,semi-finals,1930-07-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1930-18,Uruguay,Argentina,4-2,final,1930-07-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-01,Austria,France,1-1,round of 16,1934-05-27 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-02,Czechoslovakia,Romania,2-1,round of 16,1934-05-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-03,Germany,Belgium,5-2,round of 16,1934-05-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-04,Hungary,Egypt,4-2,round of 16,1934-05-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-05,Italy,United States,7-1,round of 16,1934-05-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-06,Spain,Brazil,3-1,round of 16,1934-05-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-07,Sweden,Argentina,3-2,round of 16,1934-05-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-08,Switzerland,Netherlands,3-2,round of 16,1934-05-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-09,Austria,Hungary,2-1,quarter-finals,1934-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-10,Czechoslovakia,Switzerland,3-2,quarter-finals,1934-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-11,Germany,Sweden,2-1,quarter-finals,1934-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-12,Italy,Spain,1-1,quarter-finals,1934-05-31 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-13,Italy,Spain,1-0,quarter-finals,1934-06-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-14,Czechoslovakia,Germany,3-1,semi-finals,1934-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-15,Italy,Austria,1-0,semi-finals,1934-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-16,Germany,Austria,3-2,third-place match,1934-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1934-17,Italy,Czechoslovakia,1-1,final,1934-06-10 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-01,Switzerland,Germany,1-1,round of 16,1938-06-04 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-02,Cuba,Romania,2-2,round of 16,1938-06-05 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-03,France,Belgium,3-1,round of 16,1938-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-04,Hungary,Dutch East Indies,6-0,round of 16,1938-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-05,Italy,Norway,1-1,round of 16,1938-06-05 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-06,Brazil,Poland,4-4,round of 16,1938-06-05 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-07,Czechoslovakia,Netherlands,0-0,round of 16,1938-06-05 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-08,Cuba,Romania,2-1,round of 16,1938-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-09,Switzerland,Germany,5-1,round of 16,1938-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-10,Brazil,Czechoslovakia,1-1,quarter-finals,1938-06-12 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-11,Hungary,Switzerland,2-0,quarter-finals,1938-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-12,Italy,France,3-1,quarter-finals,1938-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-13,Sweden,Cuba,8-0,quarter-finals,1938-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-14,Brazil,Czechoslovakia,2-1,quarter-finals,1938-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-15,Hungary,Sweden,4-2,semi-finals,1938-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-16,Italy,Brazil,2-1,semi-finals,1938-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-17,Brazil,Sweden,4-2,third-place match,1938-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1938-18,Italy,Hungary,4-2,final,1938-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-01,Brazil,Mexico,4-0,group stage,1950-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-02,Yugoslavia,Switzerland,3-0,group stage,1950-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-03,England,Chile,2-0,group stage,1950-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-04,Spain,United States,3-1,group stage,1950-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-05,Sweden,Italy,3-2,group stage,1950-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-06,Brazil,Switzerland,2-2,group stage,1950-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-07,Yugoslavia,Mexico,4-1,group stage,1950-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-08,Spain,Chile,2-0,group stage,1950-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-09,United States,England,1-0,group stage,1950-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-10,Sweden,Paraguay,2-2,group stage,1950-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-11,Brazil,Yugoslavia,2-0,group stage,1950-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-12,Chile,United States,5-2,group stage,1950-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-13,Spain,England,1-0,group stage,1950-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-14,Italy,Paraguay,2-0,group stage,1950-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-15,Uruguay,Bolivia,8-0,group stage,1950-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-16,Switzerland,Mexico,2-1,group stage,1950-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-17,Brazil,Sweden,7-1,final round,1950-07-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-18,Uruguay,Spain,2-2,final round,1950-07-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-19,Brazil,Spain,6-1,final round,1950-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-20,Uruguay,Sweden,3-2,final round,1950-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-21,Sweden,Spain,3-1,final round,1950-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1950-22,Uruguay,Brazil,2-1,final round,1950-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-01,Brazil,Mexico,5-0,group stage,1954-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-02,Yugoslavia,France,1-0,group stage,1954-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-03,Austria,Scotland,1-0,group stage,1954-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-04,Uruguay,Czechoslovakia,2-0,group stage,1954-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-05,Switzerland,Italy,2-1,group stage,1954-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-06,Hungary,South Korea,9-0,group stage,1954-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-07,West Germany,Turkey,4-1,group stage,1954-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-08,England,Belgium,3-3,group stage,1954-06-17 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-09,Uruguay,Scotland,7-0,group stage,1954-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-10,Brazil,Yugoslavia,1-1,group stage,1954-06-19 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-11,Austria,Czechoslovakia,5-0,group stage,1954-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-12,France,Mexico,2-3,group stage,1954-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-13,Hungary,West Germany,8-3,group stage,1954-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-14,Turkey,South Korea,7-0,group stage,1954-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-15,Italy,Belgium,4-1,group stage,1954-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-16,England,Switzerland,2-0,group stage,1954-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-17,West Germany,Turkey,7-2,group stage,1954-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-18,Switzerland,Italy,4-1,group stage,1954-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-19,Austria,Switzerland,7-5,quarter-finals,1954-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-20,Uruguay,England,4-2,quarter-finals,1954-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-21,Hungary,Brazil,4-2,quarter-finals,1954-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-22,West Germany,Yugoslavia,1-1,quarter-finals,1954-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-23,Hungary,Uruguay,2-2,semi-finals,1954-06-30 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-24,West Germany,Austria,6-1,semi-finals,1954-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-25,Austria,Uruguay,2-2,third-place match,1954-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1954-26,West Germany,Hungary,3-2,final,1954-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-01,Sweden,Mexico,3-0,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-02,Argentina,West Germany,1-3,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-03,Northern Ireland,Czechoslovakia,1-0,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-04,France,Paraguay,7-3,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-05,Yugoslavia,Scotland,1-1,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-06,Hungary,Wales,1-1,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-07,Brazil,Austria,3-0,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-08,Soviet Union,England,2-2,group stage,1958-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-09,Argentina,Northern Ireland,3-1,group stage,1958-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-10,West Germany,Czechoslovakia,2-2,group stage,1958-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-11,Paraguay,Scotland,3-2,group stage,1958-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-12,Yugoslavia,France,3-2,group stage,1958-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-13,Mexico,Wales,1-1,group stage,1958-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-14,Brazil,England,0-0,group stage,1958-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-15,Soviet Union,Austria,2-0,group stage,1958-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-16,Sweden,Hungary,2-1,group stage,1958-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-17,Sweden,Wales,0-0,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-18,Czechoslovakia,Argentina,6-1,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-19,West Germany,Northern Ireland,2-2,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-20,France,Scotland,2-1,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-21,Paraguay,Yugoslavia,3-3,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-22,Hungary,Mexico,4-0,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-23,Brazil,Soviet Union,2-0,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-24,England,Austria,2-2,group stage,1958-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-25,Northern Ireland,Czechoslovakia,1-1,group stage,1958-06-17 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-26,Wales,Hungary,2-1,group stage,1958-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-27,Soviet Union,England,1-0,group stage,1958-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-28,Brazil,Wales,1-0,quarter-finals,1958-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-29,France,Northern Ireland,4-0,quarter-finals,1958-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-30,Sweden,Soviet Union,2-0,quarter-finals,1958-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-31,West Germany,Yugoslavia,1-0,quarter-finals,1958-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-32,Brazil,France,5-2,semi-finals,1958-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-33,Sweden,West Germany,3-1,semi-finals,1958-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-34,France,West Germany,6-3,third-place match,1958-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1958-35,Brazil,Sweden,5-2,final,1958-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-01,Uruguay,Colombia,2-1,group stage,1962-05-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-02,Chile,Switzerland,3-1,group stage,1962-05-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-03,Brazil,Mexico,2-0,group stage,1962-05-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-04,Argentina,Bulgaria,1-0,group stage,1962-05-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-05,Soviet Union,Yugoslavia,2-0,group stage,1962-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-06,West Germany,Italy,0-0,group stage,1962-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-07,Czechoslovakia,Spain,1-0,group stage,1962-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-08,Hungary,England,2-1,group stage,1962-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-09,Yugoslavia,Uruguay,3-1,group stage,1962-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-10,Chile,Italy,2-0,group stage,1962-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-11,Brazil,Czechoslovakia,0-0,group stage,1962-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-12,England,Argentina,3-1,group stage,1962-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-13,Soviet Union,Colombia,4-4,group stage,1962-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-14,West Germany,Switzerland,2-1,group stage,1962-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-15,Spain,Mexico,1-0,group stage,1962-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-16,Hungary,Bulgaria,6-1,group stage,1962-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-17,Soviet Union,Uruguay,2-1,group stage,1962-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-18,West Germany,Chile,2-0,group stage,1962-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-19,Brazil,Spain,2-1,group stage,1962-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-20,Hungary,Argentina,0-0,group stage,1962-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-21,Yugoslavia,Colombia,5-0,group stage,1962-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-22,Italy,Switzerland,3-0,group stage,1962-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-23,Mexico,Czechoslovakia,3-1,group stage,1962-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-24,England,Bulgaria,0-0,group stage,1962-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-25,Brazil,England,3-1,quarter-finals,1962-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-26,Chile,Soviet Union,2-1,quarter-finals,1962-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-27,Czechoslovakia,Hungary,1-0,quarter-finals,1962-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-28,Yugoslavia,West Germany,1-0,quarter-finals,1962-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-29,Brazil,Chile,4-2,semi-finals,1962-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-30,Czechoslovakia,Yugoslavia,3-1,semi-finals,1962-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-31,Chile,Yugoslavia,1-0,third-place match,1962-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1962-32,Brazil,Czechoslovakia,3-1,final,1962-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-01,England,Uruguay,0-0,group stage,1966-07-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-02,West Germany,Switzerland,5-0,group stage,1966-07-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-03,Brazil,Bulgaria,2-0,group stage,1966-07-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-04,Soviet Union,North Korea,3-0,group stage,1966-07-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-05,France,Mexico,1-1,group stage,1966-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-06,Argentina,Spain,2-1,group stage,1966-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-07,Portugal,Hungary,3-1,group stage,1966-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-08,Italy,Chile,2-0,group stage,1966-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-09,Uruguay,France,2-1,group stage,1966-07-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-10,Spain,Switzerland,2-1,group stage,1966-07-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-11,Hungary,Brazil,3-1,group stage,1966-07-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-12,Chile,North Korea,1-1,group stage,1966-07-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-13,Argentina,West Germany,0-0,group stage,1966-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-14,Portugal,Bulgaria,2-1,group stage,1966-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-15,Soviet Union,Italy,1-0,group stage,1966-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-16,England,Mexico,2-0,group stage,1966-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-17,Mexico,Uruguay,0-0,group stage,1966-07-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-18,Argentina,Switzerland,2-0,group stage,1966-07-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-19,Portugal,Brazil,3-1,group stage,1966-07-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-20,North Korea,Italy,1-0,group stage,1966-07-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-21,England,France,2-0,group stage,1966-07-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-22,West Germany,Spain,2-1,group stage,1966-07-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-23,Hungary,Bulgaria,2-2,group stage,1966-07-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-24,Soviet Union,Chile,2-1,group stage,1966-07-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-25,England,Argentina,1-0,quarter-finals,1966-07-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-26,Portugal,North Korea,5-3,quarter-finals,1966-07-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-27,Soviet Union,Hungary,2-1,quarter-finals,1966-07-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-28,West Germany,Uruguay,4-0,quarter-finals,1966-07-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-29,West Germany,Soviet Union,2-1,semi-finals,1966-07-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-30,England,Portugal,2-1,semi-finals,1966-07-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-31,Portugal,Soviet Union,2-1,third-place match,1966-07-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1966-32,England,West Germany,2-2,final,1966-07-30 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-01,Mexico,Soviet Union,0-0,group stage,1970-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-02,Uruguay,Israel,2-0,group stage,1970-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-03,England,Romania,1-0,group stage,1970-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-04,Peru,Bulgaria,3-2,group stage,1970-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-05,Belgium,El Salvador,3-0,group stage,1970-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-06,Italy,Sweden,1-0,group stage,1970-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-07,Brazil,Czechoslovakia,4-1,group stage,1970-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-08,West Germany,Morocco,2-1,group stage,1970-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-09,Soviet Union,Belgium,4-1,group stage,1970-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-10,Uruguay,Italy,0-0,group stage,1970-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-11,Romania,Czechoslovakia,2-1,group stage,1970-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-12,Peru,Morocco,3-0,group stage,1970-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-13,Mexico,El Salvador,4-0,group stage,1970-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-14,Sweden,Israel,1-1,group stage,1970-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-15,Brazil,England,1-0,group stage,1970-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-16,West Germany,Bulgaria,5-2,group stage,1970-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-17,Soviet Union,El Salvador,2-0,group stage,1970-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-18,Sweden,Uruguay,1-0,group stage,1970-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-19,Brazil,Romania,3-2,group stage,1970-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-20,West Germany,Peru,3-1,group stage,1970-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-21,Mexico,Belgium,1-0,group stage,1970-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-22,Italy,Israel,0-0,group stage,1970-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-23,England,Czechoslovakia,1-0,group stage,1970-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-24,Bulgaria,Morocco,1-1,group stage,1970-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-25,Brazil,Peru,4-2,quarter-finals,1970-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-26,Italy,Mexico,3-2,quarter-finals,1970-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-27,Soviet Union,Uruguay,0-0,quarter-finals,1970-06-14 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-28,West Germany,England,2-2,quarter-finals,1970-06-14 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-29,Brazil,Uruguay,3-1,semi-finals,1970-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-30,Italy,West Germany,1-1,semi-finals,1970-06-17 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-31,West Germany,Uruguay,1-0,third-place match,1970-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1970-32,Brazil,Italy,4-1,final,1970-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-01,Brazil,Yugoslavia,0-0,group stage,1974-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-02,West Germany,Chile,1-0,group stage,1974-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-03,East Germany,Australia,1-1,group stage,1974-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-04,Zaire,Scotland,0-2,group stage,1974-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-05,Sweden,Bulgaria,0-0,group stage,1974-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-06,Uruguay,Netherlands,0-2,group stage,1974-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-07,Italy,Haiti,3-1,group stage,1974-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-08,Poland,Argentina,3-2,group stage,1974-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-09,Australia,West Germany,0-3,group stage,1974-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-10,Chile,East Germany,1-1,group stage,1974-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-11,Scotland,Brazil,0-0,group stage,1974-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-12,Yugoslavia,Zaire,9-0,group stage,1974-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-13,Bulgaria,Uruguay,1-1,group stage,1974-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-14,Netherlands,Sweden,0-0,group stage,1974-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-15,Argentina,Italy,2-0,group stage,1974-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-16,Haiti,Poland,0-7,group stage,1974-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-17,Australia,Chile,0-0,group stage,1974-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-18,Scotland,Yugoslavia,1-1,group stage,1974-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-19,Zaire,Brazil,0-3,group stage,1974-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-20,East Germany,West Germany,1-0,group stage,1974-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-21,Bulgaria,Netherlands,0-5,group stage,1974-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-22,Sweden,Uruguay,3-0,group stage,1974-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-23,Argentina,Haiti,4-1,group stage,1974-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-24,Poland,Italy,2-1,group stage,1974-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-25,Yugoslavia,West Germany,0-2,second group stage,1974-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-26,Brazil,East Germany,1-0,second group stage,1974-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-27,Netherlands,Argentina,4-0,second group stage,1974-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-28,Sweden,Poland,0-1,second group stage,1974-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-29,Argentina,Brazil,1-2,second group stage,1974-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-30,East Germany,Netherlands,0-2,second group stage,1974-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-31,Poland,Yugoslavia,2-1,second group stage,1974-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-32,West Germany,Sweden,4-2,second group stage,1974-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-33,Poland,West Germany,0-1,second group stage,1974-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-34,Argentina,East Germany,1-1,second group stage,1974-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-35,Netherlands,Brazil,2-0,second group stage,1974-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-36,Sweden,Yugoslavia,2-1,second group stage,1974-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-37,Brazil,Poland,0-1,third-place match,1974-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1974-38,Netherlands,West Germany,1-2,final,1974-07-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-01,West Germany,Poland,0-0,group stage,1978-06-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-02,Italy,France,2-1,group stage,1978-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-03,Tunisia,Mexico,3-1,group stage,1978-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-04,Argentina,Hungary,2-1,group stage,1978-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-05,Austria,Spain,2-1,group stage,1978-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-06,Brazil,Sweden,1-1,group stage,1978-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-07,Netherlands,Iran,3-0,group stage,1978-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-08,Peru,Scotland,3-1,group stage,1978-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-09,Italy,Hungary,3-1,group stage,1978-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-10,Poland,Tunisia,1-0,group stage,1978-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-11,West Germany,Mexico,6-0,group stage,1978-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-12,Argentina,France,2-1,group stage,1978-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-13,Austria,Sweden,1-0,group stage,1978-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-14,Brazil,Spain,0-0,group stage,1978-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-15,Netherlands,Peru,0-0,group stage,1978-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-16,Scotland,Iran,0-2,group stage,1978-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-17,France,Hungary,3-1,group stage,1978-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-18,Poland,Mexico,3-1,group stage,1978-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-19,West Germany,Tunisia,0-0,group stage,1978-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-20,Argentina,Italy,0-1,group stage,1978-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-21,Brazil,Austria,1-0,group stage,1978-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-22,Spain,Sweden,1-0,group stage,1978-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-23,Peru,Iran,4-1,group stage,1978-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-24,Scotland,Netherlands,3-2,group stage,1978-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-25,Austria,Netherlands,1-5,second group stage,1978-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-26,Italy,West Germany,0-0,second group stage,1978-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-27,Brazil,Peru,3-0,second group stage,1978-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-28,Argentina,Poland,2-0,second group stage,1978-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-29,Peru,Poland,0-1,second group stage,1978-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-30,Italy,Austria,1-0,second group stage,1978-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-31,Netherlands,West Germany,2-2,second group stage,1978-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-32,Argentina,Brazil,0-0,second group stage,1978-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-33,Austria,West Germany,2-3,second group stage,1978-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-34,Italy,Netherlands,0-3,second group stage,1978-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-35,Brazil,Poland,3-1,second group stage,1978-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-36,Argentina,Peru,6-0,second group stage,1978-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-37,Brazil,Italy,2-1,third-place match,1978-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1978-38,Argentina,Netherlands,1-1,final,1978-06-25 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-01,Argentina,Belgium,0-1,group stage,1982-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-02,Italy,Poland,0-0,group stage,1982-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-03,Brazil,Soviet Union,2-1,group stage,1982-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-04,Peru,Cameroon,0-0,group stage,1982-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-05,Hungary,El Salvador,10-1,group stage,1982-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-06,Scotland,New Zealand,5-2,group stage,1982-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-07,West Germany,Algeria,1-2,group stage,1982-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-08,England,France,3-1,group stage,1982-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-09,Spain,Honduras,1-1,group stage,1982-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-10,Chile,Austria,0-1,group stage,1982-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-11,Czechoslovakia,Kuwait,1-1,group stage,1982-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-12,Yugoslavia,Northern Ireland,0-0,group stage,1982-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-13,Italy,Peru,1-1,group stage,1982-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-14,Argentina,Hungary,4-1,group stage,1982-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-15,Brazil,Scotland,4-1,group stage,1982-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-16,Poland,Cameroon,0-0,group stage,1982-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-17,Belgium,El Salvador,1-0,group stage,1982-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-18,Soviet Union,New Zealand,3-0,group stage,1982-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-19,West Germany,Chile,4-1,group stage,1982-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-20,England,Czechoslovakia,1-1,group stage,1982-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-21,Spain,Yugoslavia,2-1,group stage,1982-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-22,Algeria,Austria,0-2,group stage,1982-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-23,France,Kuwait,4-1,group stage,1982-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-24,Honduras,Northern Ireland,1-1,group stage,1982-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-25,Poland,Peru,5-1,group stage,1982-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-26,Belgium,Hungary,1-1,group stage,1982-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-27,Soviet Union,Scotland,2-2,group stage,1982-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-28,Italy,Cameroon,1-1,group stage,1982-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-29,Argentina,El Salvador,2-0,group stage,1982-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-30,Brazil,New Zealand,4-0,group stage,1982-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-31,Algeria,Chile,3-2,group stage,1982-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-32,France,Czechoslovakia,1-1,group stage,1982-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-33,Honduras,Yugoslavia,0-1,group stage,1982-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-34,West Germany,Austria,1-0,group stage,1982-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-35,England,Kuwait,1-0,group stage,1982-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-36,Spain,Northern Ireland,0-1,group stage,1982-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-37,Austria,France,0-1,second group stage,1982-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-38,Poland,Belgium,3-0,second group stage,1982-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-39,Italy,Argentina,2-1,second group stage,1982-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-40,West Germany,England,0-0,second group stage,1982-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-41,Austria,Northern Ireland,2-2,second group stage,1982-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-42,Belgium,Soviet Union,0-1,second group stage,1982-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-43,Argentina,Brazil,1-3,second group stage,1982-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-44,West Germany,Spain,2-1,second group stage,1982-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-45,France,Northern Ireland,4-1,second group stage,1982-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-46,Soviet Union,Poland,0-0,second group stage,1982-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-47,Italy,Brazil,3-2,second group stage,1982-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-48,Spain,England,0-0,second group stage,1982-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-49,Poland,Italy,0-2,semi-finals,1982-07-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-50,West Germany,France,1-1,semi-finals,1982-07-08 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-51,Poland,France,3-2,third-place match,1982-07-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1982-52,Italy,West Germany,3-1,final,1982-07-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-01,Bulgaria,Italy,1-1,group stage,1986-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-02,Spain,Brazil,0-1,group stage,1986-06-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-03,Canada,France,0-1,group stage,1986-06-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-04,Argentina,South Korea,3-1,group stage,1986-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-05,Soviet Union,Hungary,5-1,group stage,1986-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-06,Morocco,Poland,0-0,group stage,1986-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-07,Belgium,Mexico,1-2,group stage,1986-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-08,Algeria,Northern Ireland,1-1,group stage,1986-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-09,Portugal,England,1-0,group stage,1986-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-10,Paraguay,Iraq,1-0,group stage,1986-06-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-11,Uruguay,West Germany,1-1,group stage,1986-06-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-12,Scotland,Denmark,0-1,group stage,1986-06-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-13,Italy,Argentina,1-1,group stage,1986-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-14,France,Soviet Union,1-1,group stage,1986-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-15,South Korea,Bulgaria,1-1,group stage,1986-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-16,Hungary,Canada,2-0,group stage,1986-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-17,Brazil,Algeria,1-0,group stage,1986-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-18,England,Morocco,0-0,group stage,1986-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-19,Mexico,Paraguay,1-1,group stage,1986-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-20,Northern Ireland,Spain,1-2,group stage,1986-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-21,Poland,Portugal,1-0,group stage,1986-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-22,Iraq,Belgium,1-2,group stage,1986-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-23,West Germany,Scotland,2-1,group stage,1986-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-24,Denmark,Uruguay,6-1,group stage,1986-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-25,Hungary,France,0-3,group stage,1986-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-26,Soviet Union,Canada,2-0,group stage,1986-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-27,Argentina,Bulgaria,2-0,group stage,1986-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-28,South Korea,Italy,3-2,group stage,1986-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-29,Iraq,Mexico,0-1,group stage,1986-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-30,Paraguay,Belgium,2-2,group stage,1986-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-31,England,Poland,3-0,group stage,1986-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-32,Portugal,Morocco,1-3,group stage,1986-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-33,Algeria,Spain,0-3,group stage,1986-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-34,Northern Ireland,Brazil,0-3,group stage,1986-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-35,Denmark,West Germany,2-0,group stage,1986-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-36,Scotland,Uruguay,0-0,group stage,1986-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-37,Mexico,Bulgaria,2-0,round of 16,1986-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-38,Soviet Union,Belgium,2-2,round of 16,1986-06-15 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-39,Brazil,Poland,4-0,round of 16,1986-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-40,Argentina,Uruguay,1-0,round of 16,1986-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-41,Italy,France,0-2,round of 16,1986-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-42,Morocco,West Germany,0-1,round of 16,1986-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-43,England,Paraguay,3-0,round of 16,1986-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-44,Denmark,Spain,1-5,round of 16,1986-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-45,Brazil,France,1-1,quarter-finals,1986-06-21 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-46,West Germany,Mexico,0-0,quarter-finals,1986-06-21 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-47,Argentina,England,2-1,quarter-finals,1986-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-48,Spain,Belgium,1-1,quarter-finals,1986-06-22 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-49,France,West Germany,0-2,semi-finals,1986-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-50,Argentina,Belgium,2-0,semi-finals,1986-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-51,Belgium,France,2-2,third-place match,1986-06-28 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1986-52,Argentina,West Germany,3-2,final,1986-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-01,Argentina,Cameroon,0-1,group stage,1990-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-02,Soviet Union,Romania,0-2,group stage,1990-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-03,United Arab Emirates,Colombia,0-2,group stage,1990-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-04,Italy,Austria,1-0,group stage,1990-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-05,United States,Czechoslovakia,1-5,group stage,1990-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-06,Brazil,Sweden,2-1,group stage,1990-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-07,West Germany,Yugoslavia,4-1,group stage,1990-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-08,Costa Rica,Scotland,1-0,group stage,1990-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-09,England,Republic of Ireland,1-1,group stage,1990-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-10,Belgium,South Korea,2-0,group stage,1990-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-11,Netherlands,Egypt,1-1,group stage,1990-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-12,Uruguay,Spain,0-0,group stage,1990-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-13,Argentina,Soviet Union,2-0,group stage,1990-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-14,Cameroon,Romania,2-1,group stage,1990-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-15,Yugoslavia,Colombia,1-0,group stage,1990-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-16,Italy,United States,1-0,group stage,1990-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-17,Austria,Czechoslovakia,0-1,group stage,1990-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-18,West Germany,United Arab Emirates,5-1,group stage,1990-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-19,Brazil,Costa Rica,1-0,group stage,1990-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-20,Sweden,Scotland,1-2,group stage,1990-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-21,England,Netherlands,0-0,group stage,1990-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-22,Republic of Ireland,Egypt,0-0,group stage,1990-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-23,Belgium,Uruguay,3-1,group stage,1990-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-24,South Korea,Spain,1-3,group stage,1990-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-25,Argentina,Romania,1-1,group stage,1990-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-26,Cameroon,Soviet Union,0-4,group stage,1990-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-27,West Germany,Colombia,1-1,group stage,1990-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-28,Yugoslavia,United Arab Emirates,4-1,group stage,1990-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-29,Austria,United States,2-1,group stage,1990-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-30,Italy,Czechoslovakia,2-0,group stage,1990-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-31,Brazil,Scotland,1-0,group stage,1990-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-32,Sweden,Costa Rica,1-2,group stage,1990-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-33,Belgium,Spain,1-2,group stage,1990-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-34,South Korea,Uruguay,0-1,group stage,1990-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-35,England,Egypt,1-0,group stage,1990-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-36,Republic of Ireland,Netherlands,1-1,group stage,1990-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-37,Cameroon,Colombia,0-0,round of 16,1990-06-23 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-38,Czechoslovakia,Costa Rica,4-1,round of 16,1990-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-39,Brazil,Argentina,0-1,round of 16,1990-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-40,West Germany,Netherlands,2-1,round of 16,1990-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-41,Republic of Ireland,Romania,0-0,round of 16,1990-06-25 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-42,Italy,Uruguay,2-0,round of 16,1990-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-43,Spain,Yugoslavia,1-1,round of 16,1990-06-26 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-44,England,Belgium,0-0,round of 16,1990-06-26 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-45,Argentina,Yugoslavia,0-0,quarter-finals,1990-06-30 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-46,Republic of Ireland,Italy,0-1,quarter-finals,1990-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-47,Czechoslovakia,West Germany,0-1,quarter-finals,1990-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-48,Cameroon,England,2-2,quarter-finals,1990-07-01 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-49,Argentina,Italy,1-1,semi-finals,1990-07-03 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-50,West Germany,England,1-1,semi-finals,1990-07-04 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-51,Italy,England,2-1,third-place match,1990-07-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1990-52,West Germany,Argentina,1-0,final,1990-07-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-01,China,Norway,4-0,group stage,1991-11-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-02,Germany,Nigeria,4-0,group stage,1991-11-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-03,Denmark,New Zealand,3-0,group stage,1991-11-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-04,Japan,Brazil,0-1,group stage,1991-11-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-05,Sweden,United States,2-3,group stage,1991-11-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-06,Chinese Taipei,Italy,0-5,group stage,1991-11-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-07,Norway,New Zealand,3-1,group stage,1991-11-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-08,Italy,Nigeria,1-0,group stage,1991-11-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-09,China,Denmark,2-2,group stage,1991-11-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-10,Brazil,United States,0-5,group stage,1991-11-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-11,Japan,Sweden,1-7,group stage,1991-11-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-12,Chinese Taipei,Germany,0-3,group stage,1991-11-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-13,Brazil,Sweden,0-2,group stage,1991-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-14,Japan,United States,0-3,group stage,1991-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-15,China,New Zealand,4-1,group stage,1991-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-16,Norway,Denmark,2-1,group stage,1991-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-17,Chinese Taipei,Nigeria,2-0,group stage,1991-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-18,Italy,Germany,0-2,group stage,1991-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-19,Denmark,Germany,1-1,quarter-final,1991-11-24 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-20,China,Sweden,0-1,quarter-final,1991-11-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-21,Norway,Italy,2-2,quarter-final,1991-11-24 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-22,United States,Chinese Taipei,7-0,quarter-final,1991-11-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-23,Sweden,Norway,1-4,semi-final,1991-11-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-24,Germany,United States,2-5,semi-final,1991-11-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-25,Sweden,Germany,4-0,third-place match,1991-11-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1991-26,Norway,United States,1-2,final,1991-11-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-01,Germany,Bolivia,1-0,group stage,1994-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-02,Spain,South Korea,2-2,group stage,1994-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-03,United States,Switzerland,1-1,group stage,1994-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-04,Italy,Republic of Ireland,0-1,group stage,1994-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-05,Colombia,Romania,1-3,group stage,1994-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-06,Belgium,Morocco,1-0,group stage,1994-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-07,Norway,Mexico,1-0,group stage,1994-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-08,Cameroon,Sweden,2-2,group stage,1994-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-09,Brazil,Russia,2-0,group stage,1994-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-10,Netherlands,Saudi Arabia,2-1,group stage,1994-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-11,Argentina,Greece,4-0,group stage,1994-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-12,Germany,Spain,1-1,group stage,1994-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-13,Nigeria,Bulgaria,3-0,group stage,1994-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-14,Romania,Switzerland,1-4,group stage,1994-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-15,United States,Colombia,1-2,group stage,1994-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-16,Italy,Norway,1-0,group stage,1994-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-17,South Korea,Bolivia,0-0,group stage,1994-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-18,Mexico,Republic of Ireland,2-1,group stage,1994-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-19,Brazil,Cameroon,3-0,group stage,1994-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-20,Sweden,Russia,3-1,group stage,1994-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-21,Belgium,Netherlands,1-0,group stage,1994-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-22,Saudi Arabia,Morocco,2-1,group stage,1994-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-23,Argentina,Nigeria,2-1,group stage,1994-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-24,Bulgaria,Greece,4-0,group stage,1994-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-25,Switzerland,Colombia,0-2,group stage,1994-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-26,United States,Romania,0-1,group stage,1994-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-27,Bolivia,Spain,1-3,group stage,1994-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-28,Germany,South Korea,3-2,group stage,1994-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-29,Italy,Mexico,1-1,group stage,1994-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-30,Republic of Ireland,Norway,0-0,group stage,1994-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-31,Russia,Cameroon,6-1,group stage,1994-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-32,Brazil,Sweden,1-1,group stage,1994-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-33,Belgium,Saudi Arabia,0-1,group stage,1994-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-34,Morocco,Netherlands,1-2,group stage,1994-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-35,Argentina,Bulgaria,0-2,group stage,1994-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-36,Greece,Nigeria,0-2,group stage,1994-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-37,Germany,Belgium,3-2,round of 16,1994-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-38,Spain,Switzerland,3-0,round of 16,1994-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-39,Saudi Arabia,Sweden,1-3,round of 16,1994-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-40,Romania,Argentina,3-2,round of 16,1994-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-41,Netherlands,Republic of Ireland,2-0,round of 16,1994-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-42,Brazil,United States,1-0,round of 16,1994-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-43,Nigeria,Italy,1-1,round of 16,1994-07-05 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-44,Mexico,Bulgaria,1-1,round of 16,1994-07-05 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-45,Italy,Spain,2-1,quarter-finals,1994-07-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-46,Netherlands,Brazil,2-3,quarter-finals,1994-07-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-47,Bulgaria,Germany,2-1,quarter-finals,1994-07-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-48,Romania,Sweden,1-1,quarter-finals,1994-07-10 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-49,Bulgaria,Italy,1-2,semi-finals,1994-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-50,Sweden,Brazil,0-1,semi-finals,1994-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-51,Sweden,Bulgaria,4-0,third-place match,1994-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1994-52,Brazil,Italy,0-0,final,1994-07-17 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-01,Germany,Japan,1-0,group stage,1995-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-02,Sweden,Brazil,0-1,group stage,1995-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-03,England,Canada,3-2,group stage,1995-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-04,Norway,Nigeria,8-0,group stage,1995-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-05,Denmark,Australia,5-0,group stage,1995-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-06,United States,China,3-3,group stage,1995-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-07,Brazil,Japan,1-2,group stage,1995-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-08,Sweden,Germany,3-2,group stage,1995-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-09,Nigeria,Canada,3-3,group stage,1995-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-10,Norway,England,2-0,group stage,1995-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-11,China,Australia,4-2,group stage,1995-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-12,United States,Denmark,2-0,group stage,1995-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-13,Brazil,Germany,1-6,group stage,1995-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-14,Sweden,Japan,2-0,group stage,1995-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-15,Nigeria,England,2-3,group stage,1995-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-16,Norway,Canada,7-0,group stage,1995-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-17,China,Denmark,3-1,group stage,1995-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-18,United States,Australia,4-1,group stage,1995-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-19,Japan,United States,0-4,quarter-final,1995-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-20,Norway,Denmark,3-1,quarter-final,1995-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-21,Germany,England,3-0,quarter-final,1995-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-22,Sweden,China,1-1,quarter-final,1995-06-13 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-23,United States,Norway,0-1,semi-final,1995-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-24,Germany,China,1-0,semi-final,1995-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-25,China,United States,0-2,third-place match,1995-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1995-26,Germany,Norway,0-2,final,1995-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-01,Brazil,Scotland,1-2,group stage,1998-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-02,Morocco,Norway,3-1,group stage,1998-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-03,Italy,Chile,2-2,group stage,1998-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-04,Cameroon,Austria,1-1,group stage,1998-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-05,Paraguay,Bulgaria,0-0,group stage,1998-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-06,Saudi Arabia,Denmark,0-1,group stage,1998-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-07,France,South Africa,2-1,group stage,1998-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-08,Spain,Nigeria,3-2,group stage,1998-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-09,South Korea,Mexico,1-3,group stage,1998-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-10,Netherlands,Belgium,0-0,group stage,1998-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-11,Argentina,Japan,1-0,group stage,1998-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-12,Yugoslavia,Iran,1-0,group stage,1998-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-13,Jamaica,Croatia,1-3,group stage,1998-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-14,England,Tunisia,2-0,group stage,1998-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-15,Romania,Colombia,1-0,group stage,1998-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-16,Germany,United States,2-0,group stage,1998-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-17,Scotland,Norway,1-1,group stage,1998-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-18,Brazil,Morocco,3-0,group stage,1998-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-19,Chile,Austria,1-1,group stage,1998-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-20,Italy,Cameroon,3-0,group stage,1998-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-21,South Africa,Denmark,1-1,group stage,1998-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-22,France,Saudi Arabia,4-0,group stage,1998-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-23,Nigeria,Bulgaria,1-0,group stage,1998-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-24,Spain,Paraguay,0-0,group stage,1998-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-25,Japan,Croatia,0-1,group stage,1998-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-26,Belgium,Mexico,2-2,group stage,1998-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-27,Netherlands,South Korea,5-0,group stage,1998-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-28,Germany,Yugoslavia,1-3,group stage,1998-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-29,Argentina,Jamaica,5-0,group stage,1998-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-30,United States,Iran,1-2,group stage,1998-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-31,Colombia,Tunisia,1-0,group stage,1998-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-32,Romania,England,2-1,group stage,1998-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-33,Chile,Cameroon,1-1,group stage,1998-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-34,Italy,Austria,2-1,group stage,1998-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-35,Brazil,Norway,1-2,group stage,1998-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-36,Scotland,Morocco,0-3,group stage,1998-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-37,France,Denmark,2-1,group stage,1998-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-38,South Africa,Saudi Arabia,2-2,group stage,1998-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-39,Nigeria,Paraguay,1-3,group stage,1998-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-40,Spain,Bulgaria,5-2,group stage,1998-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-41,Belgium,South Korea,1-1,group stage,1998-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-42,Netherlands,Mexico,2-2,group stage,1998-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-43,Germany,Iran,2-0,group stage,1998-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-44,United States,Yugoslavia,0-1,group stage,1998-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-45,Argentina,Croatia,1-0,group stage,1998-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-46,Japan,Jamaica,1-2,group stage,1998-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-47,Colombia,England,0-2,group stage,1998-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-48,Romania,Tunisia,1-1,group stage,1998-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-49,Italy,Norway,1-0,round of 16,1998-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-50,Brazil,Chile,4-1,round of 16,1998-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-51,France,Paraguay,0-0,round of 16,1998-06-28 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-52,Nigeria,Denmark,1-4,round of 16,1998-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-53,Germany,Mexico,2-1,round of 16,1998-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-54,Netherlands,Yugoslavia,2-1,round of 16,1998-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-55,Romania,Croatia,0-1,round of 16,1998-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-56,Argentina,England,2-2,round of 16,1998-06-30 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-57,Italy,France,0-0,quarter-finals,1998-07-03 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-58,Brazil,Denmark,3-2,quarter-finals,1998-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-59,Netherlands,Argentina,2-1,quarter-finals,1998-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-60,Germany,Croatia,0-3,quarter-finals,1998-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-61,Brazil,Netherlands,1-1,semi-finals,1998-07-07 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-62,France,Croatia,2-1,semi-finals,1998-07-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-63,Netherlands,Croatia,1-2,third-place match,1998-07-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1998-64,Brazil,France,0-3,final,1998-07-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-01,United States,Denmark,3-0,group stage,1999-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-02,China,Sweden,2-1,group stage,1999-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-03,Brazil,Mexico,7-1,group stage,1999-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-04,Japan,Canada,1-1,group stage,1999-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-05,Germany,Italy,1-1,group stage,1999-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-06,Norway,Russia,2-1,group stage,1999-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-07,North Korea,Nigeria,1-2,group stage,1999-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-08,Australia,Ghana,1-1,group stage,1999-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-09,Japan,Russia,0-5,group stage,1999-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-10,Norway,Canada,7-1,group stage,1999-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-11,Australia,Sweden,1-3,group stage,1999-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-12,China,Ghana,7-0,group stage,1999-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-13,Brazil,Italy,2-0,group stage,1999-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-14,North Korea,Denmark,3-1,group stage,1999-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-15,United States,Nigeria,6-2,group stage,1999-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-16,Germany,Mexico,6-0,group stage,1999-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-17,Canada,Russia,1-4,group stage,1999-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-18,China,Australia,3-1,group stage,1999-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-19,Ghana,Sweden,0-2,group stage,1999-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-20,Norway,Japan,3-1,group stage,1999-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-21,Germany,Brazil,3-3,group stage,1999-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-22,Nigeria,Denmark,2-0,group stage,1999-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-23,Mexico,Italy,0-2,group stage,1999-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-24,United States,North Korea,3-0,group stage,1999-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-25,China,Russia,2-0,quarter-final,1999-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-26,Norway,Sweden,3-1,quarter-final,1999-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-27,United States,Germany,4-1,quarter-final,1999-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-28,Brazil,Nigeria,3-3,quarter-final,1999-07-01 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-29,United States,Brazil,2-0,semi-final,1999-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-30,Norway,China,0-5,semi-final,1999-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-31,Brazil,Norway,0-0,third-place match,1999-07-10 00:00:00+00:00,False,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-1999-32,United States,China,0-0,final,1999-07-10 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-01,France,Senegal,0-1,group stage,2002-05-31 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-02,Republic of Ireland,Cameroon,1-1,group stage,2002-06-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-03,Uruguay,Denmark,1-2,group stage,2002-06-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-04,Germany,Saudi Arabia,8-0,group stage,2002-06-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-05,Argentina,Nigeria,1-0,group stage,2002-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-06,Paraguay,South Africa,2-2,group stage,2002-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-07,England,Sweden,1-1,group stage,2002-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-08,Spain,Slovenia,3-1,group stage,2002-06-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-09,Croatia,Mexico,0-1,group stage,2002-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-10,Brazil,Turkey,2-1,group stage,2002-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-11,Italy,Ecuador,2-0,group stage,2002-06-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-12,China,Costa Rica,0-2,group stage,2002-06-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-13,Japan,Belgium,2-2,group stage,2002-06-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-14,South Korea,Poland,2-0,group stage,2002-06-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-15,Russia,Tunisia,2-0,group stage,2002-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-16,United States,Portugal,3-2,group stage,2002-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-17,Germany,Republic of Ireland,1-1,group stage,2002-06-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-18,Denmark,Senegal,1-1,group stage,2002-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-19,Cameroon,Saudi Arabia,1-0,group stage,2002-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-20,France,Uruguay,0-0,group stage,2002-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-21,Sweden,Nigeria,2-1,group stage,2002-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-22,Spain,Paraguay,4-0,group stage,2002-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-23,Argentina,England,0-1,group stage,2002-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-24,South Africa,Slovenia,1-0,group stage,2002-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-25,Italy,Croatia,1-2,group stage,2002-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-26,Brazil,China,4-0,group stage,2002-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-27,Mexico,Ecuador,2-1,group stage,2002-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-28,Costa Rica,Turkey,1-1,group stage,2002-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-29,Japan,Russia,1-0,group stage,2002-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-30,South Korea,United States,1-1,group stage,2002-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-31,Tunisia,Belgium,1-1,group stage,2002-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-32,Portugal,Poland,4-0,group stage,2002-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-33,Denmark,France,2-0,group stage,2002-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-34,Senegal,Uruguay,3-3,group stage,2002-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-35,Cameroon,Germany,0-2,group stage,2002-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-36,Saudi Arabia,Republic of Ireland,0-3,group stage,2002-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-37,Nigeria,England,0-0,group stage,2002-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-38,Sweden,Argentina,1-1,group stage,2002-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-39,Slovenia,Paraguay,1-3,group stage,2002-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-40,South Africa,Spain,2-3,group stage,2002-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-41,Costa Rica,Brazil,2-5,group stage,2002-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-42,Turkey,China,3-0,group stage,2002-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-43,Ecuador,Croatia,1-0,group stage,2002-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-44,Mexico,Italy,1-1,group stage,2002-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-45,Belgium,Russia,3-2,group stage,2002-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-46,Tunisia,Japan,0-2,group stage,2002-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-47,Poland,United States,3-1,group stage,2002-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-48,Portugal,South Korea,0-1,group stage,2002-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-49,Germany,Paraguay,1-0,round of 16,2002-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-50,Denmark,England,0-3,round of 16,2002-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-51,Sweden,Senegal,1-1,round of 16,2002-06-16 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-52,Spain,Republic of Ireland,1-1,round of 16,2002-06-16 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-53,Mexico,United States,0-2,round of 16,2002-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-54,Brazil,Belgium,2-0,round of 16,2002-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-55,Japan,Turkey,0-1,round of 16,2002-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-56,South Korea,Italy,1-1,round of 16,2002-06-18 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-57,England,Brazil,1-2,quarter-finals,2002-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-58,Germany,United States,1-0,quarter-finals,2002-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-59,Spain,South Korea,0-0,quarter-finals,2002-06-22 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-60,Senegal,Turkey,0-0,quarter-finals,2002-06-22 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-61,Germany,South Korea,1-0,semi-finals,2002-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-62,Brazil,Turkey,1-0,semi-finals,2002-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-63,South Korea,Turkey,2-3,third-place match,2002-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2002-64,Germany,Brazil,0-2,final,2002-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-01,Norway,France,2-0,group stage,2003-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-02,Nigeria,North Korea,0-3,group stage,2003-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-03,Germany,Canada,4-1,group stage,2003-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-04,Japan,Argentina,6-0,group stage,2003-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-05,United States,Sweden,3-1,group stage,2003-09-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-06,Brazil,South Korea,3-0,group stage,2003-09-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-07,Australia,Russia,2-1,group stage,2003-09-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-08,China,Ghana,1-0,group stage,2003-09-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-09,Norway,Brazil,1-4,group stage,2003-09-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-10,Germany,Japan,3-0,group stage,2003-09-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-11,France,South Korea,1-0,group stage,2003-09-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-12,Canada,Argentina,3-0,group stage,2003-09-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-13,Ghana,Russia,0-3,group stage,2003-09-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-14,Sweden,North Korea,1-0,group stage,2003-09-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-15,China,Australia,1-1,group stage,2003-09-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-16,United States,Nigeria,5-0,group stage,2003-09-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-17,France,Brazil,1-1,group stage,2003-09-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-18,South Korea,Norway,1-7,group stage,2003-09-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-19,Argentina,Germany,1-6,group stage,2003-09-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-20,Canada,Japan,3-1,group stage,2003-09-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-21,Sweden,Nigeria,3-0,group stage,2003-09-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-22,North Korea,United States,0-3,group stage,2003-09-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-23,Ghana,Australia,2-1,group stage,2003-09-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-24,China,Russia,1-0,group stage,2003-09-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-25,Brazil,Sweden,1-2,quarter-final,2003-10-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-26,United States,Norway,1-0,quarter-final,2003-10-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-27,Germany,Russia,7-1,quarter-final,2003-10-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-28,China,Canada,0-1,quarter-final,2003-10-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-29,United States,Germany,0-3,semi-final,2003-10-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-30,Sweden,Canada,2-1,semi-final,2003-10-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-31,United States,Canada,3-1,third-place match,2003-10-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2003-32,Germany,Sweden,1-1,final,2003-10-12 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-01,Germany,Costa Rica,4-2,group stage,2006-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-02,Poland,Ecuador,0-2,group stage,2006-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-03,England,Paraguay,0-1,group stage,2006-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-04,Trinidad and Tobago,Sweden,0-0,group stage,2006-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-05,Argentina,Ivory Coast,2-1,group stage,2006-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-06,Serbia and Montenegro,Netherlands,0-1,group stage,2006-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-07,Mexico,Iran,3-1,group stage,2006-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-08,Angola,Portugal,0-1,group stage,2006-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-09,Australia,Japan,3-1,group stage,2006-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-10,United States,Czech Republic,0-3,group stage,2006-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-11,Italy,Ghana,2-0,group stage,2006-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-12,South Korea,Togo,2-1,group stage,2006-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-13,France,Switzerland,0-0,group stage,2006-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-14,Brazil,Croatia,1-0,group stage,2006-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-15,Spain,Ukraine,4-0,group stage,2006-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-16,Tunisia,Saudi Arabia,2-2,group stage,2006-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-17,Germany,Poland,1-0,group stage,2006-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-18,Ecuador,Costa Rica,3-0,group stage,2006-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-19,England,Trinidad and Tobago,2-0,group stage,2006-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-20,Sweden,Paraguay,1-0,group stage,2006-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-21,Argentina,Serbia and Montenegro,6-0,group stage,2006-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-22,Netherlands,Ivory Coast,2-1,group stage,2006-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-23,Mexico,Angola,0-0,group stage,2006-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-24,Portugal,Iran,2-0,group stage,2006-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-25,Czech Republic,Ghana,0-2,group stage,2006-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-26,Italy,United States,2-0,group stage,2006-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-27,Japan,Croatia,0-0,group stage,2006-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-28,Brazil,Australia,2-0,group stage,2006-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-29,France,South Korea,1-1,group stage,2006-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-30,Togo,Switzerland,0-2,group stage,2006-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-31,Saudi Arabia,Ukraine,0-4,group stage,2006-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-32,Spain,Tunisia,3-1,group stage,2006-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-33,Costa Rica,Poland,1-2,group stage,2006-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-34,Ecuador,Germany,0-3,group stage,2006-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-35,Paraguay,Trinidad and Tobago,1-1,group stage,2006-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-36,Sweden,England,2-2,group stage,2006-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-37,Iran,Angola,1-1,group stage,2006-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-38,Portugal,Mexico,2-1,group stage,2006-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-39,Ivory Coast,Serbia and Montenegro,3-2,group stage,2006-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-40,Netherlands,Argentina,0-0,group stage,2006-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-41,Czech Republic,Italy,0-2,group stage,2006-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-42,Ghana,United States,2-1,group stage,2006-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-43,Croatia,Australia,2-2,group stage,2006-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-44,Japan,Brazil,1-4,group stage,2006-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-45,Saudi Arabia,Spain,0-1,group stage,2006-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-46,Ukraine,Tunisia,1-0,group stage,2006-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-47,Switzerland,South Korea,2-0,group stage,2006-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-48,Togo,France,0-2,group stage,2006-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-49,Germany,Sweden,2-0,round of 16,2006-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-50,Argentina,Mexico,1-1,round of 16,2006-06-24 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-51,England,Ecuador,1-0,round of 16,2006-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-52,Portugal,Netherlands,1-0,round of 16,2006-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-53,Italy,Australia,1-0,round of 16,2006-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-54,Switzerland,Ukraine,0-0,round of 16,2006-06-26 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-55,Brazil,Ghana,3-0,round of 16,2006-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-56,Spain,France,1-3,round of 16,2006-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-57,Germany,Argentina,1-1,quarter-finals,2006-06-30 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-58,Italy,Ukraine,3-0,quarter-finals,2006-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-59,England,Portugal,0-0,quarter-finals,2006-07-01 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-60,Brazil,France,0-1,quarter-finals,2006-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-61,Germany,Italy,0-0,semi-finals,2006-07-04 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-62,Portugal,France,0-1,semi-finals,2006-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-63,Germany,Portugal,2-2,third-place match,2006-07-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2006-64,Italy,France,1-1,final,2006-07-09 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-01,Germany,Argentina,11-0,group stage,2007-09-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-02,United States,North Korea,2-2,group stage,2007-09-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-03,Japan,England,2-2,group stage,2007-09-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-04,Nigeria,Sweden,1-1,group stage,2007-09-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-05,Ghana,Australia,1-4,group stage,2007-09-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-06,New Zealand,Brazil,0-5,group stage,2007-09-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-07,Norway,Canada,2-1,group stage,2007-09-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-08,China,Denmark,3-2,group stage,2007-09-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-09,Argentina,Japan,0-1,group stage,2007-09-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-10,Sweden,United States,0-2,group stage,2007-09-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-11,England,Germany,0-0,group stage,2007-09-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-12,North Korea,Nigeria,2-0,group stage,2007-09-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-13,Canada,Ghana,4-0,group stage,2007-09-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-14,Denmark,New Zealand,2-0,group stage,2007-09-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-15,Australia,Norway,1-1,group stage,2007-09-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-16,Brazil,China,4-0,group stage,2007-09-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-17,England,Argentina,5-2,group stage,2007-09-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-18,Germany,Japan,2-0,group stage,2007-09-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-19,Nigeria,United States,0-1,group stage,2007-09-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-20,North Korea,Sweden,1-2,group stage,2007-09-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-21,Australia,Canada,2-2,group stage,2007-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-22,Norway,Ghana,7-2,group stage,2007-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-23,Brazil,Denmark,1-0,group stage,2007-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-24,China,New Zealand,2-0,group stage,2007-09-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-25,Germany,North Korea,3-0,quarter-final,2007-09-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-26,United States,England,3-0,quarter-final,2007-09-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-27,Norway,China,1-0,quarter-final,2007-09-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-28,Brazil,Australia,3-2,quarter-final,2007-09-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-29,Germany,Norway,2-1,semi-final,2007-09-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-30,United States,Brazil,1-3,semi-final,2007-09-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-31,Norway,United States,1-4,third-place match,2007-09-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2007-32,Germany,Brazil,2-0,final,2007-09-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-01,South Africa,Mexico,1-1,group stage,2010-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-02,Uruguay,France,0-0,group stage,2010-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-03,South Korea,Greece,2-0,group stage,2010-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-04,Argentina,Nigeria,1-0,group stage,2010-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-05,England,United States,1-1,group stage,2010-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-06,Algeria,Slovenia,0-1,group stage,2010-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-07,Serbia,Ghana,0-1,group stage,2010-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-08,Germany,Australia,4-0,group stage,2010-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-09,Netherlands,Denmark,1-1,group stage,2010-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-10,Japan,Cameroon,1-0,group stage,2010-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-11,Italy,Paraguay,1-1,group stage,2010-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-12,New Zealand,Slovakia,1-1,group stage,2010-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-13,Ivory Coast,Portugal,0-0,group stage,2010-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-14,Brazil,North Korea,2-1,group stage,2010-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-15,Honduras,Chile,0-1,group stage,2010-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-16,Spain,Switzerland,0-1,group stage,2010-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-17,South Africa,Uruguay,0-3,group stage,2010-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-18,Argentina,South Korea,3-2,group stage,2010-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-19,Greece,Nigeria,2-1,group stage,2010-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-20,France,Mexico,0-2,group stage,2010-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-21,Germany,Serbia,0-1,group stage,2010-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-22,Slovenia,United States,2-2,group stage,2010-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-23,England,Algeria,0-0,group stage,2010-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-24,Netherlands,Japan,1-0,group stage,2010-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-25,Ghana,Australia,1-1,group stage,2010-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-26,Cameroon,Denmark,1-2,group stage,2010-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-27,Slovakia,Paraguay,0-2,group stage,2010-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-28,Italy,New Zealand,1-1,group stage,2010-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-29,Brazil,Ivory Coast,3-1,group stage,2010-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-30,Portugal,North Korea,7-0,group stage,2010-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-31,Chile,Switzerland,1-0,group stage,2010-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-32,Spain,Honduras,2-0,group stage,2010-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-33,France,South Africa,1-2,group stage,2010-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-34,Mexico,Uruguay,0-1,group stage,2010-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-35,Greece,Argentina,0-2,group stage,2010-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-36,Nigeria,South Korea,2-2,group stage,2010-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-37,Slovenia,England,0-1,group stage,2010-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-38,United States,Algeria,1-0,group stage,2010-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-39,Australia,Serbia,2-1,group stage,2010-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-40,Ghana,Germany,0-1,group stage,2010-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-41,Paraguay,New Zealand,0-0,group stage,2010-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-42,Slovakia,Italy,3-2,group stage,2010-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-43,Cameroon,Netherlands,1-2,group stage,2010-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-44,Denmark,Japan,1-3,group stage,2010-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-45,North Korea,Ivory Coast,0-3,group stage,2010-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-46,Portugal,Brazil,0-0,group stage,2010-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-47,Chile,Spain,1-2,group stage,2010-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-48,Switzerland,Honduras,0-0,group stage,2010-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-49,Uruguay,South Korea,2-1,round of 16,2010-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-50,United States,Ghana,1-1,round of 16,2010-06-26 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-51,Germany,England,4-1,round of 16,2010-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-52,Argentina,Mexico,3-1,round of 16,2010-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-53,Netherlands,Slovakia,2-1,round of 16,2010-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-54,Brazil,Chile,3-0,round of 16,2010-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-55,Paraguay,Japan,0-0,round of 16,2010-06-29 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-56,Spain,Portugal,1-0,round of 16,2010-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-57,Netherlands,Brazil,2-1,quarter-finals,2010-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-58,Uruguay,Ghana,1-1,quarter-finals,2010-07-02 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-59,Argentina,Germany,0-4,quarter-finals,2010-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-60,Paraguay,Spain,0-1,quarter-finals,2010-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-61,Uruguay,Netherlands,2-3,semi-finals,2010-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-62,Germany,Spain,0-1,semi-finals,2010-07-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-63,Uruguay,Germany,2-3,third-place match,2010-07-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2010-64,Netherlands,Spain,0-0,final,2010-07-11 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-01,Nigeria,France,0-1,group stage,2011-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-02,Germany,Canada,2-1,group stage,2011-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-03,Japan,New Zealand,2-1,group stage,2011-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-04,Mexico,England,1-1,group stage,2011-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-05,Colombia,Sweden,0-1,group stage,2011-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-06,United States,North Korea,2-0,group stage,2011-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-07,Norway,Equatorial Guinea,1-0,group stage,2011-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-08,Brazil,Australia,1-0,group stage,2011-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-09,Canada,France,0-4,group stage,2011-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-10,Germany,Nigeria,1-0,group stage,2011-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-11,Japan,Mexico,4-0,group stage,2011-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-12,New Zealand,England,1-2,group stage,2011-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-13,North Korea,Sweden,0-1,group stage,2011-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-14,United States,Colombia,3-0,group stage,2011-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-15,Australia,Equatorial Guinea,3-2,group stage,2011-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-16,Brazil,Norway,3-0,group stage,2011-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-17,England,Japan,2-0,group stage,2011-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-18,New Zealand,Mexico,2-2,group stage,2011-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-19,Canada,Nigeria,0-1,group stage,2011-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-20,France,Germany,2-4,group stage,2011-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-21,Australia,Norway,2-1,group stage,2011-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-22,Equatorial Guinea,Brazil,0-3,group stage,2011-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-23,North Korea,Colombia,0-0,group stage,2011-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-24,Sweden,United States,1-2,group stage,2011-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-25,England,France,1-1,quarter-final,2011-07-09 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-26,Germany,Japan,0-0,quarter-final,2011-07-09 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-27,Sweden,Australia,3-1,quarter-final,2011-07-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-28,Brazil,United States,2-0,quarter-final,2011-07-10 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-29,France,United States,1-3,semi-final,2011-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-30,Japan,Sweden,3-1,semi-final,2011-07-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-31,Sweden,France,2-1,third-place match,2011-07-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2011-32,Japan,United States,1-1,final,2011-07-17 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-01,Brazil,Croatia,4-0,group stage,2014-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-02,Mexico,Cameroon,1-0,group stage,2014-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-03,Spain,Netherlands,1-5,group stage,2014-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-04,Chile,Australia,3-1,group stage,2014-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-05,Colombia,Greece,3-0,group stage,2014-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-06,Uruguay,Costa Rica,1-3,group stage,2014-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-07,England,Italy,1-2,group stage,2014-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-08,Ivory Coast,Japan,2-1,group stage,2014-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-09,Switzerland,Ecuador,2-1,group stage,2014-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-10,France,Honduras,2-1,group stage,2014-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-11,Argentina,Bosnia and Herzegovina,1-2,group stage,2014-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-12,Germany,Portugal,4-0,group stage,2014-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-13,Iran,Nigeria,0-0,group stage,2014-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-14,Ghana,United States,1-2,group stage,2014-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-15,Belgium,Algeria,2-1,group stage,2014-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-16,Brazil,Mexico,0-0,group stage,2014-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-17,Russia,South Korea,1-1,group stage,2014-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-18,Australia,Netherlands,2-3,group stage,2014-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-19,Spain,Chile,0-2,group stage,2014-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-20,Cameroon,Croatia,0-4,group stage,2014-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-21,Colombia,Ivory Coast,2-1,group stage,2014-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-22,Uruguay,England,2-1,group stage,2014-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-23,Japan,Greece,0-0,group stage,2014-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-24,Italy,Costa Rica,0-1,group stage,2014-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-25,Switzerland,France,2-5,group stage,2014-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-26,Honduras,Ecuador,1-2,group stage,2014-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-27,Argentina,Iran,1-0,group stage,2014-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-28,Germany,Ghana,2-2,group stage,2014-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-29,Nigeria,Bosnia and Herzegovina,1-0,group stage,2014-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-30,Belgium,Russia,1-0,group stage,2014-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-31,South Korea,Algeria,2-4,group stage,2014-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-32,United States,Portugal,2-2,group stage,2014-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-33,Australia,Spain,0-3,group stage,2014-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-34,Netherlands,Chile,2-0,group stage,2014-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-35,Cameroon,Brazil,1-4,group stage,2014-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-36,Croatia,Mexico,1-3,group stage,2014-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-37,Costa Rica,England,0-0,group stage,2014-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-38,Italy,Uruguay,0-1,group stage,2014-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-39,Japan,Colombia,1-4,group stage,2014-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-40,Greece,Ivory Coast,2-1,group stage,2014-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-41,Bosnia and Herzegovina,Iran,3-1,group stage,2014-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-42,Nigeria,Argentina,2-3,group stage,2014-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-43,Honduras,Switzerland,0-3,group stage,2014-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-44,Ecuador,France,0-0,group stage,2014-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-45,Portugal,Ghana,1-2,group stage,2014-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-46,United States,Germany,0-1,group stage,2014-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-47,Algeria,Russia,1-1,group stage,2014-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-48,South Korea,Belgium,0-1,group stage,2014-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-49,Brazil,Chile,1-1,round of 16,2014-06-28 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-50,Colombia,Uruguay,2-0,round of 16,2014-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-51,Netherlands,Mexico,2-1,round of 16,2014-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-52,Costa Rica,Greece,1-1,round of 16,2014-06-29 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-53,France,Nigeria,1-1,round of 16,2014-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-54,Germany,Algeria,0-0,round of 16,2014-06-30 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-55,Argentina,Switzerland,0-0,round of 16,2014-07-01 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-56,Belgium,United States,0-0,round of 16,2014-07-01 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-57,France,Germany,0-1,quarter-finals,2014-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-58,Brazil,Colombia,2-1,quarter-finals,2014-07-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-59,Argentina,Belgium,1-0,quarter-finals,2014-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-60,Netherlands,Costa Rica,0-0,quarter-finals,2014-07-05 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-61,Brazil,Germany,1-7,semi-finals,2014-07-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-62,Netherlands,Argentina,0-0,semi-finals,2014-07-09 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-63,Brazil,Netherlands,0-3,third-place match,2014-07-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2014-64,Germany,Argentina,0-0,final,2014-07-13 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-01,Canada,China,1-0,group stage,2015-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-02,New Zealand,Netherlands,0-1,group stage,2015-06-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-03,Norway,Thailand,4-0,group stage,2015-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-04,Germany,Ivory Coast,10-0,group stage,2015-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-05,Sweden,Nigeria,2-4,group stage,2015-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-06,Cameroon,Ecuador,6-0,group stage,2015-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-07,United States,Australia,3-1,group stage,2015-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-08,Japan,Switzerland,1-0,group stage,2015-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-09,France,England,1-0,group stage,2015-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-10,Spain,Costa Rica,1-1,group stage,2015-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-11,Colombia,Mexico,1-1,group stage,2015-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-12,Brazil,South Korea,2-0,group stage,2015-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-13,China,Netherlands,1-0,group stage,2015-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-14,Germany,Norway,1-1,group stage,2015-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-15,Canada,New Zealand,0-0,group stage,2015-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-16,Ivory Coast,Thailand,2-3,group stage,2015-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-17,Switzerland,Ecuador,8-3,group stage,2015-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-18,Australia,Nigeria,2-0,group stage,2015-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-19,Japan,Cameroon,2-1,group stage,2015-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-20,United States,Sweden,0-0,group stage,2015-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-21,France,Colombia,0-2,group stage,2015-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-22,Brazil,Spain,1-0,group stage,2015-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-23,England,Mexico,2-1,group stage,2015-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-24,South Korea,Costa Rica,2-2,group stage,2015-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-25,Thailand,Germany,0-4,group stage,2015-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-26,Ivory Coast,Norway,1-3,group stage,2015-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-27,China,New Zealand,2-2,group stage,2015-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-28,Netherlands,Canada,1-1,group stage,2015-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-29,Switzerland,Cameroon,1-2,group stage,2015-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-30,Ecuador,Japan,0-1,group stage,2015-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-31,Nigeria,United States,0-1,group stage,2015-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-32,Australia,Sweden,1-1,group stage,2015-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-33,England,Colombia,2-1,group stage,2015-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-34,Mexico,France,1-4,group stage,2015-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-35,South Korea,Spain,2-1,group stage,2015-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-36,Costa Rica,Brazil,0-1,group stage,2015-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-37,Germany,Sweden,4-1,round of 16,2015-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-38,China,Cameroon,1-0,round of 16,2015-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-39,Brazil,Australia,0-1,round of 16,2015-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-40,France,South Korea,3-0,round of 16,2015-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-41,Canada,Switzerland,1-0,round of 16,2015-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-42,Norway,England,1-2,round of 16,2015-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-43,United States,Colombia,2-0,round of 16,2015-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-44,Japan,Netherlands,2-1,round of 16,2015-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-45,Germany,France,1-1,quarter-final,2015-06-26 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-46,China,United States,0-1,quarter-final,2015-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-47,Australia,Japan,0-1,quarter-final,2015-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-48,England,Canada,2-1,quarter-final,2015-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-49,United States,Germany,2-0,semi-final,2015-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-50,Japan,England,1-2,semi-final,2015-07-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-51,Germany,England,0-0,third-place match,2015-07-04 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2015-52,United States,Japan,6-1,final,2015-07-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-01,Russia,Saudi Arabia,5-0,group stage,2018-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-02,Egypt,Uruguay,0-1,group stage,2018-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-03,Morocco,Iran,1-0,group stage,2018-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-04,Portugal,Spain,3-3,group stage,2018-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-05,France,Australia,1-2,group stage,2018-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-06,Argentina,Iceland,1-1,group stage,2018-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-07,Peru,Denmark,0-1,group stage,2018-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-08,Croatia,Nigeria,1-1,group stage,2018-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-09,Costa Rica,Serbia,0-1,group stage,2018-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-10,Germany,Mexico,0-1,group stage,2018-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-11,Brazil,Switzerland,1-1,group stage,2018-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-12,Sweden,South Korea,1-0,group stage,2018-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-13,Belgium,Panama,3-0,group stage,2018-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-14,Tunisia,England,1-2,group stage,2018-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-15,Colombia,Japan,1-2,group stage,2018-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-16,Poland,Senegal,2-1,group stage,2018-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-17,Russia,Egypt,2-2,group stage,2018-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-18,Portugal,Morocco,1-0,group stage,2018-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-19,Uruguay,Saudi Arabia,1-0,group stage,2018-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-20,Iran,Spain,0-1,group stage,2018-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-21,Denmark,Australia,1-1,group stage,2018-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-22,France,Peru,1-0,group stage,2018-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-23,Argentina,Croatia,0-3,group stage,2018-06-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-24,Brazil,Costa Rica,2-0,group stage,2018-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-25,Nigeria,Iceland,2-0,group stage,2018-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-26,Serbia,Switzerland,1-2,group stage,2018-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-27,Belgium,Tunisia,5-2,group stage,2018-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-28,South Korea,Mexico,1-2,group stage,2018-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-29,Germany,Sweden,2-1,group stage,2018-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-30,England,Panama,6-1,group stage,2018-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-31,Japan,Senegal,2-2,group stage,2018-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-32,Poland,Colombia,0-3,group stage,2018-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-33,Saudi Arabia,Egypt,2-1,group stage,2018-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-34,Uruguay,Russia,2-1,group stage,2018-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-35,Spain,Morocco,2-2,group stage,2018-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-36,Iran,Portugal,1-1,group stage,2018-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-37,Australia,Peru,0-2,group stage,2018-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-38,Denmark,France,0-0,group stage,2018-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-39,Iceland,Croatia,1-2,group stage,2018-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-40,Nigeria,Argentina,1-2,group stage,2018-06-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-41,South Korea,Germany,2-0,group stage,2018-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-42,Mexico,Sweden,1-2,group stage,2018-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-43,Serbia,Brazil,0-2,group stage,2018-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-44,Switzerland,Costa Rica,3-1,group stage,2018-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-45,Japan,Poland,0-1,group stage,2018-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-46,Senegal,Colombia,0-1,group stage,2018-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-47,England,Belgium,0-1,group stage,2018-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-48,Panama,Tunisia,0-3,group stage,2018-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-49,France,Argentina,4-3,round of 16,2018-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-50,Uruguay,Portugal,2-1,round of 16,2018-06-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-51,Spain,Russia,0-2,round of 16,2018-07-01 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-52,Croatia,Denmark,1-1,round of 16,2018-07-01 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-53,Brazil,Mexico,2-0,round of 16,2018-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-54,Belgium,Japan,3-2,round of 16,2018-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-55,Sweden,Switzerland,1-0,round of 16,2018-07-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-56,Colombia,England,1-1,round of 16,2018-07-03 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-57,Uruguay,France,0-2,quarter-finals,2018-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-58,Brazil,Belgium,2-1,quarter-finals,2018-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-59,Sweden,England,0-2,quarter-finals,2018-07-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-60,Russia,Croatia,1-1,quarter-finals,2018-07-07 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-61,France,Belgium,1-0,semi-finals,2018-07-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-62,Croatia,England,1-1,semi-finals,2018-07-11 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-63,Belgium,England,2-0,third-place match,2018-07-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2018-64,France,Croatia,3-3,final,2018-07-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-01,France,South Korea,4-0,group stage,2019-06-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-02,Germany,China,1-0,group stage,2019-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-03,Spain,South Africa,3-1,group stage,2019-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-04,Norway,Nigeria,2-1,group stage,2019-06-08 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-05,Australia,Italy,1-2,group stage,2019-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-06,Brazil,Jamaica,3-0,group stage,2019-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-07,England,Scotland,2-1,group stage,2019-06-09 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-08,Argentina,Japan,0-0,group stage,2019-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-09,Canada,Cameroon,1-0,group stage,2019-06-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-10,New Zealand,Netherlands,0-1,group stage,2019-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-11,Chile,Sweden,0-2,group stage,2019-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-12,United States,Thailand,13-0,group stage,2019-06-11 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-13,Nigeria,South Korea,1-1,group stage,2019-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-14,Germany,Spain,1-0,group stage,2019-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-15,France,Norway,3-0,group stage,2019-06-12 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-16,Australia,Brazil,2-3,group stage,2019-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-17,South Africa,China,0-1,group stage,2019-06-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-18,Japan,Scotland,2-1,group stage,2019-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-19,Jamaica,Italy,0-5,group stage,2019-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-20,England,Argentina,1-0,group stage,2019-06-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-21,Netherlands,Cameroon,3-1,group stage,2019-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-22,Canada,New Zealand,2-0,group stage,2019-06-15 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-23,Sweden,Thailand,5-1,group stage,2019-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-24,United States,Chile,3-0,group stage,2019-06-16 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-25,China,Spain,0-0,group stage,2019-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-26,South Africa,Germany,0-4,group stage,2019-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-27,Nigeria,France,0-1,group stage,2019-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-28,South Korea,Norway,1-2,group stage,2019-06-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-29,Italy,Brazil,0-1,group stage,2019-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-30,Jamaica,Australia,1-4,group stage,2019-06-18 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-31,Japan,England,0-2,group stage,2019-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-32,Scotland,Argentina,4-2,group stage,2019-06-19 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-33,Cameroon,New Zealand,3-0,group stage,2019-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-34,Netherlands,Canada,2-1,group stage,2019-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-35,Sweden,United States,1-1,group stage,2019-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-36,Thailand,Chile,1-1,group stage,2019-06-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-37,Germany,Nigeria,3-0,round of 16,2019-06-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-38,Norway,Australia,1-1,round of 16,2019-06-22 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-39,England,Cameroon,3-0,round of 16,2019-06-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-40,France,Brazil,1-1,round of 16,2019-06-23 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-41,Spain,United States,1-2,round of 16,2019-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-42,Sweden,Canada,1-0,round of 16,2019-06-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-43,Italy,China,2-0,round of 16,2019-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-44,Netherlands,Japan,2-1,round of 16,2019-06-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-45,Norway,England,0-3,quarter-final,2019-06-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-46,France,United States,1-2,quarter-final,2019-06-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-47,Italy,Netherlands,0-2,quarter-final,2019-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-48,Germany,Sweden,1-2,quarter-final,2019-06-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-49,England,United States,1-2,semi-final,2019-07-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-50,Netherlands,Sweden,0-0,semi-final,2019-07-03 00:00:00+00:00,True,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-51,England,Sweden,1-2,third-place match,2019-07-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2019-52,United States,Netherlands,2-0,final,2019-07-07 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-01,Qatar,Ecuador,0-2,group stage,2022-11-20 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-02,England,Iran,6-2,group stage,2022-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-03,Senegal,Netherlands,0-2,group stage,2022-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-04,United States,Wales,1-1,group stage,2022-11-21 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-05,Argentina,Saudi Arabia,1-2,group stage,2022-11-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-06,Denmark,Tunisia,0-0,group stage,2022-11-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-07,Mexico,Poland,0-0,group stage,2022-11-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-08,France,Australia,4-1,group stage,2022-11-22 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-09,Morocco,Croatia,0-0,group stage,2022-11-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-10,Germany,Japan,1-2,group stage,2022-11-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-11,Spain,Costa Rica,7-0,group stage,2022-11-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-12,Belgium,Canada,1-0,group stage,2022-11-23 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-13,Switzerland,Cameroon,1-0,group stage,2022-11-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-14,Uruguay,South Korea,0-0,group stage,2022-11-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-15,Portugal,Ghana,3-2,group stage,2022-11-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-16,Brazil,Serbia,2-0,group stage,2022-11-24 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-17,Wales,Iran,0-2,group stage,2022-11-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-18,Qatar,Senegal,1-3,group stage,2022-11-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-19,Netherlands,Ecuador,1-1,group stage,2022-11-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-20,England,United States,0-0,group stage,2022-11-25 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-21,Tunisia,Australia,0-1,group stage,2022-11-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-22,Poland,Saudi Arabia,2-0,group stage,2022-11-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-23,France,Denmark,2-1,group stage,2022-11-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-24,Argentina,Mexico,2-0,group stage,2022-11-26 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-25,Japan,Costa Rica,0-1,group stage,2022-11-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-26,Belgium,Morocco,0-2,group stage,2022-11-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-27,Croatia,Canada,4-1,group stage,2022-11-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-28,Spain,Germany,1-1,group stage,2022-11-27 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-29,Cameroon,Serbia,3-3,group stage,2022-11-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-30,South Korea,Ghana,2-3,group stage,2022-11-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-31,Brazil,Switzerland,1-0,group stage,2022-11-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-32,Portugal,Uruguay,2-0,group stage,2022-11-28 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-33,Ecuador,Senegal,1-2,group stage,2022-11-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-34,Netherlands,Qatar,2-0,group stage,2022-11-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-35,Iran,United States,0-1,group stage,2022-11-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-36,Wales,England,0-3,group stage,2022-11-29 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-37,Australia,Denmark,1-0,group stage,2022-11-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-38,Tunisia,France,1-0,group stage,2022-11-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-39,Poland,Argentina,0-2,group stage,2022-11-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-40,Saudi Arabia,Mexico,1-2,group stage,2022-11-30 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-41,Canada,Morocco,0-3,group stage,2022-12-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-42,Croatia,Belgium,0-0,group stage,2022-12-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-43,Costa Rica,Germany,2-4,group stage,2022-12-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-44,Japan,Spain,2-1,group stage,2022-12-01 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-45,Ghana,Uruguay,0-2,group stage,2022-12-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-46,South Korea,Portugal,2-1,group stage,2022-12-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-47,Cameroon,Brazil,1-0,group stage,2022-12-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-48,Serbia,Switzerland,2-3,group stage,2022-12-02 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-49,Netherlands,United States,3-1,round of 16,2022-12-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-50,Argentina,Australia,3-0,round of 16,2022-12-03 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-51,France,Poland,3-1,round of 16,2022-12-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-52,England,Senegal,3-0,round of 16,2022-12-04 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-53,Japan,Croatia,1-1,round of 16,2022-12-05 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-54,Brazil,South Korea,4-1,round of 16,2022-12-05 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-55,Morocco,Spain,0-0,round of 16,2022-12-06 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-56,Portugal,Switzerland,6-1,round of 16,2022-12-06 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-57,Croatia,Brazil,0-0,quarter-finals,2022-12-09 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-58,Netherlands,Argentina,2-2,quarter-finals,2022-12-09 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-59,Morocco,Portugal,1-0,quarter-finals,2022-12-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-60,England,France,1-2,quarter-finals,2022-12-10 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-61,Argentina,Croatia,3-0,semi-finals,2022-12-13 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-62,France,Morocco,2-0,semi-finals,2022-12-14 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-63,Croatia,Morocco,2-1,third-place match,2022-12-17 00:00:00+00:00,False,False,kaggle,1,local:kaggle-worldcup-and-international-results,0.8
+M-2022-64,Argentina,France,2-2,final,2022-12-18 00:00:00+00:00,True,True,kaggle,1,local:kaggle-worldcup-and-international-results,0.8

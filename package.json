@@ -1,6 +1,6 @@
 {
   "name": "football-prediction-platform",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open-source football intelligence platform for realtime ingestion, prediction, odds comparison, simulation, and post-match calibration.",
   "license": "MIT",
   "private": true,
@@ -20,7 +20,15 @@
     "lint": "npm run lint -w apps/web",
     "test": "npm run test -w services/api && npm run test:ai",
     "test:api": "npm run test -w services/api",
-    "test:ai": "node scripts/test-ai.mjs"
+    "test:ai": "node scripts/test-ai.mjs",
+    "etl:worldcup:download": "python scripts/worldcup/download_worldcup_sources.py",
+    "etl:worldcup:elo": "python scripts/worldcup/build_international_elo_backfill.py",
+    "etl:worldcup:reg90": "python scripts/worldcup/build_worldcup_reg90_table.py",
+    "etl:worldcup:priors": "python scripts/worldcup/build_worldcup_hist_priors.py",
+    "etl:official": "python etl/official_data_pipeline.py",
+    "etl:official:teams": "python teams/team_master_data.py",
+    "backtest:worldcup-enhancer": "python backtest/backtest_worldcup_enhancer.py",
+    "test:worldcup-enhancer": "python -m unittest discover -s tests -p \"test_worldcup_*.py\""
   },
   "overrides": {
     "postcss": "8.5.16",

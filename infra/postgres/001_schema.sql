@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS predictions (
   draw_prob NUMERIC(7, 4) NOT NULL,
   away_win_prob NUMERIC(7, 4) NOT NULL,
   top_scores JSONB NOT NULL,
+  score_probability_matrix JSONB,
   game_style TEXT NOT NULL CHECK (game_style IN ('defensive', 'balanced', 'open')),
   upset_risk TEXT NOT NULL CHECK (upset_risk IN ('low', 'medium', 'high')),
   expected_home_goals NUMERIC(5, 2) NOT NULL,
@@ -63,6 +64,9 @@ CREATE TABLE IF NOT EXISTS predictions (
 
 ALTER TABLE predictions
 ADD COLUMN IF NOT EXISTS model_version TEXT NOT NULL DEFAULT 'poisson-multifactor-v2';
+
+ALTER TABLE predictions
+ADD COLUMN IF NOT EXISTS score_probability_matrix JSONB;
 
 CREATE TABLE IF NOT EXISTS match_results (
   match_id TEXT PRIMARY KEY REFERENCES matches(id) ON DELETE CASCADE,

@@ -19,10 +19,10 @@ Email:
 `<your ChatGPT account email>`
 
 GitHub username:
-`<your public GitHub username>`
+`SilasGrantWei`
 
 GitHub repository URL:
-`https://github.com/<your-github-user>/football-prediction-platform`
+`https://github.com/SilasGrantWei/football-prediction-platform`
 
 Describe your role: are you a primary or core maintainer?
 

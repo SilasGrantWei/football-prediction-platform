@@ -114,6 +114,71 @@ $env:ESPN_WORLD_CUP_SUMMARY_URL="https://site.api.espn.com/apis/site/v2/sports/s
 $env:ESPN_MATCH_PAGE_BASE_URL="https://www.espn.com/soccer/match/_/gameId"
 ```
 
+## Official Football Truth Layer
+
+The official data layer is the single source of truth for verified match results.
+Prediction outputs, live simulations, model probabilities and score bonuses are
+not allowed to write into this layer.
+
+Source priority is fixed:
+
+```text
+FIFA > UEFA > Kaggle
+```
+
+Official source definitions live in `data_sources/official_sources.py`:
+
+- FIFA official source: https://inside.fifa.com/data-centre/matches
+- UEFA quasi-official enrichment source
+- Kaggle / historical fallback source
+
+Place raw files in one of these locations:
+
+```text
+data/official/raw/fifa_matches.csv|json|jsonl|parquet
+data/official/raw/uefa_matches.csv|json|jsonl|parquet
+data/official/raw/kaggle_matches.csv|json|jsonl|parquet
+```
+
+Or configure explicit paths:
+
+```powershell
+$env:FIFA_OFFICIAL_MATCHES_FILE="C:\path\to\fifa_matches.csv"
+$env:UEFA_OFFICIAL_MATCHES_FILE="C:\path\to\uefa_matches.csv"
+$env:KAGGLE_HISTORY_MATCHES_FILE="C:\path\to\kaggle_matches.csv"
+$env:OFFICIAL_MATCHES_JSON="data/official/official_matches.json"
+```
+
+Build the official layer and team master data:
+
+```powershell
+npm run etl:official
+npm run etl:official:teams
+```
+
+Outputs:
+
+```text
+data/official/official_matches.parquet
+data/official/official_matches.json
+data/official/official_matches.csv
+data/official/team_master.parquet
+data/official/team_master.json
+data/official/team_master.csv
+```
+
+Node API endpoints:
+
+```text
+GET /official/status
+GET /official/match/{match_id}
+GET /api/official/status
+GET /api/official/match/{match_id}
+```
+
+If `OFFICIAL_MATCHES_JSON` is explicitly configured but missing, the API returns
+an unavailable official layer instead of falling back to stale local data.
+
 ## Local Run
 
 ```powershell
@@ -150,6 +215,51 @@ $env:DEMO_MODE="false"
 $env:NEXT_PUBLIC_DATA_WS_URL="ws://localhost:8000"
 npm run dev
 ```
+
+## World Cup Historical Score Enhancer
+
+This module is a post-processing layer for exact-score predictions. It does
+not replace the base score model. It rebuilds historical 90-minute World Cup
+score outcomes from auditable public data, then uses that historical image for
+candidate score calibration, Top 3 filtering, and 3x1 combination ranking.
+
+Download the auditable public source data first:
+
+```powershell
+npm run etl:worldcup:download
+```
+
+The downloader writes `data/worldcup/raw/source_manifest.json` with source
+URLs, byte counts, and SHA256 checksums. `data/worldcup/raw/` should include:
+
+- `fjelstul/matches.csv`
+- `fjelstul/goals.csv`
+- `fjelstul/tournament_stages.csv`
+- `fjelstul/host_countries.csv`
+- `martj42/results.csv`
+- `martj42/shootouts.csv`
+
+Run the full pipeline:
+
+```powershell
+npm run etl:worldcup:download
+npm run etl:worldcup:elo
+npm run etl:worldcup:reg90
+npm run etl:worldcup:priors
+npm run backtest:worldcup-enhancer
+npm run test:worldcup-enhancer
+```
+
+Important rules:
+
+- Score paths only count 90-minute regulation time, including 45+/90+ stoppage time.
+- `matches.csv` final scores are not used as the betting score path.
+- Extra-time goals are excluded.
+- Penalty shootouts are excluded.
+- Backtests must use rolling validation. A historical image can only use data before the tested tournament.
+- If `artifacts/worldcup_enhancer_report.json` has a `promotion_gate.decision`
+  other than `promotion_ready`, the enhancer is only an explanation and
+  analysis layer. It must not affect frontend recommendation ranking.
 
 ## Docker
 

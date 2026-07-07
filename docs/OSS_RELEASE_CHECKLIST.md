@@ -40,7 +40,7 @@ git init
 git add .
 git commit -m "Initial open source release"
 git branch -M main
-git remote add origin https://github.com/<your-github-user>/football-prediction-platform.git
+git remote add origin https://github.com/SilasGrantWei/football-prediction-platform.git
 git push -u origin main
 ```
 

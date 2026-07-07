@@ -1,0 +1,618 @@
+[
+  {
+    "team_id": "algeria",
+    "team_name": "Algeria",
+    "fifa_rank": null,
+    "elo_rating": 1840.241,
+    "confederation": null
+  },
+  {
+    "team_id": "angola",
+    "team_name": "Angola",
+    "fifa_rank": null,
+    "elo_rating": 1551.889,
+    "confederation": null
+  },
+  {
+    "team_id": "argentina",
+    "team_name": "Argentina",
+    "fifa_rank": null,
+    "elo_rating": 2082.59,
+    "confederation": null
+  },
+  {
+    "team_id": "australia",
+    "team_name": "Australia",
+    "fifa_rank": null,
+    "elo_rating": 1802.62,
+    "confederation": null
+  },
+  {
+    "team_id": "austria",
+    "team_name": "Austria",
+    "fifa_rank": null,
+    "elo_rating": 1832.875,
+    "confederation": null
+  },
+  {
+    "team_id": "belgium",
+    "team_name": "Belgium",
+    "fifa_rank": null,
+    "elo_rating": 1882.492,
+    "confederation": null
+  },
+  {
+    "team_id": "bolivia",
+    "team_name": "Bolivia",
+    "fifa_rank": null,
+    "elo_rating": 1639.736,
+    "confederation": null
+  },
+  {
+    "team_id": "bosnia-and-herzegovina",
+    "team_name": "Bosnia and Herzegovina",
+    "fifa_rank": null,
+    "elo_rating": 1627.778,
+    "confederation": null
+  },
+  {
+    "team_id": "brazil",
+    "team_name": "Brazil",
+    "fifa_rank": null,
+    "elo_rating": 1971.426,
+    "confederation": null
+  },
+  {
+    "team_id": "bulgaria",
+    "team_name": "Bulgaria",
+    "fifa_rank": null,
+    "elo_rating": 1553.696,
+    "confederation": null
+  },
+  {
+    "team_id": "cameroon",
+    "team_name": "Cameroon",
+    "fifa_rank": null,
+    "elo_rating": 1653.991,
+    "confederation": null
+  },
+  {
+    "team_id": "canada",
+    "team_name": "Canada",
+    "fifa_rank": null,
+    "elo_rating": 1801.287,
+    "confederation": null
+  },
+  {
+    "team_id": "chile",
+    "team_name": "Chile",
+    "fifa_rank": null,
+    "elo_rating": 1757.219,
+    "confederation": null
+  },
+  {
+    "team_id": "china",
+    "team_name": "China",
+    "fifa_rank": null,
+    "elo_rating": 1538.631,
+    "confederation": null
+  },
+  {
+    "team_id": "chinese-taipei",
+    "team_name": "Chinese Taipei",
+    "fifa_rank": null,
+    "elo_rating": NaN,
+    "confederation": null
+  },
+  {
+    "team_id": "colombia",
+    "team_name": "Colombia",
+    "fifa_rank": null,
+    "elo_rating": 1958.417,
+    "confederation": null
+  },
+  {
+    "team_id": "costa-rica",
+    "team_name": "Costa Rica",
+    "fifa_rank": null,
+    "elo_rating": 1686.08,
+    "confederation": null
+  },
+  {
+    "team_id": "croatia",
+    "team_name": "Croatia",
+    "fifa_rank": null,
+    "elo_rating": 1883.201,
+    "confederation": null
+  },
+  {
+    "team_id": "cuba",
+    "team_name": "Cuba",
+    "fifa_rank": null,
+    "elo_rating": 1373.054,
+    "confederation": null
+  },
+  {
+    "team_id": "czech-republic",
+    "team_name": "Czech Republic",
+    "fifa_rank": null,
+    "elo_rating": 1747.478,
+    "confederation": null
+  },
+  {
+    "team_id": "czechoslovakia",
+    "team_name": "Czechoslovakia",
+    "fifa_rank": null,
+    "elo_rating": 1714.345,
+    "confederation": null
+  },
+  {
+    "team_id": "denmark",
+    "team_name": "Denmark",
+    "fifa_rank": null,
+    "elo_rating": 1839.143,
+    "confederation": null
+  },
+  {
+    "team_id": "dutch-east-indies",
+    "team_name": "Dutch East Indies",
+    "fifa_rank": null,
+    "elo_rating": NaN,
+    "confederation": null
+  },
+  {
+    "team_id": "east-germany",
+    "team_name": "East Germany",
+    "fifa_rank": null,
+    "elo_rating": NaN,
+    "confederation": null
+  },
+  {
+    "team_id": "ecuador",
+    "team_name": "Ecuador",
+    "fifa_rank": null,
+    "elo_rating": 1880.328,
+    "confederation": null
+  },
+  {
+    "team_id": "egypt",
+    "team_name": "Egypt",
+    "fifa_rank": null,
+    "elo_rating": 1771.688,
+    "confederation": null
+  },
+  {
+    "team_id": "el-salvador",
+    "team_name": "El Salvador",
+    "fifa_rank": null,
+    "elo_rating": 1492.257,
+    "confederation": null
+  },
+  {
+    "team_id": "england",
+    "team_name": "England",
+    "fifa_rank": null,
+    "elo_rating": 1941.502,
+    "confederation": null
+  },
+  {
+    "team_id": "equatorial-guinea",
+    "team_name": "Equatorial Guinea",
+    "fifa_rank": null,
+    "elo_rating": 1462.219,
+    "confederation": null
+  },
+  {
+    "team_id": "france",
+    "team_name": "France",
+    "fifa_rank": null,
+    "elo_rating": 2011.728,
+    "confederation": null
+  },
+  {
+    "team_id": "germany",
+    "team_name": "Germany",
+    "fifa_rank": null,
+    "elo_rating": 1925.887,
+    "confederation": null
+  },
+  {
+    "team_id": "ghana",
+    "team_name": "Ghana",
+    "fifa_rank": null,
+    "elo_rating": 1574.292,
+    "confederation": null
+  },
+  {
+    "team_id": "greece",
+    "team_name": "Greece",
+    "fifa_rank": null,
+    "elo_rating": 1743.568,
+    "confederation": null
+  },
+  {
+    "team_id": "haiti",
+    "team_name": "Haiti",
+    "fifa_rank": null,
+    "elo_rating": 1623.935,
+    "confederation": null
+  },
+  {
+    "team_id": "honduras",
+    "team_name": "Honduras",
+    "fifa_rank": null,
+    "elo_rating": 1630.98,
+    "confederation": null
+  },
+  {
+    "team_id": "hungary",
+    "team_name": "Hungary",
+    "fifa_rank": null,
+    "elo_rating": 1742.418,
+    "confederation": null
+  },
+  {
+    "team_id": "iceland",
+    "team_name": "Iceland",
+    "fifa_rank": null,
+    "elo_rating": 1588.595,
+    "confederation": null
+  },
+  {
+    "team_id": "iran",
+    "team_name": "Iran",
+    "fifa_rank": null,
+    "elo_rating": 1826.582,
+    "confederation": null
+  },
+  {
+    "team_id": "iraq",
+    "team_name": "Iraq",
+    "fifa_rank": null,
+    "elo_rating": 1698.869,
+    "confederation": null
+  },
+  {
+    "team_id": "israel",
+    "team_name": "Israel",
+    "fifa_rank": null,
+    "elo_rating": 1653.37,
+    "confederation": null
+  },
+  {
+    "team_id": "italy",
+    "team_name": "Italy",
+    "fifa_rank": null,
+    "elo_rating": 1881.233,
+    "confederation": null
+  },
+  {
+    "team_id": "ivory-coast",
+    "team_name": "Ivory Coast",
+    "fifa_rank": null,
+    "elo_rating": 1790.153,
+    "confederation": null
+  },
+  {
+    "team_id": "jamaica",
+    "team_name": "Jamaica",
+    "fifa_rank": null,
+    "elo_rating": 1628.77,
+    "confederation": null
+  },
+  {
+    "team_id": "japan",
+    "team_name": "Japan",
+    "fifa_rank": null,
+    "elo_rating": 1911.864,
+    "confederation": null
+  },
+  {
+    "team_id": "kuwait",
+    "team_name": "Kuwait",
+    "fifa_rank": null,
+    "elo_rating": 1498.017,
+    "confederation": null
+  },
+  {
+    "team_id": "mexico",
+    "team_name": "Mexico",
+    "fifa_rank": null,
+    "elo_rating": 1902.535,
+    "confederation": null
+  },
+  {
+    "team_id": "morocco",
+    "team_name": "Morocco",
+    "fifa_rank": null,
+    "elo_rating": 1911.487,
+    "confederation": null
+  },
+  {
+    "team_id": "netherlands",
+    "team_name": "Netherlands",
+    "fifa_rank": null,
+    "elo_rating": 1922.259,
+    "confederation": null
+  },
+  {
+    "team_id": "new-zealand",
+    "team_name": "New Zealand",
+    "fifa_rank": null,
+    "elo_rating": 1623.593,
+    "confederation": null
+  },
+  {
+    "team_id": "nigeria",
+    "team_name": "Nigeria",
+    "fifa_rank": null,
+    "elo_rating": 1763.451,
+    "confederation": null
+  },
+  {
+    "team_id": "north-korea",
+    "team_name": "North Korea",
+    "fifa_rank": null,
+    "elo_rating": 1506.609,
+    "confederation": null
+  },
+  {
+    "team_id": "northern-ireland",
+    "team_name": "Northern Ireland",
+    "fifa_rank": null,
+    "elo_rating": 1612.251,
+    "confederation": null
+  },
+  {
+    "team_id": "norway",
+    "team_name": "Norway",
+    "fifa_rank": null,
+    "elo_rating": 1859.744,
+    "confederation": null
+  },
+  {
+    "team_id": "panama",
+    "team_name": "Panama",
+    "fifa_rank": null,
+    "elo_rating": 1708.887,
+    "confederation": null
+  },
+  {
+    "team_id": "paraguay",
+    "team_name": "Paraguay",
+    "fifa_rank": null,
+    "elo_rating": 1824.423,
+    "confederation": null
+  },
+  {
+    "team_id": "peru",
+    "team_name": "Peru",
+    "fifa_rank": null,
+    "elo_rating": 1708.726,
+    "confederation": null
+  },
+  {
+    "team_id": "poland",
+    "team_name": "Poland",
+    "fifa_rank": null,
+    "elo_rating": 1742.219,
+    "confederation": null
+  },
+  {
+    "team_id": "portugal",
+    "team_name": "Portugal",
+    "fifa_rank": null,
+    "elo_rating": 1953.627,
+    "confederation": null
+  },
+  {
+    "team_id": "qatar",
+    "team_name": "Qatar",
+    "fifa_rank": null,
+    "elo_rating": 1548.699,
+    "confederation": null
+  },
+  {
+    "team_id": "republic-of-ireland",
+    "team_name": "Republic of Ireland",
+    "fifa_rank": null,
+    "elo_rating": 1693.035,
+    "confederation": null
+  },
+  {
+    "team_id": "romania",
+    "team_name": "Romania",
+    "fifa_rank": null,
+    "elo_rating": 1637.906,
+    "confederation": null
+  },
+  {
+    "team_id": "russia",
+    "team_name": "Russia",
+    "fifa_rank": null,
+    "elo_rating": 1775.03,
+    "confederation": null
+  },
+  {
+    "team_id": "saudi-arabia",
+    "team_name": "Saudi Arabia",
+    "fifa_rank": null,
+    "elo_rating": 1653.411,
+    "confederation": null
+  },
+  {
+    "team_id": "scotland",
+    "team_name": "Scotland",
+    "fifa_rank": null,
+    "elo_rating": 1743.722,
+    "confederation": null
+  },
+  {
+    "team_id": "senegal",
+    "team_name": "Senegal",
+    "fifa_rank": null,
+    "elo_rating": 1804.759,
+    "confederation": null
+  },
+  {
+    "team_id": "serbia",
+    "team_name": "Serbia",
+    "fifa_rank": null,
+    "elo_rating": 1772.148,
+    "confederation": null
+  },
+  {
+    "team_id": "serbia-and-montenegro",
+    "team_name": "Serbia and Montenegro",
+    "fifa_rank": null,
+    "elo_rating": NaN,
+    "confederation": null
+  },
+  {
+    "team_id": "slovakia",
+    "team_name": "Slovakia",
+    "fifa_rank": null,
+    "elo_rating": 1685.708,
+    "confederation": null
+  },
+  {
+    "team_id": "slovenia",
+    "team_name": "Slovenia",
+    "fifa_rank": null,
+    "elo_rating": 1734.586,
+    "confederation": null
+  },
+  {
+    "team_id": "south-africa",
+    "team_name": "South Africa",
+    "fifa_rank": null,
+    "elo_rating": 1649.068,
+    "confederation": null
+  },
+  {
+    "team_id": "south-korea",
+    "team_name": "South Korea",
+    "fifa_rank": null,
+    "elo_rating": 1812.985,
+    "confederation": null
+  },
+  {
+    "team_id": "soviet-union",
+    "team_name": "Soviet Union",
+    "fifa_rank": null,
+    "elo_rating": NaN,
+    "confederation": null
+  },
+  {
+    "team_id": "spain",
+    "team_name": "Spain",
+    "fifa_rank": null,
+    "elo_rating": 2046.681,
+    "confederation": null
+  },
+  {
+    "team_id": "sweden",
+    "team_name": "Sweden",
+    "fifa_rank": null,
+    "elo_rating": 1740.18,
+    "confederation": null
+  },
+  {
+    "team_id": "switzerland",
+    "team_name": "Switzerland",
+    "fifa_rank": null,
+    "elo_rating": 1863.672,
+    "confederation": null
+  },
+  {
+    "team_id": "thailand",
+    "team_name": "Thailand",
+    "fifa_rank": null,
+    "elo_rating": 1527.455,
+    "confederation": null
+  },
+  {
+    "team_id": "togo",
+    "team_name": "Togo",
+    "fifa_rank": null,
+    "elo_rating": 1473.194,
+    "confederation": null
+  },
+  {
+    "team_id": "trinidad-and-tobago",
+    "team_name": "Trinidad and Tobago",
+    "fifa_rank": null,
+    "elo_rating": 1540.87,
+    "confederation": null
+  },
+  {
+    "team_id": "tunisia",
+    "team_name": "Tunisia",
+    "fifa_rank": null,
+    "elo_rating": 1670.87,
+    "confederation": null
+  },
+  {
+    "team_id": "turkey",
+    "team_name": "Turkey",
+    "fifa_rank": null,
+    "elo_rating": 1853.958,
+    "confederation": null
+  },
+  {
+    "team_id": "ukraine",
+    "team_name": "Ukraine",
+    "fifa_rank": null,
+    "elo_rating": 1780.988,
+    "confederation": null
+  },
+  {
+    "team_id": "united-arab-emirates",
+    "team_name": "United Arab Emirates",
+    "fifa_rank": null,
+    "elo_rating": 1612.152,
+    "confederation": null
+  },
+  {
+    "team_id": "united-states",
+    "team_name": "United States",
+    "fifa_rank": null,
+    "elo_rating": 1782.796,
+    "confederation": null
+  },
+  {
+    "team_id": "uruguay",
+    "team_name": "Uruguay",
+    "fifa_rank": null,
+    "elo_rating": 1854.267,
+    "confederation": null
+  },
+  {
+    "team_id": "wales",
+    "team_name": "Wales",
+    "fifa_rank": null,
+    "elo_rating": 1703.408,
+    "confederation": null
+  },
+  {
+    "team_id": "west-germany",
+    "team_name": "West Germany",
+    "fifa_rank": null,
+    "elo_rating": NaN,
+    "confederation": null
+  },
+  {
+    "team_id": "yugoslavia",
+    "team_name": "Yugoslavia",
+    "fifa_rank": null,
+    "elo_rating": 1775.024,
+    "confederation": null
+  },
+  {
+    "team_id": "zaire",
+    "team_name": "Zaire",
+    "fifa_rank": null,
+    "elo_rating": NaN,
+    "confederation": null
+  }
+]
