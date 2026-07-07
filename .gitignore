@@ -9,6 +9,7 @@ dist/
 **/dist/
 coverage/
 **/coverage/
+*.tsbuildinfo
 
 # Local environments and secrets
 .env
