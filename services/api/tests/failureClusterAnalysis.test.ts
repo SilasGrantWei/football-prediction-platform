@@ -40,7 +40,7 @@ describe("buildFailureClusterAnalysis", () => {
     expect(labels).toContain("平局/低比分锚定过强");
     expect(labels).toContain("客胜打穿未进首选");
     expect(labels).toContain("胜平负层和比分层脱节");
-    expect(analysis.recommendedActions.join(" ")).toContain("Top3必须保留至少一个客胜比分路径");
+    expect(analysis.recommendedActions.join(" ")).toContain("Top3必须直接取概率矩阵前三");
   });
 });
 

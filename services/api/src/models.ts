@@ -1,4 +1,5 @@
 export type MatchStatus = "scheduled" | "live" | "halftime" | "finished";
+export type MatchDecision = "regulation" | "extra_time" | "penalties";
 export type EventType =
   | "goal"
   | "penalty"
@@ -77,6 +78,7 @@ export interface PredictionExplanation {
   recentFormSummary: string;
   playerSummary: string;
   tacticalSummary: string;
+  dataGaps?: string[];
   factors: PredictionFactor[];
   scoreRationales: ScoreRationale[];
   sources: PredictionSource[];
@@ -135,6 +137,10 @@ export interface PostMatchCalibration {
   drawTrapBreakthroughRate?: number;
   drawTrapMarginUnderestimate?: number;
   favoriteCleanSheetBustRate?: number;
+  highTotalMissRate?: number;
+  lowTotalMissRate?: number;
+  zeroZeroMissRate?: number;
+  totalGoalOverestimate?: number;
   generatedAt: string;
   notes: string[];
 }
@@ -312,6 +318,7 @@ export interface PreMatchContext {
 export interface Prediction {
   matchId: string;
   modelVersion?: string;
+  participantSignature?: string;
   homeWinProb: number;
   drawProb: number;
   awayWinProb: number;
@@ -338,9 +345,15 @@ export interface Match {
   awayTeam: Team;
   homeScore: number;
   awayScore: number;
+  fullMatchHomeScore?: number;
+  fullMatchAwayScore?: number;
+  penaltyShootoutHomeScore?: number;
+  penaltyShootoutAwayScore?: number;
+  resultDecision?: MatchDecision;
   status: MatchStatus;
   startTime: string;
   minute: number;
+  winnerTeamId?: string;
   prediction?: Prediction;
 }
 

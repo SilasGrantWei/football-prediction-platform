@@ -23,8 +23,8 @@ syncRouter.post(
     const job = parseJob(req.query.job);
 
     if (config.demoMode) {
-      const result = await syncTournamentScoresOnce();
-      const predictionRefresh = await predictionService.refreshUpcomingPredictions();
+      const result = await syncTournamentScoresOnce({ forcePredictionRefresh: true });
+      const predictionRefresh = result.predictionRefresh;
       res.json({ data: { mode: "demo", job: "tournament", result, predictionRefresh } });
       return;
     }

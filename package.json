@@ -1,6 +1,6 @@
 {
   "name": "football-prediction-platform",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Open-source football intelligence platform for realtime ingestion, prediction, odds comparison, simulation, and post-match calibration.",
   "license": "MIT",
   "private": true,
@@ -28,6 +28,7 @@
     "etl:official": "python etl/official_data_pipeline.py",
     "etl:official:teams": "python teams/team_master_data.py",
     "backtest:worldcup-enhancer": "python backtest/backtest_worldcup_enhancer.py",
+    "benchmark:causal-rest": "tsx scripts/benchmark-causal-rest-context.ts",
     "test:worldcup-enhancer": "python -m unittest discover -s tests -p \"test_worldcup_*.py\""
   },
   "overrides": {

@@ -179,7 +179,53 @@ const playerNameMap: Record<string, string> = {
   "Andreas Schjelderup": "安德烈亚斯-舍尔德鲁普",
   "Fredrik Aursnes": "弗雷德里克-奥斯内斯",
   "Leo Ostigard": "莱奥-厄斯蒂高",
-  "Leo Østigard": "莱奥-厄斯蒂高"
+  "Leo Østigard": "莱奥-厄斯蒂高",
+  "Raul Rangel": "劳尔-兰赫尔",
+  "Raúl Rangel": "劳尔-兰赫尔",
+  "Johan Vasquez": "约翰-巴斯克斯",
+  "Johan Vásquez": "约翰-巴斯克斯",
+  "Cesar Montes": "塞萨尔-蒙特斯",
+  "César Montes": "塞萨尔-蒙特斯",
+  "Jesus Gallardo": "赫苏斯-加利亚多",
+  "Jesús Gallardo": "赫苏斯-加利亚多",
+  "Jorge Sanchez": "豪尔赫-桑切斯",
+  "Jorge Sánchez": "豪尔赫-桑切斯",
+  "Erik Lira": "埃里克-利拉",
+  "Érik Lira": "埃里克-利拉",
+  "Luis Romo": "路易斯-罗莫",
+  "Gilberto Mora": "吉尔伯托-莫拉",
+  "Raul Jimenez": "劳尔-希门尼斯",
+  "Raúl Jiménez": "劳尔-希门尼斯",
+  "Julian Quinones": "胡利安-基尼奥内斯",
+  "Julián Quiñones": "胡利安-基尼奥内斯",
+  "Roberto Alvarado": "罗伯托-阿尔瓦拉多",
+  "Alvaro Fidalgo": "阿尔瓦罗-菲达尔戈",
+  "Álvaro Fidalgo": "阿尔瓦罗-菲达尔戈",
+  "Santiago Gimenez": "圣地亚哥-希门尼斯",
+  "Santiago Giménez": "圣地亚哥-希门尼斯",
+  "Brian Gutierrez": "布赖恩-古铁雷斯",
+  "Brian Gutiérrez": "布赖恩-古铁雷斯",
+  "Edson Alvarez": "埃德森-阿尔瓦雷斯",
+  "Edson Álvarez": "埃德森-阿尔瓦雷斯",
+  "Guillermo Martinez": "吉列尔莫-马丁内斯",
+  "Guillermo Martínez": "吉列尔莫-马丁内斯",
+  "Jordan Pickford": "乔丹-皮克福德",
+  "Marc Guehi": "马克-格伊",
+  "Marc Guéhi": "马克-格伊",
+  "Ezri Konsa": "埃兹里-孔萨",
+  "Nico O'Reilly": "尼科-奥赖利",
+  "Nico O’Reilly": "尼科-奥赖利",
+  "Jarell Quansah": "贾雷尔-昆萨",
+  "Jude Bellingham": "裘德-贝林厄姆",
+  "Elliot Anderson": "埃利奥特-安德森",
+  "Declan Rice": "德克兰-赖斯",
+  "Harry Kane": "哈里-凯恩",
+  "Anthony Gordon": "安东尼-戈登",
+  "Bukayo Saka": "布卡约-萨卡",
+  "John Stones": "约翰-斯通斯",
+  "Dan Burn": "丹-伯恩",
+  "Djed Spence": "杰德-斯彭斯",
+  "Morgan Rogers": "摩根-罗杰斯"
 };
 
 const positionMap: Record<string, string> = {
@@ -213,6 +259,7 @@ const orderedEntries = Object.entries({
 
 const latinRegex = /[A-Za-zÀ-ÖØ-öø-ÿ]/u;
 const latinTokenRegex = /[A-Za-zÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ'.-]*(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ'.-]*)*/gu;
+const unmappedLatinMarker = "__UNMAPPED_LATIN_TOKEN__";
 
 export function hasLatinText(value: unknown): boolean {
   return latinRegex.test(String(value ?? ""));
@@ -223,7 +270,7 @@ export function toChineseDisplay(value: unknown, fallback = "待接入中文名"
   if (!text) return "";
 
   for (const [source, target] of orderedEntries) {
-    text = text.replace(new RegExp(escapeRegExp(source), "giu"), target);
+    text = text.replace(sourceRegex(source), target);
   }
 
   return text.replace(latinTokenRegex, (token) => {
@@ -236,7 +283,41 @@ export function toChineseDisplay(value: unknown, fallback = "待接入中文名"
 export function toChineseDisplayOrOriginal(value: unknown): string {
   const raw = String(value ?? "").trim();
   if (!raw) return "";
-  return toChineseDisplay(raw, raw);
+  const translated = toChineseDisplay(raw, unmappedLatinMarker);
+  return translated.includes(unmappedLatinMarker) ? raw : translated;
+}
+
+const playerNamePlaceholders = [
+  "未知球员",
+  "待补中文球员",
+  "待补中文名",
+  "待接入中文名",
+  "待接入中文球员",
+  "未接入中文名",
+  "数据源未返回姓名",
+  "数据源重复姓名",
+  "占位",
+  "placeholder",
+  "unknown",
+  "unknown player",
+  "tbd",
+  "待定球员",
+  "sub player"
+];
+
+export function isPlaceholderPlayerName(value: unknown): boolean {
+  const normalized = String(value ?? "").trim().toLowerCase();
+  if (!normalized || normalized === "-" || normalized === "n/a") return true;
+  return playerNamePlaceholders.some((placeholder) => normalized.includes(placeholder));
+}
+
+export function toPlayerDisplayName(value: unknown, fallback = "数据源未返回姓名"): string {
+  const raw = String(value ?? "").trim();
+  if (isPlaceholderPlayerName(raw)) return fallback;
+
+  const translated = toChineseDisplayOrOriginal(raw).trim();
+  if (!translated || isPlaceholderPlayerName(translated)) return raw;
+  return translated;
 }
 
 export function translateTeamName(value: unknown): string {
@@ -257,4 +338,10 @@ export function translateFreeText(value: unknown): string {
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function sourceRegex(source: string): RegExp {
+  const escaped = escapeRegExp(source);
+  if (!latinRegex.test(source)) return new RegExp(escaped, "giu");
+  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "giu");
 }

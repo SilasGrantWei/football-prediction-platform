@@ -68,6 +68,7 @@ def ensure_schema(conn: Connection) -> None:
     conn.execute("ALTER TABLE matches ADD COLUMN IF NOT EXISTS kickoff_time TIMESTAMPTZ")
     conn.execute("UPDATE matches SET kickoff_time = start_time WHERE kickoff_time IS NULL")
     conn.execute("ALTER TABLE matches ADD COLUMN IF NOT EXISTS stage TEXT NOT NULL DEFAULT 'group'")
+    conn.execute("ALTER TABLE matches ADD COLUMN IF NOT EXISTS winner_team_id TEXT REFERENCES teams(id)")
     conn.execute("ALTER TABLE matches ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()")
     conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_matches_match_id ON matches(match_id)")
     conn.execute("CREATE INDEX IF NOT EXISTS idx_matches_status ON matches(status)")

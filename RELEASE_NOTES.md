@@ -1,5 +1,28 @@
 # Release Notes
 
+## v0.1.2
+
+Reliability, model-calibration, and verified-score update for the public repository.
+
+### Highlights
+
+- Separates the official 90-minute score from the full-match score and penalty shootout, without changing prediction evaluation semantics.
+- Adds automatic ESPN tournament refresh, Beijing-time schedule grouping, persistent match state, and reboot-safe local startup.
+- Upgrades exact-score generation and post-match learning with Poisson + Elo + FIFA priors, causal rest context, participant-bound snapshots, and safer refresh checkpoints.
+- Ships the light broadcast dashboard redesign with clearer score, status, lineup, and review presentation.
+- Rejects invalid provider score pairs and prioritizes explicit shootout evidence to prevent fabricated or mislabeled results.
+
+### Verification
+
+Validated before publishing:
+
+- Node API: 124 tests passed.
+- Web: 7 tests passed.
+- AI service: 6 tests passed.
+- Python pipeline: 18 tests passed.
+- ESLint and production builds passed.
+- Runtime verification confirmed `qf-099` as 90 minutes `1-1`, full match `1-2`, decided after extra time.
+
 ## v0.1.1
 
 Maintenance and data-pipeline update for the public repository.

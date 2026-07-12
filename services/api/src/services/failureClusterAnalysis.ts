@@ -213,7 +213,9 @@ function buildRecommendedActions(tags: FailureClusterTag[]): string[] {
   }
 
   if (keys.has("away_breakthrough") || keys.has("score_outcome_decoupling")) {
-    actions.push("把胜平负概率强制传导到精确比分矩阵：客胜占优时，Top3必须保留至少一个客胜比分路径。");
+    actions.push(
+      "把胜平负、球队实力和总进球校准全部写入精确比分矩阵；Top3必须直接取概率矩阵前三，禁止再用平局或爆冷启发式替换高概率比分。"
+    );
   }
 
   if (keys.has("total_goals_underestimated") || keys.has("total_goals_overestimated")) {

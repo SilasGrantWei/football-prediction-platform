@@ -30,6 +30,7 @@ __pycache__/
 # Runtime output
 logs/
 .codex-logs/
+data/runtime/
 *.log
 
 # Local release packages

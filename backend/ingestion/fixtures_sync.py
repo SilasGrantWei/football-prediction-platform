@@ -18,8 +18,12 @@ def upsert_fixtures(conn, snapshots: Iterable[MatchSnapshot]) -> dict[str, int]:
     snapshots = list(snapshots)
     inserted = 0
     updated = 0
+    skipped_unverified = 0
 
     for snapshot in snapshots:
+        if not snapshot.score90_verified:
+            skipped_unverified += 1
+            continue
         ensure_team(conn, snapshot.home_team)
         ensure_team(conn, snapshot.away_team)
         existing_id = existing_match_id(conn, snapshot)
@@ -43,6 +47,7 @@ def upsert_fixtures(conn, snapshots: Iterable[MatchSnapshot]) -> dict[str, int]:
               kickoff_time,
               stage,
               minute,
+              winner_team_id,
               updated_at
             )
             VALUES (
@@ -60,6 +65,7 @@ def upsert_fixtures(conn, snapshots: Iterable[MatchSnapshot]) -> dict[str, int]:
               %(kickoff_time)s,
               %(stage)s,
               %(minute)s,
+              %(winner_team_id)s,
               NOW()
             )
             ON CONFLICT (id) DO UPDATE SET
@@ -76,6 +82,7 @@ def upsert_fixtures(conn, snapshots: Iterable[MatchSnapshot]) -> dict[str, int]:
               kickoff_time = EXCLUDED.kickoff_time,
               stage = EXCLUDED.stage,
               minute = CASE WHEN EXCLUDED.minute >= 120 THEN matches.minute ELSE EXCLUDED.minute END,
+              winner_team_id = COALESCE(EXCLUDED.winner_team_id, matches.winner_team_id),
               updated_at = NOW()
             """,
             match_params(match_id, snapshot),
@@ -86,7 +93,12 @@ def upsert_fixtures(conn, snapshots: Iterable[MatchSnapshot]) -> dict[str, int]:
         else:
             inserted += 1
 
-    return {"fetched": len(snapshots), "inserted": inserted, "updated": updated}
+    return {
+        "fetched": len(snapshots),
+        "inserted": inserted,
+        "updated": updated,
+        "skipped_unverified": skipped_unverified,
+    }
 
 
 def ensure_team(conn, team) -> None:
@@ -144,6 +156,7 @@ def match_params(match_id: str, snapshot: MatchSnapshot) -> dict:
         "kickoff_time": snapshot.kickoff_time,
         "stage": snapshot.stage,
         "minute": snapshot.minute,
+        "winner_team_id": snapshot.winner_team_id,
     }
 
 

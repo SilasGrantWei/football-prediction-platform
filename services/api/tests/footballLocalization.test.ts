@@ -99,8 +99,10 @@ describe("footballLocalization", () => {
     expect(cardEvent).not.toMatch(/未接入中文名|shown|yellow|foul/);
   });
 
-  it("keeps unmapped real names unchanged instead of inventing translations", () => {
+  it("preserves unmapped source player names when the provider supplies a real-name fallback", () => {
     expect(localizePlayerName("Unmapped Player")).toBe("未知球员");
+    expect(localizePlayerName("Unmapped Player", "Unmapped Player")).toBe("Unmapped Player");
+    expect(localizePlayerName("Unmapped Player", "")).toBe("");
     expect(localizePositionName("Wing Wizard")).toBe("位置未返回");
   });
 
@@ -135,6 +137,35 @@ describe("footballLocalization", () => {
     expect(localizeFootballText("Goal by Joao Felix, assist James Rodriguez")).toBe(
       "进球： 若昂·菲利克斯, 助攻 哈梅斯·罗德里格斯"
     );
+  });
+
+  it("localizes Mexico and England knockout lineup names", () => {
+    const names = [
+      ["Raúl Rangel", "劳尔·兰赫尔"],
+      ["Johan Vásquez", "约翰·巴斯克斯"],
+      ["César Montes", "塞萨尔·蒙特斯"],
+      ["Jesús Gallardo", "赫苏斯·加利亚多"],
+      ["Jorge Sánchez", "豪尔赫·桑切斯"],
+      ["Érik Lira", "埃里克·利拉"],
+      ["Raúl Jiménez", "劳尔·希门尼斯"],
+      ["Julián Quiñones", "胡利安·基尼奥内斯"],
+      ["Álvaro Fidalgo", "阿尔瓦罗·菲达尔戈"],
+      ["Brian Gutiérrez", "布赖恩·古铁雷斯"],
+      ["Edson Álvarez", "埃德森·阿尔瓦雷斯"],
+      ["Jordan Pickford", "乔丹·皮克福德"],
+      ["Marc Guéhi", "马克·格伊"],
+      ["Ezri Konsa", "埃兹里·孔萨"],
+      ["Nico O'Reilly", "尼科·奥赖利"],
+      ["Jude Bellingham", "裘德·贝林厄姆"],
+      ["Declan Rice", "德克兰·赖斯"],
+      ["Harry Kane", "哈里·凯恩"],
+      ["Bukayo Saka", "布卡约·萨卡"],
+      ["Morgan Rogers", "摩根·罗杰斯"]
+    ];
+
+    for (const [source, localized] of names) {
+      expect(localizePlayerName(source)).toBe(localized);
+    }
   });
 
   it("localizes common ESPN event descriptions without hiding the real event source", () => {

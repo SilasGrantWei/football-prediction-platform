@@ -261,6 +261,17 @@ Important rules:
   other than `promotion_ready`, the enhancer is only an explanation and
   analysis layer. It must not affect frontend recommendation ranking.
 
+### Regulation and full-match score contract
+
+The public match API keeps official score meanings separate:
+
+- `homeScore` / `awayScore`: 90 minutes including stoppage time; prediction evaluation uses only this pair.
+- `fullMatchHomeScore` / `fullMatchAwayScore`: on-field score after extra time, excluding shootout kicks.
+- `penaltyShootoutHomeScore` / `penaltyShootoutAwayScore`: shootout kicks, only when explicitly returned by the provider.
+- `resultDecision`: `regulation`, `extra_time`, or `penalties`.
+
+Missing or invalid score pairs are never converted into a fabricated `0-0` result.
+
 ## Docker
 
 ```powershell

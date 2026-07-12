@@ -9,6 +9,7 @@ import {
   fetchWorldCupTournamentScoreboardScores,
   type ExternalScoreSnapshot
 } from "./liveScoreProvider.js";
+import { PredictionRefreshCheckpoint } from "./predictionRefreshCheckpoint.js";
 import { predictionService } from "./predictionService.js";
 
 interface LivePayload {
@@ -19,10 +20,24 @@ interface LivePayload {
 
 type ScoreSnapshotMatchMode = "known-event-id" | "team-time";
 
+interface ScoreSnapshotApplyResult {
+  updated: number;
+  bracketOutcomesUpdated: number;
+}
+
 interface ScoreSnapshotMatch {
   match: Match;
   mode: ScoreSnapshotMatchMode;
 }
+
+type PredictionRefreshResult = Awaited<ReturnType<typeof predictionService.refreshUpcomingPredictions>>;
+
+type TournamentSyncOptions = {
+  forcePredictionRefresh?: boolean;
+};
+
+const predictionRefreshCheckpoint = new PredictionRefreshCheckpoint();
+let predictionRefreshInFlight: Promise<PredictionRefreshResult | undefined> | null = null;
 
 const knownEspnEventIdsByMatchId: Record<string, string> = {
   "r16-090": "760502",
@@ -32,7 +47,9 @@ const knownEspnEventIdsByMatchId: Record<string, string> = {
   "r16-093": "760506",
   "r16-094": "760507",
   "r16-096": "760508",
-  "r16-095": "760509"
+  "r16-095": "760509",
+  "qf-099": "760512",
+  "qf-100": "760513"
 };
 
 export function attachLiveSocket(wss: WebSocketServer): void {
@@ -75,38 +92,78 @@ export function startLiveSimulator(wss: WebSocketServer): () => void {
   };
 }
 
-export async function syncLiveScoresOnce(): Promise<{ provider: "espn"; scope: "window"; snapshots: number; updated: number }> {
+export async function syncLiveScoresOnce(): Promise<{
+  provider: "espn";
+  scope: "window";
+  snapshots: number;
+  updated: number;
+  predictionRefresh?: PredictionRefreshResult;
+}> {
+  let snapshotsCount = 0;
+  let updated = 0;
+  let bracketOutcomesUpdated = 0;
   try {
     const snapshots = await fetchWorldCupScoreboardScores();
-    const updated = await applyScoreSnapshots(snapshots);
-    return { provider: "espn", scope: "window", snapshots: snapshots.length, updated };
+    snapshotsCount = snapshots.length;
+    const result = await applyScoreSnapshotsDetailed(snapshots);
+    updated = result.updated;
+    bracketOutcomesUpdated = result.bracketOutcomesUpdated;
   } catch (error) {
     console.warn(JSON.stringify({ level: "warn", message: "Live score sync failed", error: String(error) }));
-    return { provider: "espn", scope: "window", snapshots: 0, updated: 0 };
   }
+
+  if (bracketOutcomesUpdated > 0) predictionRefreshCheckpoint.request();
+  const predictionRefresh = await refreshPendingPredictions(bracketOutcomesUpdated);
+  return {
+    provider: "espn",
+    scope: "window",
+    snapshots: snapshotsCount,
+    updated,
+    ...(predictionRefresh ? { predictionRefresh } : {})
+  };
 }
 
-export async function syncTournamentScoresOnce(): Promise<{
+export async function syncTournamentScoresOnce(options: TournamentSyncOptions = {}): Promise<{
   provider: "espn";
   scope: "tournament";
   snapshots: number;
   updated: number;
+  predictionRefresh?: PredictionRefreshResult;
 }> {
+  let snapshotsCount = 0;
+  let updated = 0;
+  let bracketOutcomesUpdated = 0;
   try {
     const snapshots = await fetchWorldCupTournamentScoreboardScores();
-    const updated = await applyScoreSnapshots(snapshots);
-    return { provider: "espn", scope: "tournament", snapshots: snapshots.length, updated };
+    snapshotsCount = snapshots.length;
+    const result = await applyScoreSnapshotsDetailed(snapshots);
+    updated = result.updated;
+    bracketOutcomesUpdated = result.bracketOutcomesUpdated;
   } catch (error) {
     console.warn(JSON.stringify({ level: "warn", message: "Tournament score sync failed", error: String(error) }));
-    return { provider: "espn", scope: "tournament", snapshots: 0, updated: 0 };
   }
+
+  if (bracketOutcomesUpdated > 0 || options.forcePredictionRefresh) predictionRefreshCheckpoint.request();
+  const predictionRefresh = await refreshPendingPredictions(bracketOutcomesUpdated);
+  return {
+    provider: "espn",
+    scope: "tournament",
+    snapshots: snapshotsCount,
+    updated,
+    ...(predictionRefresh ? { predictionRefresh } : {})
+  };
 }
 
 export async function applyScoreSnapshots(snapshots: ExternalScoreSnapshot[]): Promise<number> {
-  if (!snapshots.length) return 0;
+  return (await applyScoreSnapshotsDetailed(snapshots)).updated;
+}
+
+async function applyScoreSnapshotsDetailed(snapshots: ExternalScoreSnapshot[]): Promise<ScoreSnapshotApplyResult> {
+  if (!snapshots.length) return { updated: 0, bracketOutcomesUpdated: 0 };
 
   const localMatches = await matchRepository.findMatches();
   let updated = 0;
+  let bracketOutcomesUpdated = 0;
 
   for (const snapshot of snapshots) {
     const matched = findMatchingLocalMatch(localMatches, snapshot);
@@ -120,34 +177,142 @@ export async function applyScoreSnapshots(snapshots: ExternalScoreSnapshot[]): P
 
     const localHomeTeamId = reverseOrder ? snapshot.awayTeamId : snapshot.homeTeamId;
     const localAwayTeamId = reverseOrder ? snapshot.homeTeamId : snapshot.awayTeamId;
+    const nextWinnerTeamId =
+      snapshot.winnerTeamId === localHomeTeamId || snapshot.winnerTeamId === localAwayTeamId
+        ? snapshot.winnerTeamId
+        : match.winnerTeamId;
     const nextState = {
       minute: snapshot.minute,
-      homeScore: reverseOrder ? snapshot.awayScore : snapshot.homeScore,
-      awayScore: reverseOrder ? snapshot.homeScore : snapshot.awayScore,
+      homeScore:
+        snapshot.score90Verified === false
+          ? match.homeScore
+          : reverseOrder
+            ? snapshot.awayScore
+            : snapshot.homeScore,
+      awayScore:
+        snapshot.score90Verified === false
+          ? match.awayScore
+          : reverseOrder
+            ? snapshot.homeScore
+            : snapshot.awayScore,
+      fullMatchHomeScore: reverseOrder ? snapshot.fullMatchAwayScore : snapshot.fullMatchHomeScore,
+      fullMatchAwayScore: reverseOrder ? snapshot.fullMatchHomeScore : snapshot.fullMatchAwayScore,
+      penaltyShootoutHomeScore: reverseOrder
+        ? snapshot.penaltyShootoutAwayScore
+        : snapshot.penaltyShootoutHomeScore,
+      penaltyShootoutAwayScore: reverseOrder
+        ? snapshot.penaltyShootoutHomeScore
+        : snapshot.penaltyShootoutAwayScore,
+      resultDecision: snapshot.resultDecision,
       status: snapshot.status,
       homeTeamId: localHomeTeamId,
       awayTeamId: localAwayTeamId,
-      startTime: snapshot.startTime
+      startTime: snapshot.startTime,
+      winnerTeamId: nextWinnerTeamId
     };
+
+    const previousAdvancingTeamId = resolveAdvancingTeamId({
+      status: match.status,
+      homeScore: match.homeScore,
+      awayScore: match.awayScore,
+      homeTeamId: match.homeTeam.id,
+      awayTeamId: match.awayTeam.id,
+      winnerTeamId: match.winnerTeamId
+    });
+    const nextAdvancingTeamId = resolveAdvancingTeamId(nextState);
 
     if (
       match.minute !== nextState.minute ||
       match.homeScore !== nextState.homeScore ||
       match.awayScore !== nextState.awayScore ||
+      match.fullMatchHomeScore !== nextState.fullMatchHomeScore ||
+      match.fullMatchAwayScore !== nextState.fullMatchAwayScore ||
+      match.penaltyShootoutHomeScore !== nextState.penaltyShootoutHomeScore ||
+      match.penaltyShootoutAwayScore !== nextState.penaltyShootoutAwayScore ||
+      match.resultDecision !== nextState.resultDecision ||
       match.status !== nextState.status ||
       match.homeTeam.id !== nextState.homeTeamId ||
       match.awayTeam.id !== nextState.awayTeamId ||
+      match.winnerTeamId !== nextState.winnerTeamId ||
       new Date(match.startTime).getTime() !== new Date(nextState.startTime).getTime()
     ) {
       await matchRepository.updateMatchState(match.id, nextState);
       updated += 1;
+      if (nextAdvancingTeamId && nextAdvancingTeamId !== previousAdvancingTeamId) {
+        bracketOutcomesUpdated += 1;
+      }
     }
   }
 
   if (updated > 0) {
     console.log(JSON.stringify({ level: "info", message: "Scores synced", provider: "espn", updated }));
   }
-  return updated;
+  return { updated, bracketOutcomesUpdated };
+}
+
+function resolveAdvancingTeamId(input: {
+  status: Match["status"];
+  homeScore: number;
+  awayScore: number;
+  homeTeamId: string;
+  awayTeamId: string;
+  winnerTeamId?: string;
+}): string | undefined {
+  if (input.status !== "finished") return undefined;
+  if (input.winnerTeamId === input.homeTeamId || input.winnerTeamId === input.awayTeamId) return input.winnerTeamId;
+  if (input.homeScore > input.awayScore) return input.homeTeamId;
+  if (input.awayScore > input.homeScore) return input.awayTeamId;
+  return undefined;
+}
+
+async function refreshPendingPredictions(bracketOutcomesUpdated: number): Promise<PredictionRefreshResult | undefined> {
+  if (!predictionRefreshCheckpoint.hasPending()) return undefined;
+  if (predictionRefreshInFlight) return predictionRefreshInFlight;
+
+  const requestedVersion = predictionRefreshCheckpoint.requestedVersion();
+  predictionRefreshInFlight = (async () => {
+    try {
+      const result = await predictionService.refreshUpcomingPredictions();
+      if (result.failed === 0) {
+        predictionRefreshCheckpoint.complete(requestedVersion);
+        console.log(
+          JSON.stringify({
+            level: "info",
+            message: "Upcoming predictions refreshed after bracket update",
+            bracketOutcomesUpdated,
+            requestedVersion,
+            recalculated: result.recalculated
+          })
+        );
+      } else {
+        console.warn(
+          JSON.stringify({
+            level: "warn",
+            message: "Upcoming prediction refresh remains pending after partial failure",
+            bracketOutcomesUpdated,
+            requestedVersion,
+            failed: result.failed
+          })
+        );
+      }
+      return result;
+    } catch (error) {
+      console.warn(
+        JSON.stringify({
+          level: "warn",
+          message: "Upcoming prediction refresh after bracket update failed",
+          bracketOutcomesUpdated,
+          requestedVersion,
+          error: String(error)
+        })
+      );
+      return undefined;
+    } finally {
+      predictionRefreshInFlight = null;
+    }
+  })();
+
+  return predictionRefreshInFlight;
 }
 
 function findMatchingLocalMatch(matches: Match[], snapshot: ExternalScoreSnapshot): ScoreSnapshotMatch | null {

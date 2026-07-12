@@ -1,6 +1,6 @@
 # Security Audit Notes
 
-Last checked: 2026-07-05
+Last checked: 2026-07-12 for release v0.1.2
 
 ## npm audit
 
@@ -32,4 +32,3 @@ dependency is fixed without a major application downgrade.
 This project does not intentionally expose user-provided CSS stringify output
 paths. Still, the audit item should remain visible until the upstream dependency
 chain is fixed.
-

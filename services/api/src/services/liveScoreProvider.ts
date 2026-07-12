@@ -1,5 +1,5 @@
 import { config } from "../config.js";
-import type { MatchStatus } from "../models.js";
+import type { MatchDecision, MatchStatus } from "../models.js";
 
 export interface ExternalScoreSnapshot {
   provider: "espn";
@@ -8,8 +8,15 @@ export interface ExternalScoreSnapshot {
   awayTeamId: string;
   homeScore: number;
   awayScore: number;
+  fullMatchHomeScore?: number;
+  fullMatchAwayScore?: number;
+  penaltyShootoutHomeScore?: number;
+  penaltyShootoutAwayScore?: number;
+  resultDecision?: MatchDecision;
+  score90Verified?: boolean;
   minute: number;
   status: MatchStatus;
+  winnerTeamId?: string;
   startTime: string;
   source: string;
 }
@@ -41,12 +48,25 @@ interface EspnEvent {
 
 interface EspnCompetitor {
   homeAway?: "home" | "away";
-  score?: string;
+  score?: string | number;
+  shootoutScore?: string | number;
+  winner?: boolean;
+  linescores?: Array<{
+    displayValue?: string;
+  }>;
   team?: {
     displayName?: string;
     shortDisplayName?: string;
     name?: string;
     abbreviation?: string;
+  };
+}
+
+interface EspnSummaryResponse {
+  header?: {
+    competitions?: Array<{
+      competitors?: EspnCompetitor[];
+    }>;
   };
 }
 
@@ -130,7 +150,8 @@ async function fetchScoreboardUrl(url: string): Promise<ExternalScoreSnapshot[]>
   }
 
   const payload = (await response.json()) as EspnScoreboardResponse;
-  return parseEspnScoreboard(payload, url);
+  const snapshots = parseEspnScoreboard(payload, url);
+  return enrichRegulationScores(payload, snapshots);
 }
 
 export function parseEspnScoreboard(payload: EspnScoreboardResponse, source: string): ExternalScoreSnapshot[] {
@@ -161,18 +182,163 @@ function parseEspnEvent(event: EspnEvent, source: string): ExternalScoreSnapshot
     return null;
   }
 
+  const status = parseStatus(event.status);
+  const winnerTeamId = status === "finished" ? (home.winner ? homeTeamId : away.winner ? awayTeamId : undefined) : undefined;
+  const parsedHomeScore = parseScore(home.score);
+  const parsedAwayScore = parseScore(away.score);
+  const hasVerifiedScorePair = parsedHomeScore !== null && parsedAwayScore !== null;
+  if (status !== "scheduled" && !hasVerifiedScorePair) {
+    console.warn(
+      JSON.stringify({
+        level: "warn",
+        message: "Public score source returned an incomplete or invalid score pair",
+        provider: "espn",
+        eventId: event.id,
+        homeScore: home.score,
+        awayScore: away.score
+      })
+    );
+    return null;
+  }
+
+  const aggregateHomeScore = parsedHomeScore ?? 0;
+  const aggregateAwayScore = parsedAwayScore ?? 0;
+  const shootoutHomeScore = parseScore(home.shootoutScore);
+  const shootoutAwayScore = parseScore(away.shootoutScore);
+  const hasVerifiedShootoutScore = shootoutHomeScore !== null && shootoutAwayScore !== null;
+  const score90Verified = hasVerifiedScorePair && !isDecidedAfterRegulation(event.status);
+  const resultDecision = status === "finished" ? parseResultDecision(event.status, hasVerifiedShootoutScore) : undefined;
+
   return {
     provider: "espn",
     externalId: event.id,
     homeTeamId,
     awayTeamId,
-    homeScore: Number(home.score ?? 0),
-    awayScore: Number(away.score ?? 0),
+    homeScore: aggregateHomeScore,
+    awayScore: aggregateAwayScore,
+    ...(status === "finished"
+      ? {
+          fullMatchHomeScore: aggregateHomeScore,
+          fullMatchAwayScore: aggregateAwayScore,
+          resultDecision
+        }
+      : {}),
+    ...(status === "finished" && hasVerifiedShootoutScore
+      ? {
+          penaltyShootoutHomeScore: shootoutHomeScore,
+          penaltyShootoutAwayScore: shootoutAwayScore
+        }
+      : {}),
+    score90Verified,
     minute: parseMinute(event.status),
-    status: parseStatus(event.status),
+    status,
+    winnerTeamId,
     startTime: new Date(event.date).toISOString(),
     source
   };
+}
+
+async function enrichRegulationScores(
+  payload: EspnScoreboardResponse,
+  snapshots: ExternalScoreSnapshot[]
+): Promise<ExternalScoreSnapshot[]> {
+  const eventsById = new Map((payload.events ?? []).flatMap((event) => (event.id ? [[event.id, event] as const] : [])));
+
+  return Promise.all(
+    snapshots.map(async (snapshot) => {
+      const event = eventsById.get(snapshot.externalId);
+      if (!event || snapshot.score90Verified !== false) return snapshot;
+
+      const regulationResult = await fetchRegulationResult(snapshot.externalId);
+      if (!regulationResult) return snapshot;
+      return {
+        ...snapshot,
+        homeScore: regulationResult.homeScore,
+        awayScore: regulationResult.awayScore,
+        winnerTeamId: regulationResult.winnerTeamId ?? snapshot.winnerTeamId,
+        score90Verified: true
+      };
+    })
+  );
+}
+
+async function fetchRegulationResult(
+  eventId: string
+): Promise<{ homeScore: number; awayScore: number; winnerTeamId?: string } | null> {
+  const url = buildSummaryUrl(eventId);
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36",
+        accept: "application/json,text/plain,*/*"
+      },
+      signal: AbortSignal.timeout(8_000)
+    });
+    if (!response.ok) return null;
+
+    const summary = (await response.json()) as EspnSummaryResponse;
+    const competitors = summary.header?.competitions?.[0]?.competitors ?? [];
+    const home = competitors.find((item) => item.homeAway === "home");
+    const away = competitors.find((item) => item.homeAway === "away");
+    if (!home || !away) return null;
+
+    const homeScore = regulationScore(home);
+    const awayScore = regulationScore(away);
+    if (homeScore === null || awayScore === null) return null;
+
+    const homeTeamId = resolveTeamId(home);
+    const awayTeamId = resolveTeamId(away);
+    const winnerTeamId = home.winner ? homeTeamId ?? undefined : away.winner ? awayTeamId ?? undefined : undefined;
+    return { homeScore, awayScore, winnerTeamId };
+  } catch (error) {
+    console.warn(
+      JSON.stringify({
+        level: "warn",
+        message: "Regulation-time score lookup failed",
+        provider: "espn",
+        eventId,
+        error: String(error)
+      })
+    );
+    return null;
+  }
+}
+
+function regulationScore(competitor: EspnCompetitor): number | null {
+  const regulationPeriods = competitor.linescores?.slice(0, 2) ?? [];
+  if (regulationPeriods.length !== 2) return null;
+  const values = regulationPeriods.map((period) => Number(period.displayValue));
+  if (values.some((value) => !Number.isFinite(value) || value < 0)) return null;
+  return values[0] + values[1];
+}
+
+function parseScore(value?: string | number): number | null {
+  if (value === undefined || (typeof value === "string" && value.trim() === "")) return null;
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : null;
+}
+
+function parseResultDecision(status: EspnEvent["status"], hasVerifiedShootoutScore: boolean): MatchDecision {
+  if (hasVerifiedShootoutScore) return "penalties";
+  const type = status?.type;
+  const detail = `${type?.description ?? ""} ${type?.detail ?? ""} ${type?.shortDetail ?? ""}`.toLowerCase();
+  if (/\b(pen|pens|penalties)\b/.test(detail)) return "penalties";
+  if ((status?.period ?? 0) > 2 || detail.includes("extra time") || /\baet\b/.test(detail)) return "extra_time";
+  return "regulation";
+}
+
+function isDecidedAfterRegulation(status: EspnEvent["status"]): boolean {
+  const type = status?.type;
+  const detail = `${type?.description ?? ""} ${type?.detail ?? ""} ${type?.shortDetail ?? ""}`.toLowerCase();
+  return (status?.period ?? 0) > 2 || detail.includes("extra time") || /\b(aet|pen|pens|penalties)\b/.test(detail);
+}
+
+function buildSummaryUrl(eventId: string): string {
+  const scoreboardUrl = config.espnWorldCupScoreboardUrl.split("?")[0].replace(/\/$/, "");
+  const summaryUrl = scoreboardUrl.replace(/\/scoreboard$/i, "/summary");
+  return `${summaryUrl}?event=${encodeURIComponent(eventId)}`;
 }
 
 function resolveTeamId(competitor: EspnCompetitor): string | null {

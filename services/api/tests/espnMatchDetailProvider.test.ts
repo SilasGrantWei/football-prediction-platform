@@ -57,8 +57,8 @@ describe("fetchEspnMatchDetail", () => {
     expect(detail?.sourceUrl).toContain("760505");
     expect(detail?.lineups?.home.teamId).toBe("mexico");
     expect(detail?.lineups?.away.teamId).toBe("england");
-    expect(detail?.lineups?.home.starters[0]?.name).toBe("Raul Rangel");
-    expect(detail?.lineups?.away.starters[0]?.name).toBe("Jordan Pickford");
+    expect(detail?.lineups?.home.starters[0]?.name).toBe("劳尔·兰赫尔");
+    expect(detail?.lineups?.away.starters[0]?.name).toBe("乔丹·皮克福德");
     expect(detail?.lineups?.home.starters[0]?.name).not.toContain("未知球员");
     expect(detail?.lineups?.away.starters[0]?.name).not.toContain("未知球员");
   });
