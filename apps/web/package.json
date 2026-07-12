@@ -1,6 +1,6 @@
 {
   "name": "@football-prediction/web",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Next.js dashboard for the football prediction platform.",
   "license": "MIT",
   "private": true,

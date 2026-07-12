@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.3 - 2026-07-12
+
+### Changed
+
+- Published the verified score-sync, model-reliability, and dashboard update under the corrected `0.1.3` package and release version.
+- Kept the `0.1.2` tag and changelog entry intact as historical release metadata.
+
 ## 0.1.2 - 2026-07-12
 
 ### Added

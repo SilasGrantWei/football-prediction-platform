@@ -1,5 +1,20 @@
 # Release Notes
 
+## v0.1.3
+
+Version publication update for the verified score-sync and model-reliability release.
+
+### Highlights
+
+- Publishes the current root, Web, and API packages consistently as `0.1.3`.
+- Includes the verified 90-minute/full-match score separation, automatic result synchronization, persistent match state, prediction calibration, and light broadcast dashboard delivered in the preceding update.
+- Preserves `v0.1.2` as an immutable historical release instead of rewriting its tag.
+
+### Verification
+
+- Package metadata and lockfile versions are aligned at `0.1.3`.
+- API, Web, AI, Python, lint, and production-build checks are rerun before publishing.
+
 ## v0.1.2
 
 Reliability, model-calibration, and verified-score update for the public repository.
