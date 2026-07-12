@@ -1,6 +1,6 @@
 {
   "name": "football-prediction-platform",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Open-source football intelligence platform for realtime ingestion, prediction, odds comparison, simulation, and post-match calibration.",
   "license": "MIT",
   "private": true,

@@ -4,7 +4,7 @@ title: "Production Sports Intelligence System"
 type: software
 authors:
   - name: "Project Contributors"
-version: "0.1.2"
+version: "0.1.3"
 date-released: "2026-07-12"
 license: "MIT"
 abstract: "An open-source football intelligence platform for realtime ingestion, prediction, odds comparison, simulation, and post-match calibration."
