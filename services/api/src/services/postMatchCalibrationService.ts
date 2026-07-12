@@ -25,6 +25,9 @@ interface CalibrationSample {
   drawTrapMarginUnderestimate: number;
   favoriteCleanSheetBust: boolean;
   highTotalMissed: boolean;
+  lowTotalMissed: boolean;
+  zeroZeroMissed: boolean;
+  totalGoalOverestimate: number;
   winnerGoalUnderestimate: number;
   loserGoalOverestimate: number;
   loserGoalUnderestimate: number;
@@ -32,9 +35,10 @@ interface CalibrationSample {
   drawUnderweighted: boolean;
 }
 
-const CALIBRATION_VERSION = "post-match-causal-calibration-v7";
+const CALIBRATION_VERSION = "post-match-causal-calibration-v9";
 const MAX_SAMPLE_COUNT = 12;
 const MIN_SAMPLE_COUNT = 1;
+const RECENCY_DECAY = 0.82;
 
 export async function buildPostMatchCalibration(
   targetMatch: Match,
@@ -72,13 +76,18 @@ export async function buildPostMatchCalibration(
   const favoriteSamples = samples.filter((sample) => sample.favoriteDirection);
   const favoriteMissRate = average(favoriteSamples.map((sample) => (sample.favoriteMissed ? 1 : 0)));
   const favoriteConcededMultipleRate = average(favoriteSamples.map((sample) => (sample.favoriteConcededMultiple ? 1 : 0)));
-  const favoriteDrawMissRate = average(favoriteSamples.map((sample) => (sample.favoriteDrawMissed ? 1 : 0)));
+  const favoriteDrawMissRate = recencyWeightedAverage(
+    favoriteSamples.map((sample) => (sample.favoriteDrawMissed ? 1 : 0))
+  );
   const favoriteMarginOverestimate = average(favoriteSamples.map((sample) => sample.favoriteMarginOverestimate));
   const drawProtectedFavoriteWinRate = average(favoriteSamples.map((sample) => (sample.drawProtectedFavoriteWin ? 1 : 0)));
   const favoriteMarginUnderestimate = average(favoriteSamples.map((sample) => sample.favoriteMarginUnderestimate));
   const drawTrapBreakthroughRate = average(samples.map((sample) => (sample.drawTrapBreakthrough ? 1 : 0)));
   const drawTrapMarginUnderestimate = average(samples.map((sample) => sample.drawTrapMarginUnderestimate));
   const favoriteCleanSheetBustRate = average(favoriteSamples.map((sample) => (sample.favoriteCleanSheetBust ? 1 : 0)));
+  const lowTotalMissRate = average(samples.map((sample) => (sample.lowTotalMissed ? 1 : 0)));
+  const zeroZeroMissRate = average(samples.map((sample) => (sample.zeroZeroMissed ? 1 : 0)));
+  const totalGoalOverestimate = average(samples.map((sample) => sample.totalGoalOverestimate));
   const overconfidentFavoriteMissRate = average(
     favoriteSamples
       .filter((sample) => sample.favoriteProbability >= 0.54)
@@ -127,7 +136,9 @@ export async function buildPostMatchCalibration(
       drawTrapBreakthroughRate * 0.12 -
       favoriteMarginUnderestimate * 0.035 -
       drawTrapMarginUnderestimate * 0.025 -
-      drawOverweightRate * 0.04,
+      drawOverweightRate * 0.04 +
+      zeroZeroMissRate * 0.14 +
+      lowTotalMissRate * 0.03,
     0,
     0.22
   );
@@ -141,7 +152,9 @@ export async function buildPostMatchCalibration(
       favoriteDrawMissRate * 0.12 -
       favoriteMarginOverestimate * 0.035 +
       drawProtectedFavoriteWinRate * 0.10 +
-      favoriteMarginUnderestimate * 0.025,
+      favoriteMarginUnderestimate * 0.025 +
+      lowTotalMissRate * 0.08 +
+      totalGoalOverestimate * 0.02,
     0,
     0.22
   );
@@ -149,6 +162,7 @@ export async function buildPostMatchCalibration(
     winnerGoalUnderestimate * 0.08 +
       favoriteCleanSheetRate * 0.05 +
       highTotalMissRate * 0.03 -
+      lowTotalMissRate * 0.03 -
       favoriteMissRate * 0.04 -
       favoriteDrawMissRate * 0.05 -
       favoriteMarginOverestimate * 0.02 +
@@ -165,7 +179,8 @@ export async function buildPostMatchCalibration(
       underdogResilienceBoost * 0.45 -
       loserGoalUnderestimate * 0.09 -
       favoriteConcededMultipleRate * 0.10 -
-      favoriteCleanSheetBustRate * 0.08,
+      favoriteCleanSheetBustRate * 0.08 +
+      lowTotalMissRate * 0.04,
     0,
     0.14
   );
@@ -184,6 +199,8 @@ export async function buildPostMatchCalibration(
     directionMissRate * 0.07 +
       scoreMissRate * 0.04 +
       highTotalMissRate * 0.08 +
+      Math.max(0, highTotalMissRate - lowTotalMissRate) * 0.03 -
+      lowTotalMissRate * 0.02 +
       loserGoalUnderestimate * 0.04 +
       favoriteMarginOverestimate * 0.02 +
       favoriteCleanSheetBustRate * 0.07,
@@ -213,6 +230,10 @@ export async function buildPostMatchCalibration(
     drawTrapBreakthroughRate: round4(drawTrapBreakthroughRate),
     drawTrapMarginUnderestimate: round4(drawTrapMarginUnderestimate),
     favoriteCleanSheetBustRate: round4(favoriteCleanSheetBustRate),
+    highTotalMissRate: round4(highTotalMissRate),
+    lowTotalMissRate: round4(lowTotalMissRate),
+    zeroZeroMissRate: round4(zeroZeroMissRate),
+    totalGoalOverestimate: round4(totalGoalOverestimate),
     generatedAt: new Date().toISOString(),
     notes: buildCalibrationNotes({
       samples,
@@ -233,6 +254,9 @@ export async function buildPostMatchCalibration(
       drawTrapMarginUnderestimate,
       favoriteCleanSheetBustRate,
       highTotalMissRate,
+      lowTotalMissRate,
+      zeroZeroMissRate,
+      totalGoalOverestimate,
       drawOverweightRate
     })
   };
@@ -243,6 +267,7 @@ function toCalibrationSample(match: Match, prediction: Prediction): CalibrationS
 
   const evaluation = buildPredictionEvaluation(match, prediction);
   if (!evaluation) return undefined;
+  const scoreDistributionTop3Hit = isScoreDistributionTop3Hit(match, prediction, evaluation.top3ScoreHit);
 
   const [predictedHomeGoals, predictedAwayGoals] = parseScore(prediction.topScores[0].score);
   const actualDirection = resultDirection(match.homeScore, match.awayScore);
@@ -287,6 +312,12 @@ function toCalibrationSample(match: Match, prediction: Prediction): CalibrationS
   const actualTotalGoals = match.homeScore + match.awayScore;
   const predictedTotalGoals = predictedHomeGoals + predictedAwayGoals;
   const highTotalMissed = actualTotalGoals >= 5 && predictedTotalGoals <= actualTotalGoals - 2;
+  const lowTotalMissed = !scoreDistributionTop3Hit && actualTotalGoals <= 1 && predictedTotalGoals >= actualTotalGoals + 2;
+  const zeroZeroMissed =
+    !scoreDistributionTop3Hit &&
+    actualTotalGoals === 0 &&
+    !prediction.topScores.slice(0, 3).some((score) => score.score === "0-0");
+  const totalGoalOverestimate = Math.max(0, predictedTotalGoals - actualTotalGoals);
   const drawOverweighted = prediction.drawProb >= 0.25 && actualDirection !== "draw";
   const drawUnderweighted = prediction.drawProb <= 0.21 && actualDirection === "draw";
 
@@ -297,7 +328,7 @@ function toCalibrationSample(match: Match, prediction: Prediction): CalibrationS
     predictedTopDirection,
     favoriteDirection,
     favoriteProbability,
-    top3Missed: !evaluation.top3ScoreHit,
+    top3Missed: !scoreDistributionTop3Hit,
     directionMissed: !evaluation.resultHit,
     favoriteMissed,
     favoriteWonToNil,
@@ -310,12 +341,26 @@ function toCalibrationSample(match: Match, prediction: Prediction): CalibrationS
     drawTrapMarginUnderestimate,
     favoriteCleanSheetBust,
     highTotalMissed,
+    lowTotalMissed,
+    zeroZeroMissed,
+    totalGoalOverestimate,
     winnerGoalUnderestimate,
     loserGoalOverestimate,
     loserGoalUnderestimate,
     drawOverweighted,
     drawUnderweighted
   };
+}
+
+function isScoreDistributionTop3Hit(match: Match, prediction: Prediction, fallback: boolean): boolean {
+  const matrix = prediction.scoreProbabilityMatrix;
+  if (!matrix || matrix.length < 3) return fallback;
+
+  const actualScore = `${match.homeScore}-${match.awayScore}`;
+  return [...matrix]
+    .sort((left, right) => right.probability - left.probability)
+    .slice(0, 3)
+    .some((item) => item.score === actualScore);
 }
 
 function isCausalPredictionSnapshot(match: Match, prediction: Prediction | undefined | null): prediction is Prediction {
@@ -435,6 +480,9 @@ function buildCalibrationNotes({
   drawTrapMarginUnderestimate,
   favoriteCleanSheetBustRate,
   highTotalMissRate,
+  lowTotalMissRate,
+  zeroZeroMissRate,
+  totalGoalOverestimate,
   drawOverweightRate
 }: {
   samples: CalibrationSample[];
@@ -455,6 +503,9 @@ function buildCalibrationNotes({
   drawTrapMarginUnderestimate: number;
   favoriteCleanSheetBustRate: number;
   highTotalMissRate: number;
+  lowTotalMissRate: number;
+  zeroZeroMissRate: number;
+  totalGoalOverestimate: number;
   drawOverweightRate: number;
 }): string[] {
   return [
@@ -466,6 +517,7 @@ function buildCalibrationNotes({
     `平局陷阱被打穿样本 ${formatPercent(drawTrapBreakthroughRate)}，打穿时平均少估 ${drawTrapMarginUnderestimate.toFixed(2)} 球；后续不会机械保护 1-1，而会检查哪一方具备二次进球能力。`,
     `强队零封预测被打破样本 ${formatPercent(favoriteCleanSheetBustRate)}；后续会降低 3-0/4-0 这类零封比分，并提高 2-1/3-1/3-2 这类双方进球候选。`,
     `热门方赢球但丢两球以上样本 ${formatPercent(favoriteConcededMultipleRate)}，高总进球漏判样本 ${formatPercent(highTotalMissRate)}；后续降低零封/大胜权重，提高双方进球和高比分尾部候选。`,
+    `低总进球漏判样本 ${formatPercent(lowTotalMissRate)}，0-0 漏判样本 ${formatPercent(zeroZeroMissRate)}，首选比分总进球平均高估 ${totalGoalOverestimate.toFixed(2)} 球；后续把 0-0、一球零封和两球零封放入候选保护。`,
     `胜方进球平均低估 ${winnerGoalUnderestimate.toFixed(2)} 球，负方进球平均高估 ${loserGoalOverestimate.toFixed(2)} 球，负方进球平均低估 ${loserGoalUnderestimate.toFixed(2)} 球。`,
     `平局权重偏高样本 ${formatPercent(drawOverweightRate)}，平局被低估样本 ${formatPercent(drawUnderweightRate)}；后续会分别处理，不再把所有方向错误都当成强队该加强。`
   ];
@@ -474,6 +526,20 @@ function buildCalibrationNotes({
 function average(values: number[]): number {
   if (!values.length) return 0;
   return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function recencyWeightedAverage(values: number[]): number {
+  if (!values.length) return 0;
+
+  let weightedTotal = 0;
+  let weightTotal = 0;
+  values.forEach((value, index) => {
+    const weight = Math.pow(RECENCY_DECAY, index);
+    weightedTotal += value * weight;
+    weightTotal += weight;
+  });
+
+  return weightedTotal / weightTotal;
 }
 
 function formatPercent(value: number): string {

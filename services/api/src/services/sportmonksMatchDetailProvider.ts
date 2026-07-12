@@ -269,8 +269,10 @@ function toEventType(value: string | undefined): EventType | null {
 }
 
 function buildEventPlayer(event: SportmonksEvent, type: EventType): string {
-  const player = localizePlayerName(event.player_name, "");
-  const related = localizePlayerName(event.related_player_name ?? undefined, "");
+  const sourcePlayer = event.player_name?.trim();
+  const sourceRelated = event.related_player_name?.trim();
+  const player = localizePlayerName(sourcePlayer, sourcePlayer ?? "");
+  const related = localizePlayerName(sourceRelated, sourceRelated ?? "");
   if (type === "substitution" && player && related) return `${player} 替换 ${related}`;
   if (player) return player;
   if (type === "offside") return "越位";

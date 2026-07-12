@@ -29,16 +29,17 @@ import { buildTeamRecordComparison } from "./teamRecordService.js";
 import { attachWorldCupScoreEnhancement } from "./worldCupScoreEnhancer.js";
 import { buildWorldCupFactors, type TeamTournamentFactors, type WorldCupFactors } from "./worldCupFactors.js";
 
-export const LOCAL_MODEL_VERSION = "poisson-elo-fifa-prior-distribution-v2";
+export const LOCAL_MODEL_VERSION = "poisson-elo-fifa-prior-distribution-v11";
+const LEGACY_DEMO_MODEL_VERSION = "poisson-elo-fifa-prior-distribution-v9";
 const AI_MODEL_VERSION = "worldcup-90min-lightgbm-elo-poisson-causal-v8";
 const DEFAULT_DIXON_COLES_RHO = -0.1;
 
 export const PREDICTION_MODEL_INFO = {
   name: "世界杯九十分钟因果融合模型",
-  version: "第十七版",
+  version: "第二十五版",
   type: "赛前大数据推算、等级分模型、泊松比分矩阵、世界杯历史画像后处理和世界杯上下文规则校准",
   description:
-    "只推算90分钟比赛结果（包含裁判加计的伤停补时），不计入加时赛与点球大战。第十六版禁止使用实时比分、分钟和本场赛果作为比分输入：小组赛按赛前因果快照处理，淘汰赛才使用已经发生的小组赛表现；同时把开赛前已结束的本年世界杯赛果、公开赛事数据源已完赛国际友谊赛、赛前气候/温度、休息旅行、赛程阶段压力、非官方推算首发和赛后错题本校准作为赛前可用特征。新版本把平局保护被打穿、强队零封假设被打破、大比分幅度高估/低估拆成独立误差信号，只影响后续未开赛比赛，不回写已结束预测。",
+    "只推算90分钟比赛结果（包含裁判加计的伤停补时），不计入加时赛与点球大战。第二十五版继续禁止使用实时比分、分钟和本场赛果作为比分输入：小组赛按赛前因果快照处理，淘汰赛只使用目标场开赛前已经结束的真实比赛；球队休息天数会自动取该队最近一场因果赛果，不再沿用小组赛末轮静态日期。同时把球队实力差（FIFA评分、近期状态、攻防均值、防守质量和世界杯上下文）、开赛前已结束的本年世界杯赛果、公开赛事数据源已完赛国际友谊赛、赛前气候/温度、休息旅行、赛程阶段压力、非官方推算首发和赛后错题本校准作为赛前可用特征。淘汰赛占位会在上游赛果可验证后自动解析；没有加时赛或点球胜者字段时不编造晋级队。没有真实首发、伤停、球员近期状态和球员对位数据时，阵容信号只能低权重辅助，不允许冒充真实球员状态；页面会暴露球员级数据缺口。只影响后续未开赛比赛，不回写已结束预测。",
   dimensions: [
     "等级分和国际足联评分综合实力",
     "本届小组赛积分与净胜球",
@@ -58,6 +59,7 @@ export const PREDICTION_MODEL_INFO = {
     "推算首发/球星影响因子（非官方阵容，低权重校准）",
     "赛后误差错题本校准（只影响后续未开赛比赛）",
     "平局陷阱、零封假设和大比分幅度误差的因果校准",
+    "极端热门冷却和Top3尾部保护",
     "世界杯历史90分钟比分画像后处理"
   ]
 };
@@ -123,6 +125,7 @@ export interface UpcomingPredictionRefreshResult {
     alreadyStarted: number;
     finishedLocked: number;
     invalidKickoff: number;
+    unresolvedTeams: number;
   };
   matches: Array<{
     matchId: string;
@@ -155,31 +158,63 @@ export class PredictionService {
       typeof forceOrOptions === "boolean" ? { force: forceOrOptions, detail: true } : { detail: true, ...forceOrOptions };
     const force = options.force ?? false;
     const detail = options.detail ?? true;
-    const cacheKey = `prediction:${match.id}`;
+    const cacheKey = `prediction:${match.id}:${participantSignature(match)}`;
+
+    if (hasUnresolvedBracketTeam(match)) {
+      return undefined;
+    }
+
+    const kickoffAt = new Date(match.startTime).getTime();
+    if (match.status === "scheduled" && (!Number.isFinite(kickoffAt) || kickoffAt <= Date.now())) {
+      const frozenPrediction =
+        isCausalPredictionSnapshot(match, match.prediction) && hasCurrentParticipantSignature(match, match.prediction)
+          ? match.prediction
+          : undefined;
+      if (!frozenPrediction) return undefined;
+      if (!detail) return withListContext(match, frozenPrediction);
+
+      const recordComparison = await buildTeamRecordComparison(match).catch(() => undefined);
+      return withExplanation(
+        match,
+        frozenPrediction,
+        buildWorldCupFactors(match, recordComparison),
+        recordComparison
+      );
+    }
 
     if (match.status === "finished" && !detail) {
       const frozenPrediction = isCausalPredictionSnapshot(match, match.prediction) ? match.prediction : undefined;
       const prediction = frozenPrediction ?? (config.demoMode ? reconstructDemoPreMatchPrediction(match) : undefined);
+      if (!frozenPrediction && prediction && config.demoMode) {
+        await matchRepository.upsertPrediction(prediction);
+      }
       return prediction ? withFinishedListContext(match, prediction) : undefined;
     }
 
-    const factors = buildWorldCupFactors(match);
     const postMatchCalibration =
-      match.status === "finished"
+      match.status !== "scheduled"
         ? undefined
         : await buildPostMatchCalibration(match, config.demoMode ? reconstructDemoPreMatchPrediction : undefined).catch(
             () => undefined
           );
     let recordComparison: TeamRecordComparison | undefined;
     const attachContext = async (prediction: Prediction): Promise<Prediction> => {
-      if (!detail) return withListContext(match, prediction);
+      if (!detail) return withListContext(match, prediction, recordComparison);
       recordComparison = recordComparison ?? (await buildTeamRecordComparison(match).catch(() => undefined));
-      return withExplanation(match, prediction, factors, recordComparison);
+      return withExplanation(match, prediction, buildWorldCupFactors(match, recordComparison), recordComparison);
     };
 
-    if (match.status === "finished") {
-      const frozenPrediction = isCausalPredictionSnapshot(match, match.prediction) ? match.prediction : undefined;
+    if (match.status !== "scheduled") {
+      const frozenPrediction =
+        match.status === "finished"
+          ? isCausalPredictionSnapshot(match, match.prediction)
+            ? match.prediction
+            : undefined
+          : match.prediction;
       const prediction = frozenPrediction ?? (config.demoMode ? reconstructDemoPreMatchPrediction(match) : undefined);
+      if (!frozenPrediction && prediction && config.demoMode && match.status === "finished") {
+        await matchRepository.upsertPrediction(prediction);
+      }
       return prediction ? attachContext(prediction) : undefined;
     }
 
@@ -187,6 +222,7 @@ export class PredictionService {
       const cached = await cacheGet<Prediction>(cacheKey);
       if (
         (cached?.modelVersion === LOCAL_MODEL_VERSION || cached?.modelVersion === AI_MODEL_VERSION) &&
+        hasCurrentParticipantSignature(match, cached) &&
         hasCurrentCalibrationSignature(cached, postMatchCalibration)
       ) {
         return attachContext(cached);
@@ -194,6 +230,7 @@ export class PredictionService {
 
       if (
         (match.prediction?.modelVersion === LOCAL_MODEL_VERSION || match.prediction?.modelVersion === AI_MODEL_VERSION) &&
+        hasCurrentParticipantSignature(match, match.prediction) &&
         hasCurrentCalibrationSignature(match.prediction, postMatchCalibration)
       ) {
         return attachContext(match.prediction);
@@ -208,6 +245,7 @@ export class PredictionService {
     }
 
     recordComparison = await buildTeamRecordComparison(match).catch(() => undefined);
+    const factors = buildWorldCupFactors(match, recordComparison);
     const prediction = await this.requestAiPrediction(match, factors, recordComparison).catch((error) => {
       console.warn(
         JSON.stringify({
@@ -235,7 +273,8 @@ export class PredictionService {
       skipped: {
         alreadyStarted: 0,
         finishedLocked: 0,
-        invalidKickoff: 0
+        invalidKickoff: 0,
+        unresolvedTeams: 0
       },
       matches: [],
       failures: []
@@ -323,7 +362,8 @@ export class PredictionService {
       expectedHomeGoals: round2(exactScore.expectedGoalsHome),
       expectedAwayGoals: round2(exactScore.expectedGoalsAway),
       generatedAt: parsed.generated_at ?? new Date().toISOString(),
-      modelVersion: LOCAL_MODEL_VERSION
+      modelVersion: LOCAL_MODEL_VERSION,
+      participantSignature: participantSignature(match)
     };
   }
 }
@@ -340,6 +380,7 @@ function predictionRefreshEligibility(
   | { allowed: false; reason: keyof UpcomingPredictionRefreshResult["skipped"] } {
   if (match.status === "finished") return { allowed: false, reason: "finishedLocked" };
   if (match.status === "live" || match.status === "halftime") return { allowed: false, reason: "alreadyStarted" };
+  if (hasUnresolvedBracketTeam(match)) return { allowed: false, reason: "unresolvedTeams" };
 
   const kickoffAt = new Date(match.startTime).getTime();
   const nowAt = now.getTime();
@@ -347,6 +388,18 @@ function predictionRefreshEligibility(
   if (kickoffAt <= nowAt) return { allowed: false, reason: "alreadyStarted" };
 
   return { allowed: true };
+}
+
+function hasUnresolvedBracketTeam(match: Match): boolean {
+  return [match.homeTeam, match.awayTeam].some((team) => {
+    const normalizedId = team.id.trim().toLowerCase();
+    const normalizedName = team.name.trim().toLowerCase();
+    return (
+      normalizedId.startsWith("winner_") ||
+      normalizedId.startsWith("loser_") ||
+      /胜者|负者|待定|winner|loser|tbd/.test(normalizedName)
+    );
+  });
 }
 
 async function withExplanation(
@@ -372,9 +425,13 @@ async function withExplanation(
   };
 }
 
-async function withListContext(match: Match, prediction: Prediction): Promise<Prediction> {
+async function withListContext(
+  match: Match,
+  prediction: Prediction,
+  recordComparison?: TeamRecordComparison
+): Promise<Prediction> {
   const lineupProjection = prediction.lineupProjection ?? buildMatchLineupProjection(match);
-  const factors = buildWorldCupFactors(match);
+  const factors = buildWorldCupFactors(match, recordComparison);
   const predictionWithLineup = {
     ...prediction,
     lineupProjection,
@@ -447,10 +504,24 @@ function hasCurrentCalibrationSignature(
   return prediction.postMatchCalibration?.sampleSignature === calibration.sampleSignature;
 }
 
+function hasCurrentParticipantSignature(match: Match, prediction: Prediction | undefined): boolean {
+  return prediction?.participantSignature === participantSignature(match);
+}
+
+function participantSignature(match: Match): string {
+  return `${match.homeTeam.id}:${match.awayTeam.id}`;
+}
+
 async function persistPreMatchPredictionSnapshot(match: Match, prediction: Prediction, cacheKey: string): Promise<void> {
   const generatedAt = new Date(prediction.generatedAt).getTime();
   const kickoffAt = new Date(match.startTime).getTime();
-  if (match.status !== "scheduled" || !Number.isFinite(generatedAt) || !Number.isFinite(kickoffAt) || generatedAt > kickoffAt) {
+  if (
+    match.status !== "scheduled" ||
+    !hasCurrentParticipantSignature(match, prediction) ||
+    !Number.isFinite(generatedAt) ||
+    !Number.isFinite(kickoffAt) ||
+    generatedAt > kickoffAt
+  ) {
     return;
   }
 
@@ -471,10 +542,108 @@ function reconstructDemoPreMatchPrediction(match: Match): Prediction | undefined
     prediction: undefined
   };
 
+  const reconstructed = calculateLocalPrediction(preMatch);
   return {
-    ...calculateLocalPrediction(preMatch),
-    generatedAt
+    ...reconstructed,
+    topScores: selectLegacyDemoTopScores(match, reconstructed),
+    generatedAt,
+    modelVersion: LEGACY_DEMO_MODEL_VERSION
   };
+}
+
+function selectLegacyDemoTopScores(match: Match, prediction: Prediction): Prediction["topScores"] {
+  const sortedScores = [...(prediction.scoreProbabilityMatrix ?? [])].sort((left, right) => right.probability - left.probability);
+  const selected: typeof sortedScores = [];
+  const first = sortedScores[0];
+  if (!first) return prediction.topScores;
+
+  addLegacyScore(selected, first);
+  const strengthEdge = teamStrength(match.homeTeam) - teamStrength(match.awayTeam);
+  const strengthFavorite = strengthEdge >= 0 ? "home" : "away";
+  const outcome = {
+    home: prediction.homeWinProb,
+    draw: prediction.drawProb,
+    away: prediction.awayWinProb
+  };
+  const outcomeDirections: Array<keyof typeof outcome> = ["home", "draw", "away"];
+  const outcomeFavorite = outcomeDirections.sort((left, right) => outcome[right] - outcome[left])[0] ?? "draw";
+  const hasDecisiveStrengthFavorite =
+    Math.abs(strengthEdge) >= 7 && outcome[strengthFavorite] >= Math.max(outcome.home, outcome.draw, outcome.away) - 0.08;
+  const favorite = hasDecisiveStrengthFavorite ? strengthFavorite : outcomeFavorite;
+  const favoriteProbability = outcome[favorite];
+  const favoriteEdge = favoriteProbability - Math.max(favorite === "home" ? outcome.away : outcome.home, outcome.draw);
+  const favoriteHasEdge =
+    favorite !== "draw" &&
+    (favoriteProbability >= 0.6 ||
+      (favoriteProbability >= 0.42 && favoriteEdge >= 0.06) ||
+      (hasDecisiveStrengthFavorite && favoriteProbability >= 0.36 && favoriteEdge >= 0.02));
+
+  if (favoriteHasEdge) {
+    const oneGoalCleanSheet = sortedScores.find((score) => {
+      if (legacyScoreDirection(score) !== favorite) return false;
+      const loserGoals = favorite === "home" ? score.awayGoals : score.homeGoals;
+      return loserGoals === 0 && Math.abs(score.homeGoals - score.awayGoals) === 1 && score.homeGoals + score.awayGoals <= 3;
+    });
+    const multiGoalCleanSheet = sortedScores.find((score) => {
+      if (legacyScoreDirection(score) !== favorite) return false;
+      const loserGoals = favorite === "home" ? score.awayGoals : score.homeGoals;
+      const margin = Math.abs(score.homeGoals - score.awayGoals);
+      return loserGoals === 0 && margin >= 2 && margin <= 3 && score.homeGoals + score.awayGoals <= 4;
+    });
+    const bothTeamsScore =
+      sortedScores.find((score) => {
+        if (legacyScoreDirection(score) !== favorite) return false;
+        const winnerGoals = favorite === "home" ? score.homeGoals : score.awayGoals;
+        const loserGoals = favorite === "home" ? score.awayGoals : score.homeGoals;
+        return loserGoals >= 2 && winnerGoals > loserGoals && score.homeGoals + score.awayGoals <= 5;
+      }) ??
+      sortedScores.find((score) => {
+        if (legacyScoreDirection(score) !== favorite) return false;
+        const loserGoals = favorite === "home" ? score.awayGoals : score.homeGoals;
+        const totalGoals = score.homeGoals + score.awayGoals;
+        return loserGoals >= 1 && totalGoals >= 4 && totalGoals <= 5;
+      });
+    const hedge = sortedScores.find((score) => legacyScoreDirection(score) !== favorite && score.homeGoals + score.awayGoals <= 4);
+    const strengthAwareHedge =
+      Math.abs(strengthEdge) >= 10
+        ? sortedScores.find((score) => legacyScoreDirection(score) === "draw" && score.homeGoals + score.awayGoals <= 2) ?? hedge
+        : hedge;
+    const preferCleanSheets = favoriteProbability >= 0.64 || Math.abs(strengthEdge) >= 7;
+
+    if (favoriteProbability >= 0.6) {
+      if (preferCleanSheets) {
+        addLegacyScore(selected, oneGoalCleanSheet);
+        addLegacyScore(selected, strengthAwareHedge);
+        addLegacyScore(selected, multiGoalCleanSheet);
+        addLegacyScore(selected, bothTeamsScore);
+      } else {
+        addLegacyScore(selected, bothTeamsScore);
+        addLegacyScore(selected, strengthAwareHedge);
+        addLegacyScore(selected, oneGoalCleanSheet ?? multiGoalCleanSheet);
+      }
+    } else {
+      addLegacyScore(selected, oneGoalCleanSheet ?? multiGoalCleanSheet);
+      addLegacyScore(selected, bothTeamsScore);
+      addLegacyScore(selected, strengthAwareHedge);
+    }
+  }
+
+  for (const score of sortedScores) addLegacyScore(selected, score);
+  return selected
+    .sort((left, right) => right.probability - left.probability)
+    .slice(0, 3)
+    .map(({ score, probability }) => ({ score, probability: round4(probability) }));
+}
+
+function addLegacyScore<T extends { score: string }>(items: T[], item: T | undefined): void {
+  if (items.length >= 3 || !item || items.some((selected) => selected.score === item.score)) return;
+  items.push(item);
+}
+
+function legacyScoreDirection(score: { homeGoals: number; awayGoals: number }): "home" | "draw" | "away" {
+  if (score.homeGoals > score.awayGoals) return "home";
+  if (score.homeGoals < score.awayGoals) return "away";
+  return "draw";
 }
 
 function preKickoffTimestamp(startTime: string): string | undefined {
@@ -590,11 +759,13 @@ export function calculateLocalPrediction(
   recordComparison?: TeamRecordComparison,
   postMatchCalibration?: PostMatchCalibration
 ): Prediction {
-  const factors = buildWorldCupFactors(match);
+  const factors = buildWorldCupFactors(match, recordComparison);
   const recordSignal = buildTeamRecordSignal(recordComparison);
   const lineupProjection = buildMatchLineupProjection(match);
   const lineupSignal = buildLineupImpactSignal(lineupProjection);
   const preMatchContext = buildPreMatchContextSignal(match, factors, lineupProjection);
+  const baseHomeStrength = teamStrength(match.homeTeam);
+  const baseAwayStrength = teamStrength(match.awayTeam);
   const homeStrength =
     adjustedTeamStrength(match.homeTeam, factors.home) +
     recordSignal.homeStrengthDelta +
@@ -605,6 +776,7 @@ export function calculateLocalPrediction(
     recordSignal.awayStrengthDelta +
     lineupSignal.awayStrengthDelta +
     preMatchContext.away.strengthDelta;
+  const scoreStrengthEdge = selectScoreStrengthEdge(baseHomeStrength - baseAwayStrength, homeStrength - awayStrength);
   const baseHomeExpectedGoals = clamp(
     expectedGoals(match.homeTeam, match.awayTeam, homeStrength, awayStrength, factors.home, factors.away, factors) *
       recordSignal.homeGoalFactor *
@@ -625,12 +797,18 @@ export function calculateLocalPrediction(
     0.18,
     5.4
   );
-  const [homeExpectedGoals, awayExpectedGoals] = calibrateExpectedGoalsByPostMatchErrors(
+  const [postMatchHomeExpectedGoals, postMatchAwayExpectedGoals] = calibrateExpectedGoalsByPostMatchErrors(
     match,
     baseHomeExpectedGoals,
     baseAwayExpectedGoals,
     homeStrength,
     awayStrength,
+    postMatchCalibration
+  );
+  const [homeExpectedGoals, awayExpectedGoals] = coolExtremeFavoriteExpectedGoals(
+    postMatchHomeExpectedGoals,
+    postMatchAwayExpectedGoals,
+    factors,
     postMatchCalibration
   );
   const poissonOutcome = poissonOutcomeProbabilities(homeExpectedGoals, awayExpectedGoals);
@@ -646,7 +824,11 @@ export function calculateLocalPrediction(
     recordSignal,
     postMatchCalibration
   );
-  const contextualOutcome = calibrateOutcomeForPreMatchContext(calibratedOutcome, preMatchContext);
+  const contextualOutcome = calibrateExtremeFavoriteOutcome(
+    calibrateOutcomeForPreMatchContext(calibratedOutcome, preMatchContext),
+    factors,
+    postMatchCalibration
+  );
   const exactScore = buildExactScoreDistribution({
     homeLambda: homeExpectedGoals,
     awayLambda: awayExpectedGoals,
@@ -656,7 +838,18 @@ export function calculateLocalPrediction(
     isHome: factors.home.hostAdvantage > 0,
     calibratedOutcome: contextualOutcome,
     poissonOutcome,
-    scoreAdjuster: (score) => postMatchScoreCalibrationMultiplier(score, contextualOutcome, postMatchCalibration)
+    scoreAdjuster: (score) => postMatchScoreCalibrationMultiplier(score, contextualOutcome, postMatchCalibration),
+    selectionHints: {
+      lowTotalPressure: Math.max(
+        0,
+        (postMatchCalibration?.lowTotalMissRate ?? 0) - (postMatchCalibration?.highTotalMissRate ?? 0) * 0.45
+      ),
+      highTotalPressure: postMatchCalibration?.highTotalMissRate ?? 0,
+      cleanSheetPressure: postMatchCalibration?.favoriteCleanSheetBoost ?? 0,
+      zeroZeroPressure: postMatchCalibration?.zeroZeroMissRate ?? 0,
+      strengthEdge: scoreStrengthEdge,
+      strengthFavorite: scoreStrengthEdge >= 0 ? "home" : "away"
+    }
   });
   const { home: homeWinProb, draw: drawProb, away: awayWinProb } = exactScore.outcome;
   const upsetRisk = classifyUpsetRisk(match, homeStrength, awayStrength, homeWinProb, awayWinProb, factors);
@@ -674,6 +867,7 @@ export function calculateLocalPrediction(
     expectedAwayGoals: round2(exactScore.expectedGoalsAway),
     generatedAt: new Date().toISOString(),
     modelVersion: LOCAL_MODEL_VERSION,
+    participantSignature: participantSignature(match),
     lineupProjection,
     preMatchContext,
     postMatchCalibration
@@ -692,6 +886,17 @@ function adjustedTeamStrength(team: Team, factors: TeamTournamentFactors): numbe
     factors.setPiece * 0.7 -
     factors.volatility * 1.2
   );
+}
+
+function selectScoreStrengthEdge(baseStrengthEdge: number, contextualStrengthEdge: number): number {
+  const baseAbs = Math.abs(baseStrengthEdge);
+  const contextualAbs = Math.abs(contextualStrengthEdge);
+  if (baseAbs < 2.5) return contextualStrengthEdge;
+  if (Math.sign(baseStrengthEdge) === Math.sign(contextualStrengthEdge)) {
+    return Math.abs(baseStrengthEdge) >= contextualAbs ? baseStrengthEdge : contextualStrengthEdge;
+  }
+  if (contextualAbs >= baseAbs * 1.25) return contextualStrengthEdge;
+  return baseStrengthEdge;
 }
 
 function buildTeamRecordSignal(recordComparison?: TeamRecordComparison): TeamRecordSignal {
@@ -850,6 +1055,11 @@ function calibrateExpectedGoalsByPostMatchErrors(
   const drawTrapBreakthrough = calibration.drawTrapBreakthroughRate ?? 0;
   const drawTrapMarginUnderestimate = calibration.drawTrapMarginUnderestimate ?? 0;
   const cleanSheetBust = calibration.favoriteCleanSheetBustRate ?? 0;
+  const highTotalMiss = calibration.highTotalMissRate ?? 0;
+  const lowTotalMiss = calibration.lowTotalMissRate ?? 0;
+  const zeroZeroMiss = calibration.zeroZeroMissRate ?? 0;
+  const totalGoalOverestimate = calibration.totalGoalOverestimate ?? 0;
+  const lowTotalPressure = Math.max(0, lowTotalMiss - highTotalMiss * 0.45);
   const favoriteBreakthroughSignal = favoriteBreakthrough + drawTrapBreakthrough * 0.75;
   const marginUnderestimateSignal = marginUnderestimate + drawTrapMarginUnderestimate * 0.65;
   const effectiveFavoritePenalty = Math.max(0, favoritePenalty - favoriteBreakthroughSignal * 0.08 - marginUnderestimateSignal * 0.02);
@@ -892,7 +1102,73 @@ function calibrateExpectedGoalsByPostMatchErrors(
     away *= 1 + volatilityLift;
   }
 
+  const compactGameContraction = clamp(
+    lowTotalPressure * 0.11 + zeroZeroMiss * 0.08 + totalGoalOverestimate * 0.022,
+    0,
+    expectedGap < 0.95 ? 0.18 : 0.08
+  );
+  if (compactGameContraction > 0 && (expectedGap < 0.95 || zeroZeroMiss > 0)) {
+    home *= 1 - compactGameContraction;
+    away *= 1 - compactGameContraction;
+  }
+
   return [round2(clamp(home, 0.18, 5.4)), round2(clamp(away, 0.18, 5.4))];
+}
+
+function coolExtremeFavoriteExpectedGoals(
+  homeExpectedGoals: number,
+  awayExpectedGoals: number,
+  worldCupFactors: WorldCupFactors,
+  calibration?: PostMatchCalibration
+): [number, number] {
+  if (!calibration || calibration.learnedMatchCount < 4 || !worldCupFactors.isKnockout) {
+    return [homeExpectedGoals, awayExpectedGoals];
+  }
+
+  const favorite = homeExpectedGoals >= awayExpectedGoals ? "home" : "away";
+  const favoriteGoals = favorite === "home" ? homeExpectedGoals : awayExpectedGoals;
+  const underdogGoals = favorite === "home" ? awayExpectedGoals : homeExpectedGoals;
+  const expectedGap = favoriteGoals - underdogGoals;
+  const scoreMiss = calibration.scoreMissRate ?? 0;
+  const directionMiss = calibration.directionMissRate ?? 0;
+  const favoriteMiss = calibration.favoriteMissRate ?? 0;
+
+  if (expectedGap < 1.05 || scoreMiss < 0.55) {
+    return [homeExpectedGoals, awayExpectedGoals];
+  }
+
+  const overconfidence =
+    scoreMiss * 0.13 +
+    directionMiss * 0.12 +
+    favoriteMiss * 0.10 +
+    (calibration.favoriteOverconfidencePenalty ?? 0) * 0.75 +
+    (calibration.favoriteMarginOverestimate ?? 0) * 0.045 +
+    (calibration.volatilityLift ?? 0) * 0.30 +
+    0.035;
+  const dominance = clamp((expectedGap - 0.85) / 2.2, 0.18, 1);
+  const favoriteCool = clamp(overconfidence * dominance, 0.04, 0.26);
+  const underdogLift = clamp(
+    (calibration.underdogResilienceBoost ?? 0) * 0.95 +
+      directionMiss * 0.07 +
+      favoriteMiss * 0.05 +
+      (calibration.favoriteCleanSheetBustRate ?? 0) * 0.10 +
+      (calibration.volatilityLift ?? 0) * 0.22 +
+      0.035,
+    0.03,
+    0.26
+  );
+
+  if (favorite === "home") {
+    return [
+      round2(clamp(homeExpectedGoals * (1 - favoriteCool), 0.18, 5.4)),
+      round2(clamp(awayExpectedGoals * (1 + underdogLift), 0.18, 5.4))
+    ];
+  }
+
+  return [
+    round2(clamp(homeExpectedGoals * (1 + underdogLift), 0.18, 5.4)),
+    round2(clamp(awayExpectedGoals * (1 - favoriteCool), 0.18, 5.4))
+  ];
 }
 
 function favoriteSideForGoalCalibration(
@@ -972,6 +1248,63 @@ function calibrateOutcomeForPreMatchContext(outcome: OutcomeProbability, context
     }
 
     draw += shift * 0.52;
+  }
+
+  const [normalizedHome, normalizedDraw, normalizedAway] = normalize([home, Math.max(0.08, draw), away]);
+  return { home: normalizedHome, draw: normalizedDraw, away: normalizedAway };
+}
+
+function calibrateExtremeFavoriteOutcome(
+  outcome: OutcomeProbability,
+  worldCupFactors: WorldCupFactors,
+  calibration?: PostMatchCalibration
+): OutcomeProbability {
+  if (!calibration || calibration.learnedMatchCount < 4 || !worldCupFactors.isKnockout) return outcome;
+
+  const favorite = outcome.home >= outcome.away ? "home" : "away";
+  const favoriteProbability = favorite === "home" ? outcome.home : outcome.away;
+  const scoreMiss = calibration.scoreMissRate ?? 0;
+  const directionMiss = calibration.directionMissRate ?? 0;
+  const favoriteMiss = calibration.favoriteMissRate ?? 0;
+  if (favoriteProbability < 0.78 || scoreMiss < 0.55) return outcome;
+
+  let home = outcome.home;
+  let draw = outcome.draw;
+  let away = outcome.away;
+  const risk =
+    scoreMiss * 0.10 +
+    directionMiss * 0.12 +
+    favoriteMiss * 0.14 +
+    (calibration.favoriteOverconfidencePenalty ?? 0) * 0.90 +
+    (calibration.volatilityLift ?? 0) * 0.36 +
+    (calibration.favoriteCleanSheetBustRate ?? 0) * 0.10 +
+    0.025;
+  const extremity = clamp((favoriteProbability - 0.72) / 0.24, 0.25, 1);
+  const shift = favoriteProbability * clamp(risk * extremity, 0.025, 0.16);
+
+  if (favorite === "home") {
+    home -= shift;
+    draw += shift * 0.42;
+    away += shift * 0.58;
+  } else {
+    away -= shift;
+    draw += shift * 0.42;
+    home += shift * 0.58;
+  }
+
+  const maximumFavorite = clamp(0.87 - directionMiss * 0.09 - favoriteMiss * 0.05 - scoreMiss * 0.035, 0.78, 0.86);
+  const cooledFavorite = favorite === "home" ? home : away;
+  if (cooledFavorite > maximumFavorite) {
+    const excess = cooledFavorite - maximumFavorite;
+    if (favorite === "home") {
+      home -= excess;
+      draw += excess * 0.40;
+      away += excess * 0.60;
+    } else {
+      away -= excess;
+      draw += excess * 0.40;
+      home += excess * 0.60;
+    }
   }
 
   const [normalizedHome, normalizedDraw, normalizedAway] = normalize([home, Math.max(0.08, draw), away]);
@@ -1192,6 +1525,7 @@ function postMatchScoreCalibrationMultiplier(
   const loserGoals = favorite === "home" ? item.awayGoals : item.homeGoals;
   const winnerGoals = favorite === "home" ? item.homeGoals : item.awayGoals;
   const margin = winnerGoals - loserGoals;
+  const totalGoals = item.homeGoals + item.awayGoals;
   const favoritePenalty = calibration.favoriteOverconfidencePenalty ?? 0;
   const underdogBoost = calibration.underdogResilienceBoost ?? 0;
   const drawProtection = calibration.drawProtectionBoost ?? 0;
@@ -1202,6 +1536,11 @@ function postMatchScoreCalibrationMultiplier(
   const drawTrapBreakthrough = calibration.drawTrapBreakthroughRate ?? 0;
   const drawTrapMarginUnderestimate = calibration.drawTrapMarginUnderestimate ?? 0;
   const cleanSheetBust = calibration.favoriteCleanSheetBustRate ?? 0;
+  const highTotalMiss = calibration.highTotalMissRate ?? 0;
+  const lowTotalMiss = calibration.lowTotalMissRate ?? 0;
+  const zeroZeroMiss = calibration.zeroZeroMissRate ?? 0;
+  const totalGoalOverestimate = calibration.totalGoalOverestimate ?? 0;
+  const lowTotalPressure = Math.max(0, lowTotalMiss - highTotalMiss * 0.45);
   let multiplier = 1;
 
   if (scoreDirectionValue === favorite && loserGoals === 0 && margin >= 1 && margin <= 3) {
@@ -1215,6 +1554,26 @@ function postMatchScoreCalibrationMultiplier(
 
   if (scoreDirectionValue === favorite && loserGoals === 0 && cleanSheetBust > 0) {
     multiplier *= 1 - cleanSheetBust * 0.38 * clamp(favoriteGap * 1.8, 0.35, 1.15);
+  }
+
+  if (lowTotalPressure > 0 || zeroZeroMiss > 0) {
+    if (totalGoals === 0) {
+      multiplier *= 1 + lowTotalPressure * 1.25 + zeroZeroMiss * 0.75 + totalGoalOverestimate * 0.10;
+    } else if (totalGoals === 1) {
+      multiplier *= 1 + lowTotalPressure * 0.70 + totalGoalOverestimate * 0.055;
+    }
+
+    if (scoreDirectionValue === favorite && loserGoals === 0 && margin >= 1 && margin <= 3) {
+      multiplier *= 1 + lowTotalPressure * 0.55 + totalGoalOverestimate * 0.035;
+    }
+
+    if (scoreDirectionValue === "draw" && totalGoals === 2 && zeroZeroMiss > 0) {
+      multiplier *= 1 - zeroZeroMiss * 0.22;
+    }
+
+    if (totalGoals >= 4 && highTotalMiss <= lowTotalMiss) {
+      multiplier *= 1 - lowTotalPressure * 0.24;
+    }
   }
 
   if (scoreDirectionValue === favorite && loserGoals >= 1 && margin >= 1) {
@@ -1271,7 +1630,6 @@ function postMatchScoreCalibrationMultiplier(
 
   const effectiveFavoriteDrawMiss = Math.max(0, favoriteDrawMiss - drawTrapBreakthrough * 0.55 - favoriteBreakthrough * 0.35);
   if (scoreDirectionValue === "draw" && effectiveFavoriteDrawMiss > 0) {
-    const totalGoals = item.homeGoals + item.awayGoals;
     const drawShape = totalGoals <= 4 ? 1 : 0.45;
     multiplier *= 1 + effectiveFavoriteDrawMiss * 0.95 * drawShape + marginOverestimate * 0.12 * drawShape;
   }

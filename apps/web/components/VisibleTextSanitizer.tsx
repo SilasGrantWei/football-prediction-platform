@@ -7,6 +7,7 @@ import { hasLatinText, toChineseDisplay } from "@/lib/chineseDisplay";
 const ignoredTags = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "SELECT", "OPTION", "CODE", "PRE", "NOSCRIPT"]);
 const maxTextNodesPerFlush = 220;
 const flushDelayMs = 160;
+const unmappedLatinMarker = "__UNMAPPED_LATIN_TEXT__";
 
 type IdleWindow = Window &
   typeof globalThis & {
@@ -26,8 +27,13 @@ export function VisibleTextSanitizer() {
       const value = node.nodeValue;
       if (!value || !hasLatinText(value)) return;
       if (processedValues.get(node) === value) return;
-      node.nodeValue = toChineseDisplay(value, "待接入中文名");
-      processedValues.set(node, node.nodeValue ?? "");
+      const translated = toChineseDisplay(value, unmappedLatinMarker);
+      if (translated.includes(unmappedLatinMarker)) {
+        processedValues.set(node, value);
+        return;
+      }
+      node.nodeValue = translated;
+      processedValues.set(node, translated);
     };
 
     const sanitizeTree = (root: ParentNode) => {

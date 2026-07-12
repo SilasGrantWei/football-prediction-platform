@@ -9,6 +9,7 @@ import {
   calculateDixonColesScoreMatrix,
   calculateLocalPrediction,
   isFutureScheduledPredictionTarget,
+  LOCAL_MODEL_VERSION,
   PredictionService
 } from "../src/services/predictionService.js";
 import { buildWorldCupFactors } from "../src/services/worldCupFactors.js";
@@ -73,13 +74,15 @@ describe("calculateLocalPrediction", () => {
 
     expect(total).toBeGreaterThan(0.999);
     expect(total).toBeLessThan(1.001);
+    expect(LOCAL_MODEL_VERSION).toBe("poisson-elo-fifa-prior-distribution-v11");
+    expect(prediction.modelVersion).toBe(LOCAL_MODEL_VERSION);
     expect(prediction.topScores).toHaveLength(3);
     expect(prediction.scoreProbabilityMatrix).toHaveLength(36);
     const matrixTotal = prediction.scoreProbabilityMatrix?.reduce((sum, item) => sum + item.probability, 0) ?? 0;
-    const matrixTopScore = [...(prediction.scoreProbabilityMatrix ?? [])].sort((a, b) => b.probability - a.probability)[0];
+    const matrixTopScores = topMatrixScores(prediction);
     expect(matrixTotal).toBeGreaterThan(0.999);
     expect(matrixTotal).toBeLessThan(1.001);
-    expect(prediction.topScores[0].score).toBe(matrixTopScore?.score);
+    expect(prediction.topScores).toEqual(matrixTopScores);
     expect(prediction.topScores[0].probability).toBeGreaterThanOrEqual(prediction.topScores[1].probability);
     expect(prediction.topScores[1].probability).toBeGreaterThanOrEqual(prediction.topScores[2].probability);
     expect(["defensive", "balanced", "open"]).toContain(prediction.gameStyle);
@@ -288,6 +291,239 @@ describe("calculateLocalPrediction", () => {
     expect(calibrated.expectedHomeGoals).toBeLessThan(baseline.expectedHomeGoals);
     expect(calibrated.expectedAwayGoals).toBeGreaterThan(baseline.expectedAwayGoals);
     expect(calibrated.postMatchCalibration?.favoriteMissRate).toBe(1);
+  });
+
+  it("cools extreme knockout favorites when recent Top3 score misses are concentrated", () => {
+    const extremeFavorite: Match = {
+      ...match,
+      id: "extreme-knockout-favorite",
+      competition: "2026世界杯淘汰赛 · 1/8决赛",
+      homeTeam: {
+        ...match.homeTeam,
+        fifaRating: 94,
+        recentForm: 90,
+        attackAvg: 2.35,
+        defenseAvg: 88,
+        xga: 0.78
+      },
+      awayTeam: {
+        ...match.awayTeam,
+        fifaRating: 80,
+        recentForm: 78,
+        attackAvg: 1.49,
+        defenseAvg: 76,
+        xga: 1.15
+      },
+      status: "scheduled",
+      minute: 0
+    };
+    const postMatchCalibration: PostMatchCalibration = {
+      version: "unit-test-extreme-favorite-cooling",
+      sampleSignature: "recent-score-miss-cluster:2026-07-07T00:00:00.000Z",
+      learnedMatchCount: 12,
+      scoreMissRate: 0.83,
+      directionMissRate: 0.33,
+      favoriteMissRate: 0.25,
+      favoriteCleanSheetBoost: 0.06,
+      favoriteGoalLift: 0.11,
+      underdogGoalSuppression: 0.03,
+      drawDampener: 0.09,
+      volatilityLift: 0.09,
+      favoriteOverconfidencePenalty: 0.04,
+      underdogResilienceBoost: 0.06,
+      drawProtectionBoost: 0,
+      favoriteMarginOverestimate: 0.08,
+      favoriteCleanSheetBustRate: 0.08,
+      generatedAt: "2026-07-07T15:31:52.496Z",
+      notes: ["unit-test recent Top3 miss cluster"]
+    };
+
+    const baseline = calculateLocalPrediction(extremeFavorite);
+    const calibrated = calculateLocalPrediction(extremeFavorite, undefined, postMatchCalibration);
+    expect(calibrated.homeWinProb).toBeLessThan(baseline.homeWinProb);
+    expect(calibrated.homeWinProb).toBeLessThan(0.9);
+    expect(calibrated.drawProb + calibrated.awayWinProb).toBeGreaterThan(baseline.drawProb + baseline.awayWinProb);
+    expect(calibrated.expectedHomeGoals).toBeLessThan(baseline.expectedHomeGoals);
+    expect(calibrated.expectedAwayGoals).toBeGreaterThan(baseline.expectedAwayGoals);
+    expect(calibrated.postMatchCalibration?.sampleSignature).toBe(postMatchCalibration.sampleSignature);
+  });
+
+  it("calibrates the matrix for a near-even knockout favorite after consecutive score-script misses", () => {
+    const nearEvenAwayFavorite: Match = {
+      ...match,
+      id: "near-even-away-favorite-script-diversity",
+      competition: "2026世界杯淘汰赛 · 1/8决赛",
+      homeTeam: {
+        ...match.homeTeam,
+        id: "switzerland",
+        name: "Switzerland",
+        fifaRating: 80,
+        recentForm: 80,
+        attackAvg: 1.42,
+        defenseAvg: 79,
+        xga: 1.08
+      },
+      awayTeam: {
+        ...match.awayTeam,
+        id: "colombia",
+        name: "Colombia",
+        fifaRating: 84,
+        recentForm: 82,
+        attackAvg: 1.72,
+        defenseAvg: 79,
+        xga: 1.06
+      },
+      status: "scheduled",
+      minute: 0
+    };
+    const postMatchCalibration: PostMatchCalibration = {
+      version: "unit-test-score-script-diversity",
+      sampleSignature: "recent-consecutive-top3-misses:2026-07-07T18:07:21.633Z",
+      learnedMatchCount: 12,
+      scoreMissRate: 0.83,
+      directionMissRate: 0.33,
+      favoriteMissRate: 0.25,
+      favoriteCleanSheetBoost: 0.03,
+      favoriteGoalLift: 0.11,
+      underdogGoalSuppression: 0,
+      drawDampener: 0.09,
+      volatilityLift: 0.1,
+      favoriteOverconfidencePenalty: 0.05,
+      underdogResilienceBoost: 0.08,
+      drawProtectionBoost: 0,
+      favoriteMarginOverestimate: 0.08,
+      favoriteMarginUnderestimate: 0.42,
+      drawTrapBreakthroughRate: 0.25,
+      drawTrapMarginUnderestimate: 0.58,
+      favoriteCleanSheetBustRate: 0.08,
+      generatedAt: "2026-07-07T18:07:21.633Z",
+      notes: ["unit-test consecutive score-script miss cluster"]
+    };
+
+    const calibrated = calculateLocalPrediction(nearEvenAwayFavorite, undefined, postMatchCalibration);
+    expect(calibrated.awayWinProb).toBeGreaterThan(calibrated.homeWinProb);
+    expect(calibrated.topScores).toEqual(topMatrixScores(calibrated));
+    expect(calibrated.postMatchCalibration?.sampleSignature).toBe(postMatchCalibration.sampleSignature);
+  });
+
+  it("raises 0-0 probability in the matrix after recent compact knockout misses", () => {
+    const nearEvenAwayFavorite: Match = {
+      ...match,
+      id: "compact-knockout-future",
+      competition: "2026世界杯淘汰赛 · 1/8决赛",
+      homeTeam: {
+        ...match.homeTeam,
+        fifaRating: 86,
+        recentForm: 78,
+        attackAvg: 1.35,
+        defenseAvg: 82,
+        xga: 1.05
+      },
+      awayTeam: {
+        ...match.awayTeam,
+        fifaRating: 88,
+        recentForm: 84,
+        attackAvg: 1.58,
+        defenseAvg: 84,
+        xga: 0.94
+      },
+      status: "scheduled",
+      minute: 0
+    };
+    const postMatchCalibration: PostMatchCalibration = {
+      version: "unit-test-compact-score-calibration",
+      sampleSignature: "compact-nil-nil-miss:2026-07-07T18:00:00.000Z",
+      learnedMatchCount: 12,
+      scoreMissRate: 0.58,
+      directionMissRate: 0.33,
+      favoriteMissRate: 0.25,
+      favoriteCleanSheetBoost: 0.12,
+      favoriteGoalLift: 0.02,
+      underdogGoalSuppression: 0.05,
+      drawDampener: 0.02,
+      volatilityLift: 0.02,
+      favoriteOverconfidencePenalty: 0.04,
+      underdogResilienceBoost: 0.03,
+      drawProtectionBoost: 0.12,
+      favoriteDrawMissRate: 0,
+      favoriteMarginOverestimate: 0.1,
+      favoriteMarginUnderestimate: 0.2,
+      favoriteCleanSheetBustRate: 0,
+      highTotalMissRate: 0.08,
+      lowTotalMissRate: 0.5,
+      zeroZeroMissRate: 0.25,
+      totalGoalOverestimate: 1.1,
+      generatedAt: "2026-07-08T00:00:00.000Z",
+      notes: ["unit-test compact nil-nil calibration"]
+    };
+
+    const baseline = calculateLocalPrediction(nearEvenAwayFavorite);
+    const calibrated = calculateLocalPrediction(nearEvenAwayFavorite, undefined, postMatchCalibration);
+    const scoreProbability = (prediction: ReturnType<typeof calculateLocalPrediction>, score: string) =>
+      prediction.scoreProbabilityMatrix?.find((item) => item.score === score)?.probability ?? 0;
+
+    expect(calibrated.topScores).toHaveLength(3);
+    expect(scoreProbability(calibrated, "0-0")).toBeGreaterThan(scoreProbability(baseline, "0-0"));
+    expect(calibrated.topScores).toEqual(topMatrixScores(calibrated));
+    expect(calibrated.expectedHomeGoals + calibrated.expectedAwayGoals).toBeLessThan(2.8);
+  });
+
+  it("keeps dominant team strength ahead of compact 0-0 protection", () => {
+    const dominantFavorite: Match = {
+      ...match,
+      id: "dominant-strength-compact-protection",
+      competition: "2026世界杯淘汰赛 · 1/4决赛",
+      homeTeam: {
+        ...match.homeTeam,
+        fifaRating: 95,
+        recentForm: 92,
+        attackAvg: 2.35,
+        defenseAvg: 90,
+        xga: 0.7
+      },
+      awayTeam: {
+        ...match.awayTeam,
+        fifaRating: 72,
+        recentForm: 69,
+        attackAvg: 1.05,
+        defenseAvg: 70,
+        xga: 1.55
+      },
+      status: "scheduled",
+      minute: 0
+    };
+    const postMatchCalibration: PostMatchCalibration = {
+      version: "unit-test-strength-first-calibration",
+      sampleSignature: "compact-nil-nil-miss:2026-07-07T18:00:00.000Z",
+      learnedMatchCount: 12,
+      scoreMissRate: 0.7,
+      directionMissRate: 0.2,
+      favoriteMissRate: 0.1,
+      favoriteCleanSheetBoost: 0.1,
+      favoriteGoalLift: 0.01,
+      underdogGoalSuppression: 0.06,
+      drawDampener: 0,
+      volatilityLift: 0,
+      favoriteOverconfidencePenalty: 0.02,
+      underdogResilienceBoost: 0,
+      drawProtectionBoost: 0.18,
+      highTotalMissRate: 0,
+      lowTotalMissRate: 0.75,
+      zeroZeroMissRate: 0.45,
+      totalGoalOverestimate: 1.6,
+      generatedAt: "2026-07-08T00:00:00.000Z",
+      notes: ["unit-test strength must dominate compact protection"]
+    };
+
+    const calibrated = calculateLocalPrediction(dominantFavorite, undefined, postMatchCalibration);
+    const [topHomeGoals = 0, topAwayGoals = 0] = calibrated.topScores[0]?.score
+      .split("-")
+      .map((value) => Number.parseInt(value, 10)) ?? [0, 0];
+
+    expect(calibrated.homeWinProb).toBeGreaterThan(calibrated.drawProb + calibrated.awayWinProb);
+    expect(topHomeGoals).toBeGreaterThan(topAwayGoals);
+    expect(calibrated.topScores.map((item) => item.score)).not.toContain("0-0");
+    expect(calibrated.topScores.some((item) => item.score.endsWith("-0"))).toBe(true);
   });
 
   it("lifts both-teams-to-score candidates after prior favorite 3-2 clean-sheet misses", () => {
@@ -617,6 +853,17 @@ describe("calculateLocalPrediction", () => {
     }
   });
 
+  it("exposes missing official player-state inputs instead of implying real lineup knowledge", () => {
+    const prediction = calculateLocalPrediction(match);
+    const explanation = buildPredictionExplanation(match, prediction);
+    const gaps = explanation.dataGaps?.join("\n") ?? "";
+
+    expect(gaps).toContain("官方真实首发");
+    expect(gaps).toContain("实时伤停");
+    expect(gaps).toContain("球员级近期状态");
+    expect(gaps).toContain("低权重");
+  });
+
   it("does not use final group-stage points before a group match kicks off", () => {
     const groupStageMatch: Match = {
       ...match,
@@ -709,7 +956,7 @@ describe("PredictionService causal snapshots", () => {
     expect(upsertSpy).not.toHaveBeenCalled();
   });
 
-  it("reconstructs demo finished-match predictions from pre-match inputs only", async () => {
+  it("reconstructs and persists a version-frozen demo snapshot from pre-match inputs only", async () => {
     config.demoMode = true;
     const service = new PredictionService();
     const upsertSpy = vi.spyOn(matchRepository, "upsertPrediction");
@@ -730,14 +977,61 @@ describe("PredictionService causal snapshots", () => {
       minute: 0,
       prediction: undefined
     };
-    const causalBaseline = comparablePrediction(calculateLocalPrediction(preMatchInput));
+    const causalBaseline = calculateLocalPrediction(preMatchInput);
 
     const prediction = await service.getPrediction(finishedMatch);
 
-    expect(comparablePrediction(prediction!)).toEqual(causalBaseline);
+    expect(prediction?.homeWinProb).toBe(causalBaseline.homeWinProb);
+    expect(prediction?.drawProb).toBe(causalBaseline.drawProb);
+    expect(prediction?.awayWinProb).toBe(causalBaseline.awayWinProb);
+    expect(prediction?.scoreProbabilityMatrix).toEqual(causalBaseline.scoreProbabilityMatrix);
+    expect(prediction?.modelVersion).toBe("poisson-elo-fifa-prior-distribution-v9");
     expect(new Date(prediction!.generatedAt).getTime()).toBeLessThanOrEqual(new Date(finishedMatch.startTime).getTime());
     expect(prediction?.evaluation?.actualScore).toBe("6-4");
-    expect(upsertSpy).not.toHaveBeenCalled();
+    expect(upsertSpy).toHaveBeenCalledWith(expect.objectContaining({ matchId: finishedMatch.id }));
+  });
+
+  it("preserves the published v9 candidate list when a finished demo snapshot must be recovered", async () => {
+    config.demoMode = true;
+    const finishedMatch: Match = {
+      ...match,
+      id: "qf-097-frozen-recovery",
+      competition: "2026世界杯淘汰赛 · 1/4决赛",
+      homeTeam: {
+        id: "france",
+        name: "法国",
+        fifaRating: 93,
+        recentForm: 88,
+        attackAvg: 2.05,
+        defenseAvg: 84,
+        xga: 0.94
+      },
+      awayTeam: {
+        id: "morocco",
+        name: "摩洛哥",
+        fifaRating: 80,
+        recentForm: 82,
+        attackAvg: 1.35,
+        defenseAvg: 86,
+        xga: 0.88
+      },
+      homeScore: 2,
+      awayScore: 0,
+      status: "finished",
+      startTime: "2026-07-09T20:00:00.000Z",
+      minute: 90,
+      prediction: undefined
+    };
+
+    const prediction = await new PredictionService().getPrediction(finishedMatch, { detail: false });
+    const matrixTop3 = [...(prediction?.scoreProbabilityMatrix ?? [])]
+      .sort((left, right) => right.probability - left.probability)
+      .slice(0, 3)
+      .map((item) => item.score);
+
+    expect(matrixTop3).toEqual(["2-1", "2-0", "1-0"]);
+    expect(prediction?.topScores.map((item) => item.score)).toEqual(["2-1", "1-0", "1-1"]);
+    expect(prediction?.modelVersion).toBe("poisson-elo-fifa-prior-distribution-v9");
   });
 
   it("adds post-match evaluation to demo finished matches in list enrichment", async () => {
@@ -760,7 +1054,7 @@ describe("PredictionService causal snapshots", () => {
     expect(enriched?.prediction?.evaluation?.actualScore).toBe("3-0");
     expect(enriched?.prediction?.evaluation?.status).toMatch(/success|failed/);
     expect(new Date(enriched!.prediction!.generatedAt).getTime()).toBeLessThanOrEqual(new Date(finishedMatch.startTime).getTime());
-    expect(upsertSpy).not.toHaveBeenCalled();
+    expect(upsertSpy).toHaveBeenCalledWith(expect.objectContaining({ matchId: finishedMatch.id }));
   });
 
   it("stores scheduled list predictions as causal pre-match snapshots", async () => {
@@ -786,14 +1080,14 @@ describe("PredictionService causal snapshots", () => {
     config.demoMode = true;
     config.externalFriendlyRecordsEnabled = false;
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("ai offline"));
-    const liveMatch: Match = {
+    const scheduledMatch: Match = {
       ...match,
       id: "list-detail-consistency",
-      status: "halftime",
-      startTime: "2026-07-04T09:00:00.000Z",
-      homeScore: 1,
+      status: "scheduled",
+      startTime: "2099-07-04T09:00:00.000Z",
+      homeScore: 0,
       awayScore: 0,
-      minute: 45,
+      minute: 0,
       prediction: undefined
     };
     const recordOpponent = (id: string): Match["homeTeam"] => ({
@@ -809,36 +1103,36 @@ describe("PredictionService causal snapshots", () => {
       {
         ...match,
         id: "home-record-1",
-        homeTeam: liveMatch.homeTeam,
+        homeTeam: scheduledMatch.homeTeam,
         awayTeam: recordOpponent("home-opponent-1"),
         homeScore: 4,
         awayScore: 0,
         status: "finished",
-        startTime: "2026-06-01T09:00:00.000Z",
+        startTime: "2099-06-23T09:00:00.000Z",
         minute: 90,
         prediction: undefined
       },
       {
         ...match,
         id: "home-record-2",
-        homeTeam: liveMatch.homeTeam,
+        homeTeam: scheduledMatch.homeTeam,
         awayTeam: recordOpponent("home-opponent-2"),
         homeScore: 3,
         awayScore: 1,
         status: "finished",
-        startTime: "2026-06-08T09:00:00.000Z",
+        startTime: "2099-06-30T09:00:00.000Z",
         minute: 90,
         prediction: undefined
       },
       {
         ...match,
         id: "away-record-1",
-        homeTeam: liveMatch.awayTeam,
+        homeTeam: scheduledMatch.awayTeam,
         awayTeam: recordOpponent("away-opponent-1"),
         homeScore: 0,
         awayScore: 2,
         status: "finished",
-        startTime: "2026-06-01T12:00:00.000Z",
+        startTime: "2099-06-23T12:00:00.000Z",
         minute: 90,
         prediction: undefined
       },
@@ -846,22 +1140,31 @@ describe("PredictionService causal snapshots", () => {
         ...match,
         id: "away-record-2",
         homeTeam: recordOpponent("away-opponent-2"),
-        awayTeam: liveMatch.awayTeam,
+        awayTeam: scheduledMatch.awayTeam,
         homeScore: 2,
         awayScore: 0,
         status: "finished",
-        startTime: "2026-06-08T12:00:00.000Z",
+        startTime: "2099-06-30T12:00:00.000Z",
         minute: 90,
         prediction: undefined
       }
     ];
-    vi.spyOn(matchRepository, "findMatches").mockResolvedValue([liveMatch, ...records]);
+    vi.spyOn(matchRepository, "findMatches").mockResolvedValue([scheduledMatch, ...records]);
+    const upsertSpy = vi.spyOn(matchRepository, "upsertPrediction");
 
     const service = new PredictionService();
-    const listPrediction = await service.getPrediction(liveMatch, { detail: false, force: true });
-    const detailPrediction = await service.getPrediction(liveMatch, { detail: true, force: true });
+    const listPrediction = await service.getPrediction(scheduledMatch, { detail: false, force: true });
+    const detailPrediction = await service.getPrediction(scheduledMatch, { detail: true, force: true });
+    const listRest = listPrediction?.preMatchContext?.factors.find((factor) => factor.name === "休息/旅行消耗");
+    const detailRest = detailPrediction?.preMatchContext?.factors.find((factor) => factor.name === "休息/旅行消耗");
 
     expect(comparablePrediction(listPrediction!)).toEqual(comparablePrediction(detailPrediction!));
+    expect(listRest?.homeValue).toMatch(/^4天休息/);
+    expect(listRest?.awayValue).toMatch(/^4天休息/);
+    expect(detailRest).toEqual(listRest);
+    expect(new Date(listPrediction!.generatedAt).getTime()).toBeLessThanOrEqual(new Date(scheduledMatch.startTime).getTime());
+    expect(new Date(detailPrediction!.generatedAt).getTime()).toBeLessThanOrEqual(new Date(scheduledMatch.startTime).getTime());
+    expect(upsertSpy).toHaveBeenCalledTimes(2);
   });
 
   it("keeps the frozen pre-match prediction during live matches and only records live review", async () => {
@@ -1022,6 +1325,20 @@ describe("PredictionService causal snapshots", () => {
       minute: 0,
       prediction: undefined
     };
+    const unresolvedFuture: Match = {
+      ...futureScheduled,
+      id: "unresolved-bracket-no-refresh",
+      homeTeam: {
+        ...futureScheduled.homeTeam,
+        id: "winner_m101",
+        name: "胜者M101"
+      },
+      awayTeam: {
+        ...futureScheduled.awayTeam,
+        id: "loser_m102",
+        name: "负者M102"
+      }
+    };
     const staleScheduled: Match = {
       ...match,
       id: "stale-scheduled-no-refresh",
@@ -1048,20 +1365,38 @@ describe("PredictionService causal snapshots", () => {
 
     vi.spyOn(matchRepository, "findMatches").mockImplementation(async (filters = {}) => {
       if (filters.status === "finished") return [finishedMatch];
-      return [futureScheduled, staleScheduled, liveMatch, finishedMatch];
+      return [futureScheduled, unresolvedFuture, staleScheduled, liveMatch, finishedMatch];
     });
     const upsertSpy = vi.spyOn(matchRepository, "upsertPrediction").mockResolvedValue(undefined);
 
     const result = await new PredictionService().refreshUpcomingPredictions(now);
 
     expect(isFutureScheduledPredictionTarget(futureScheduled, now)).toBe(true);
+    expect(isFutureScheduledPredictionTarget(unresolvedFuture, now)).toBe(false);
+    await expect(new PredictionService().getPrediction(unresolvedFuture, { force: true })).resolves.toBeUndefined();
+    await expect(
+      new PredictionService().getPrediction({ ...unresolvedFuture, status: "live", minute: 12 }, { force: true })
+    ).resolves.toBeUndefined();
+    await expect(
+      new PredictionService().getPrediction(
+        { ...unresolvedFuture, status: "finished", minute: 90, homeScore: 1, awayScore: 0 },
+        { detail: false }
+      )
+    ).resolves.toBeUndefined();
+    await expect(
+      new PredictionService().getPrediction(
+        { ...futureScheduled, id: "past-scheduled-direct-request", startTime: "2020-01-01T00:00:00.000Z" },
+        { force: true }
+      )
+    ).resolves.toBeUndefined();
     expect(isFutureScheduledPredictionTarget(staleScheduled, now)).toBe(false);
     expect(isFutureScheduledPredictionTarget(liveMatch, now)).toBe(false);
     expect(isFutureScheduledPredictionTarget(finishedMatch, now)).toBe(false);
-    expect(result.considered).toBe(4);
+    expect(result.considered).toBe(5);
     expect(result.recalculated).toBe(1);
     expect(result.skipped.alreadyStarted).toBe(2);
     expect(result.skipped.finishedLocked).toBe(1);
+    expect(result.skipped.unresolvedTeams).toBe(1);
     expect(result.matches).toEqual([
       expect.objectContaining({
         matchId: "future-scheduled-refresh",
@@ -1070,6 +1405,47 @@ describe("PredictionService causal snapshots", () => {
     ]);
     expect(upsertSpy).toHaveBeenCalledTimes(1);
     expect(upsertSpy).toHaveBeenCalledWith(expect.objectContaining({ matchId: "future-scheduled-refresh" }));
+  });
+
+  it("rejects a current-version persisted prediction when bracket participants have changed", async () => {
+    config.demoMode = true;
+    config.externalFriendlyRecordsEnabled = false;
+    const resolvedMatch: Match = {
+      ...match,
+      id: "resolved-participant-signature",
+      competition: "2026世界杯淘汰赛 · 半决赛",
+      homeTeam: {
+        ...match.homeTeam,
+        id: "france",
+        name: "法国"
+      },
+      awayTeam: {
+        ...match.awayTeam,
+        id: "spain",
+        name: "西班牙"
+      },
+      status: "scheduled",
+      startTime: "2099-01-03T00:00:00.000Z",
+      minute: 0
+    };
+    resolvedMatch.prediction = {
+      ...calculateLocalPrediction(resolvedMatch),
+      participantSignature: "winner_m101:loser_m102",
+      homeWinProb: 0.99,
+      drawProb: 0.005,
+      awayWinProb: 0.005
+    };
+
+    vi.spyOn(matchRepository, "findMatches").mockResolvedValue([]);
+    const upsertSpy = vi.spyOn(matchRepository, "upsertPrediction").mockResolvedValue(undefined);
+
+    const prediction = await new PredictionService().getPrediction(resolvedMatch, { detail: false });
+
+    expect(prediction?.homeWinProb).not.toBe(0.99);
+    expect(prediction?.participantSignature).toBe("france:spain");
+    expect(upsertSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ matchId: resolvedMatch.id, participantSignature: "france:spain" })
+    );
   });
 });
 
@@ -1312,6 +1688,13 @@ function comparablePrediction(prediction: ReturnType<typeof calculateLocalPredic
     expectedAwayGoals: prediction.expectedAwayGoals,
     modelVersion: prediction.modelVersion
   };
+}
+
+function topMatrixScores(prediction: ReturnType<typeof calculateLocalPrediction>) {
+  return [...(prediction.scoreProbabilityMatrix ?? [])]
+    .sort((left, right) => right.probability - left.probability)
+    .slice(0, 3)
+    .map(({ score, probability }) => ({ score, probability: Math.round(probability * 10_000) / 10_000 }));
 }
 
 function factorial(n: number): number {

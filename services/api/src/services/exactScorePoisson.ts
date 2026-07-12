@@ -15,6 +15,15 @@ export interface OutcomeProbability {
   away: number;
 }
 
+export interface ScoreSelectionHints {
+  lowTotalPressure?: number;
+  highTotalPressure?: number;
+  cleanSheetPressure?: number;
+  zeroZeroPressure?: number;
+  strengthEdge?: number;
+  strengthFavorite?: Exclude<keyof OutcomeProbability, "draw">;
+}
+
 export interface ExactScoreDistribution {
   probabilityMatrix: ScoreProbabilityMatrixItem[];
   top3Scores: ScorePrediction[];
@@ -34,6 +43,7 @@ interface ExactScoreInput {
   calibratedOutcome?: OutcomeProbability;
   poissonOutcome?: OutcomeProbability;
   scoreAdjuster?: (score: ScoreProbabilityMatrixItem) => number;
+  selectionHints?: ScoreSelectionHints;
   maxGoals?: number;
 }
 
@@ -87,6 +97,7 @@ export function buildExactScoreDistribution(input: ExactScoreInput): ExactScoreD
           priorFactor *
           directionRatio *
           directionConsistencyShape(direction, input.calibratedOutcome) *
+          strengthDirectionShape(direction, input.selectionHints) *
           stageScoreShape(homeGoals, awayGoals, input.stage)
       };
       adjusted.probability *= input.scoreAdjuster?.(adjusted) ?? 1;
@@ -98,7 +109,10 @@ export function buildExactScoreDistribution(input: ExactScoreInput): ExactScoreD
   const normalized = rawScores
     .map((item) => ({ ...item, probability: total > 0 ? item.probability / total : 0 }))
     .sort((a, b) => b.probability - a.probability);
-  const top3Scores = normalized.slice(0, 3).map((item) => ({ score: item.score, probability: round4(item.probability) }));
+  const top3Scores = normalized.slice(0, 3).map((item) => ({
+    score: item.score,
+    probability: round4(item.probability)
+  }));
   const matrix = [...normalized]
     .sort((a, b) => a.homeGoals - b.homeGoals || a.awayGoals - b.awayGoals)
     .map((item) => ({ ...item, probability: round6(item.probability) }));
@@ -232,6 +246,24 @@ function directionConsistencyShape(direction: keyof OutcomeProbability, outcome?
 
   if (direction === topDirection) return 1 + clamp(edge * 4.8, 0, 0.20);
   return 1 - clamp(edge * 3.2, 0, 0.16);
+}
+
+function strengthDirectionShape(direction: keyof OutcomeProbability, hints?: ScoreSelectionHints): number {
+  const favorite = hints?.strengthFavorite;
+  if (!favorite) return 1;
+
+  const strengthEdge = Math.abs(hints.strengthEdge ?? 0);
+  const lowTotalProtection = clamp(
+    Math.max(hints.lowTotalPressure ?? 0, hints.zeroZeroPressure ?? 0) - (hints.highTotalPressure ?? 0) * 0.45,
+    0,
+    1
+  );
+  const bias = clamp((strengthEdge - 2.5) / 12, 0, 0.18) * (1 - lowTotalProtection * 0.82);
+  if (bias <= 0) return 1;
+
+  if (direction === favorite) return 1 + bias;
+  if (direction === "draw") return 1 - bias * 0.58;
+  return 1 - bias * 0.24;
 }
 
 function homeAdvantage(isHome?: boolean): number {

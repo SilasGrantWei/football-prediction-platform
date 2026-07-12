@@ -9,7 +9,7 @@ interface RouteContext {
 
 export async function POST(request: Request, { params }: RouteContext) {
   const { id } = await params;
-  const redirectUrl = new URL(`/match/${encodeURIComponent(id)}`, request.url);
+  const redirectUrl = buildBrowserRedirectUrl(`/match/${encodeURIComponent(id)}`, request.url);
 
   try {
     const prediction = await recalculateMatchPrediction(id);
@@ -29,4 +29,16 @@ export async function POST(request: Request, { params }: RouteContext) {
   }
 
   return NextResponse.redirect(redirectUrl, { status: 303 });
+}
+
+function buildBrowserRedirectUrl(pathname: string, requestUrl: string): URL {
+  const redirectUrl = new URL(pathname, requestUrl);
+  if (isUnspecifiedHost(redirectUrl.hostname)) {
+    redirectUrl.hostname = "127.0.0.1";
+  }
+  return redirectUrl;
+}
+
+function isUnspecifiedHost(hostname: string): boolean {
+  return hostname === "0.0.0.0" || hostname === "::" || hostname === "[::]";
 }

@@ -10,6 +10,7 @@ from typing import Any
 
 
 SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
+SUMMARY_URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary"
 TOURNAMENT_START = datetime(2026, 6, 11, tzinfo=UTC)
 TOURNAMENT_END = datetime(2026, 7, 19, tzinfo=UTC)
 
@@ -36,6 +37,8 @@ class MatchSnapshot:
     minute: int
     source: str
     raw: dict[str, Any]
+    score90_verified: bool = True
+    winner_team_id: str | None = None
 
 
 TEAM_ALIASES: dict[str, list[str]] = {
@@ -164,7 +167,8 @@ def fetch_scoreboard_events(start: datetime, end: datetime) -> list[dict[str, An
     )
     with urllib.request.urlopen(request, timeout=20) as response:
         payload = json.loads(response.read().decode("utf-8"))
-    return list(payload.get("events") or [])
+    events = list(payload.get("events") or [])
+    return [enrich_regulation_score(event) for event in events]
 
 
 def parse_events(events: list[dict[str, Any]], source: str = "espn") -> list[MatchSnapshot]:
@@ -191,8 +195,21 @@ def parse_event(event: dict[str, Any], source: str = "espn") -> MatchSnapshot | 
     away_team = parse_team(away)
     kickoff_time = parse_datetime(event.get("date") or competition.get("date") or competition.get("startDate"))
     stage = parse_stage(event, competition)
-    status = parse_status(event.get("status") or competition.get("status"))
-    minute = parse_minute(event.get("status") or competition.get("status"), status)
+    status_payload = event.get("status") or competition.get("status")
+    status = parse_status(status_payload)
+    minute = parse_minute(status_payload, status)
+    after_regulation = is_after_regulation(status_payload)
+    home_score = int(home.get("score") or 0)
+    away_score = int(away.get("score") or 0)
+    score90_verified = not after_regulation
+    if after_regulation:
+        regulation_score = parse_regulation_score(event, home, away)
+        if regulation_score is not None:
+            home_score, away_score = regulation_score
+            score90_verified = True
+            if status == "finished":
+                minute = 90
+    winner_team_id = home_team.id if home.get("winner") else away_team.id if away.get("winner") else None
     alt_note = str(competition.get("altGameNote") or "")
     competition_name = f"2026世界杯 · {stage_label(stage, alt_note)}"
 
@@ -202,15 +219,99 @@ def parse_event(event: dict[str, Any], source: str = "espn") -> MatchSnapshot | 
         competition=competition_name,
         home_team=home_team,
         away_team=away_team,
-        home_score=int(home.get("score") or 0),
-        away_score=int(away.get("score") or 0),
+        home_score=home_score,
+        away_score=away_score,
         status=status,
         kickoff_time=kickoff_time,
         stage=stage,
         minute=minute,
         source=source,
         raw=event,
+        score90_verified=score90_verified,
+        winner_team_id=winner_team_id,
     )
+
+
+def enrich_regulation_score(event: dict[str, Any]) -> dict[str, Any]:
+    competition = (event.get("competitions") or [{}])[0]
+    status = event.get("status") or competition.get("status")
+    if not is_after_regulation(status) or event.get("_regulationScore"):
+        return event
+
+    external_id = str(event.get("id") or "")
+    if not external_id:
+        return event
+
+    request = urllib.request.Request(
+        f"{SUMMARY_URL}?event={external_id}",
+        headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Accept": "application/json,text/plain,*/*",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            summary = json.loads(response.read().decode("utf-8"))
+    except (OSError, TimeoutError, ValueError):
+        return event
+
+    score = regulation_score_from_summary(summary)
+    if score is not None:
+        event["_regulationScore"] = {"home": score[0], "away": score[1]}
+    return event
+
+
+def regulation_score_from_summary(summary: dict[str, Any]) -> tuple[int, int] | None:
+    competition = (((summary.get("header") or {}).get("competitions") or [{}])[0])
+    competitors = competition.get("competitors") or []
+    home = next((item for item in competitors if item.get("homeAway") == "home"), None)
+    away = next((item for item in competitors if item.get("homeAway") == "away"), None)
+    if not home or not away:
+        return None
+    return regulation_score_from_competitors(home, away)
+
+
+def parse_regulation_score(
+    event: dict[str, Any], home: dict[str, Any], away: dict[str, Any]
+) -> tuple[int, int] | None:
+    stored = event.get("_regulationScore")
+    if isinstance(stored, dict):
+        try:
+            return int(stored["home"]), int(stored["away"])
+        except (KeyError, TypeError, ValueError):
+            pass
+    return regulation_score_from_competitors(home, away)
+
+
+def regulation_score_from_competitors(
+    home: dict[str, Any], away: dict[str, Any]
+) -> tuple[int, int] | None:
+    home_score = first_two_period_total(home.get("linescores"))
+    away_score = first_two_period_total(away.get("linescores"))
+    if home_score is None or away_score is None:
+        return None
+    return home_score, away_score
+
+
+def first_two_period_total(linescores: Any) -> int | None:
+    if not isinstance(linescores, list) or len(linescores) < 2:
+        return None
+    try:
+        values = [int(linescores[index].get("displayValue")) for index in range(2)]
+    except (AttributeError, TypeError, ValueError):
+        return None
+    return sum(values) if all(value >= 0 for value in values) else None
+
+
+def is_after_regulation(status: dict[str, Any] | None) -> bool:
+    status = status or {}
+    status_type = status.get("type") or {}
+    text = " ".join(
+        str(status_type.get(key) or "")
+        for key in ("name", "description", "detail", "shortDetail")
+    ).lower()
+    period = int(status.get("period") or 0)
+    return period > 2 or "extra time" in text or bool(re.search(r"\b(aet|pen|pens|penalties)\b", text))
 
 
 def parse_team(competitor: dict[str, Any]) -> TeamRef:

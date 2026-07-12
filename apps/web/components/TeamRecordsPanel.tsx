@@ -3,7 +3,7 @@
 import { BarChart3, CalendarDays, ChevronRight, Goal, Loader2, ShieldCheck, Swords, UsersRound, X } from "lucide-react";
 import { useState } from "react";
 
-import { toChineseDisplay } from "@/lib/chineseDisplay";
+import { isPlaceholderPlayerName, toChineseDisplay, toPlayerDisplayName } from "@/lib/chineseDisplay";
 import type {
   MatchEvent,
   MatchResult,
@@ -482,7 +482,9 @@ function formatEventMinute(minute: number): string {
 }
 
 function displayEventPlayer(event: MatchEvent): string {
-  return event.player && !genericEventPlayers.has(event.player) ? toChineseDisplay(event.player, "待补中文球员") : "数据源未返回具体球员";
+  return event.player && !genericEventPlayers.has(event.player) && !isPlaceholderPlayerName(event.player)
+    ? toPlayerDisplayName(event.player, "数据源未返回具体球员")
+    : "数据源未返回具体球员";
 }
 
 function fallbackEventDescription(event: MatchEvent): string {
@@ -531,7 +533,7 @@ function PlayerRow({ player, compact = false }: { player: TeamRecordPlayerAppear
     <div className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-md bg-white px-2 ${compact ? "py-1.5" : "py-2"}`}>
       <span className="score-text w-7 rounded bg-slate-100 py-1 text-center text-xs font-bold text-slate-600">{player.number}</span>
       <div className="min-w-0">
-        <div className="truncate text-sm font-semibold text-ink">{toChineseDisplay(player.name, "待补中文球员")}</div>
+        <div className="truncate text-sm font-semibold text-ink">{toPlayerDisplayName(player.name)}</div>
         <div className="text-xs text-slate-500">{toChineseDisplay(player.position, "位置未返回")}</div>
       </div>
       <span className="score-text text-xs font-semibold text-slate-500">{player.minutesPlayed === null ? "-" : `${player.minutesPlayed}'`}</span>

@@ -18,11 +18,17 @@ CREATE TABLE IF NOT EXISTS matches (
   away_team_id TEXT NOT NULL REFERENCES teams(id),
   home_score INTEGER NOT NULL DEFAULT 0,
   away_score INTEGER NOT NULL DEFAULT 0,
+  full_match_home_score INTEGER,
+  full_match_away_score INTEGER,
+  penalty_shootout_home_score INTEGER,
+  penalty_shootout_away_score INTEGER,
+  result_decision TEXT CHECK (result_decision IN ('regulation', 'extra_time', 'penalties')),
   status TEXT NOT NULL CHECK (status IN ('scheduled', 'live', 'halftime', 'finished')),
   start_time TIMESTAMPTZ NOT NULL,
   kickoff_time TIMESTAMPTZ,
   stage TEXT NOT NULL DEFAULT 'group' CHECK (stage IN ('group', 'r32', 'r16', 'qf', 'sf', 'third_place', 'final')),
   minute INTEGER NOT NULL DEFAULT 0,
+  winner_team_id TEXT REFERENCES teams(id),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -34,6 +40,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_matches_source_external_id ON matches(sour
 
 UPDATE matches SET match_id = id WHERE match_id IS NULL;
 UPDATE matches SET kickoff_time = start_time WHERE kickoff_time IS NULL;
+
+ALTER TABLE matches
+ADD COLUMN IF NOT EXISTS winner_team_id TEXT REFERENCES teams(id);
 
 CREATE TABLE IF NOT EXISTS events (
   id BIGSERIAL PRIMARY KEY,

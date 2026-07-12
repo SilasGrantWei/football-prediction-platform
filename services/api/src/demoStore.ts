@@ -1,10 +1,14 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import type { EventType, Match, MatchEvent, MatchStatus, Prediction, Team, TrendPoint } from "./models.js";
 import type { MatchFilters, MatchStateUpdate } from "./repositories/matchRepository.js";
 import { filterDisplayableMatches } from "./services/matchDisplayPolicy.js";
 import { isTournamentToday, isTournamentTomorrow } from "./services/matchPeriodPolicy.js";
 
 // Verified snapshot: FIFA official match schedule PDF v22, ESPN fixtures/results,
-// and Guardian live report for Belgium 3-2 Senegal. Updated for 2026-07-02 Asia/Shanghai.
+// and Guardian live report for Belgium 2-2 Senegal after 90 minutes (Belgium advanced after extra time).
 
 const teams: Record<string, Team> = {
   mexico: team("mexico", "墨西哥", 78, 78, 1.34, 75, 1.18),
@@ -61,14 +65,14 @@ const teams: Record<string, Team> = {
   winner_m86: team("winner_m86", "胜者M86（阿根廷/佛得角）", 84, 83, 1.67, 80, 1.01),
   winner_m87: team("winner_m87", "胜者M87（哥伦比亚/加纳）", 81, 78, 1.53, 76, 1.15),
   winner_m88: team("winner_m88", "胜者M88（澳大利亚/埃及）", 78, 76, 1.37, 75, 1.22),
-  winner_m89: team("winner_m89", "胜者M89", 85, 82, 1.62, 82, 1.02),
-  winner_m90: team("winner_m90", "胜者M90", 79, 80, 1.39, 80, 1.04),
-  winner_m91: team("winner_m91", "胜者M91", 87, 82, 1.87, 79, 1.10),
-  winner_m92: team("winner_m92", "胜者M92", 84, 80, 1.61, 79, 1.08),
-  winner_m93: team("winner_m93", "胜者M93", 85, 82, 1.74, 80, 1.07),
-  winner_m94: team("winner_m94", "胜者M94", 83, 80, 1.60, 76, 1.15),
-  winner_m95: team("winner_m95", "胜者M95", 82, 81, 1.61, 78, 1.11),
-  winner_m96: team("winner_m96", "胜者M96", 80, 78, 1.48, 76, 1.18),
+  winner_m89: team("winner_m89", "胜者M89（巴拉圭/法国）", 85, 82, 1.62, 82, 1.02),
+  winner_m90: team("winner_m90", "胜者M90（加拿大/摩洛哥）", 79, 80, 1.39, 80, 1.04),
+  winner_m91: team("winner_m91", "胜者M91（巴西/挪威）", 87, 82, 1.87, 79, 1.10),
+  winner_m92: team("winner_m92", "胜者M92（墨西哥/英格兰）", 84, 80, 1.61, 79, 1.08),
+  winner_m93: team("winner_m93", "胜者M93（葡萄牙/西班牙）", 85, 82, 1.74, 80, 1.07),
+  winner_m94: team("winner_m94", "胜者M94（美国/比利时）", 83, 80, 1.60, 76, 1.15),
+  winner_m95: team("winner_m95", "胜者M95（阿根廷/埃及）", 82, 81, 1.61, 78, 1.11),
+  winner_m96: team("winner_m96", "胜者M96（瑞士/哥伦比亚）", 80, 78, 1.48, 76, 1.18),
   winner_m97: team("winner_m97", "胜者M97", 83, 81, 1.55, 81, 1.03),
   winner_m98: team("winner_m98", "胜者M98", 84, 81, 1.67, 79, 1.09),
   winner_m99: team("winner_m99", "胜者M99", 86, 82, 1.74, 80, 1.08),
@@ -88,6 +92,32 @@ const matches: Match[] = [
   ...medalMatches()
 ];
 
+type DemoMatchStateSnapshot = MatchStateUpdate & { matchId: string };
+
+const matchStateSnapshots = loadMatchStateSnapshots();
+applyMatchStateSnapshots(matchStateSnapshots);
+
+type BracketSlotResult = "winner" | "loser";
+
+const bracketSlots: Record<string, { sourceMatchId: string; result: BracketSlotResult }> = {
+  winner_m89: { sourceMatchId: "r16-089", result: "winner" },
+  winner_m90: { sourceMatchId: "r16-090", result: "winner" },
+  winner_m91: { sourceMatchId: "r16-091", result: "winner" },
+  winner_m92: { sourceMatchId: "r16-092", result: "winner" },
+  winner_m93: { sourceMatchId: "r16-093", result: "winner" },
+  winner_m94: { sourceMatchId: "r16-094", result: "winner" },
+  winner_m95: { sourceMatchId: "r16-095", result: "winner" },
+  winner_m96: { sourceMatchId: "r16-096", result: "winner" },
+  winner_m97: { sourceMatchId: "qf-097", result: "winner" },
+  winner_m98: { sourceMatchId: "qf-098", result: "winner" },
+  winner_m99: { sourceMatchId: "qf-099", result: "winner" },
+  winner_m100: { sourceMatchId: "qf-100", result: "winner" },
+  winner_m101: { sourceMatchId: "sf-101", result: "winner" },
+  winner_m102: { sourceMatchId: "sf-102", result: "winner" },
+  loser_m101: { sourceMatchId: "sf-101", result: "loser" },
+  loser_m102: { sourceMatchId: "sf-102", result: "loser" }
+};
+
 let nextEventId = 100;
 const events: MatchEvent[] = [
   event(1, "match-001", 25, "goal", "塞内加尔", "迪亚拉"),
@@ -105,7 +135,7 @@ const events: MatchEvent[] = [
   event(14, "match-010", 88, "goal", "巴西", "罗德里戈")
 ];
 
-const predictions = new Map<string, Prediction>();
+const predictions = loadPredictionSnapshots();
 
 export const demoStore = {
   findMatches(filters: MatchFilters = {}): Match[] {
@@ -153,14 +183,48 @@ export const demoStore = {
     if (state.homeTeamId) item.homeTeam = resolveTeam(state.homeTeamId, matchId);
     if (state.awayTeamId) item.awayTeam = resolveTeam(state.awayTeamId, matchId);
     if (state.startTime) item.startTime = new Date(state.startTime).toISOString();
+    if (state.winnerTeamId) item.winnerTeamId = resolveTeam(state.winnerTeamId, matchId).id;
     item.minute = state.minute;
     item.homeScore = state.homeScore;
     item.awayScore = state.awayScore;
+    if (state.fullMatchHomeScore !== undefined) item.fullMatchHomeScore = state.fullMatchHomeScore;
+    if (state.fullMatchAwayScore !== undefined) item.fullMatchAwayScore = state.fullMatchAwayScore;
+    if (state.penaltyShootoutHomeScore !== undefined) {
+      item.penaltyShootoutHomeScore = state.penaltyShootoutHomeScore;
+    }
+    if (state.penaltyShootoutAwayScore !== undefined) {
+      item.penaltyShootoutAwayScore = state.penaltyShootoutAwayScore;
+    }
+    if (state.resultDecision !== undefined) {
+      item.resultDecision = state.resultDecision;
+      if (state.resultDecision !== "penalties") {
+        delete item.penaltyShootoutHomeScore;
+        delete item.penaltyShootoutAwayScore;
+      }
+    }
     item.status = state.status;
+    matchStateSnapshots.set(matchId, {
+      matchId,
+      homeTeamId: item.homeTeam.id,
+      awayTeamId: item.awayTeam.id,
+      homeScore: item.homeScore,
+      awayScore: item.awayScore,
+      fullMatchHomeScore: item.fullMatchHomeScore,
+      fullMatchAwayScore: item.fullMatchAwayScore,
+      penaltyShootoutHomeScore: item.penaltyShootoutHomeScore,
+      penaltyShootoutAwayScore: item.penaltyShootoutAwayScore,
+      resultDecision: item.resultDecision,
+      winnerTeamId: item.winnerTeamId,
+      status: item.status,
+      startTime: item.startTime,
+      minute: item.minute
+    });
+    persistMatchStateSnapshots(matchStateSnapshots);
   },
 
   upsertPrediction(prediction: Prediction): void {
     predictions.set(prediction.matchId, prediction);
+    persistPredictionSnapshots(predictions);
   },
 
   buildTrend(matchId: string): TrendPoint[] {
@@ -194,6 +258,140 @@ export const demoStore = {
     return points;
   }
 };
+
+function predictionSnapshotPath(): string | undefined {
+  const configured = process.env.DEMO_PREDICTION_SNAPSHOT_PATH?.trim();
+  if (configured) return resolve(configured);
+  if (process.env.NODE_ENV === "test") return undefined;
+  return resolve(dirname(fileURLToPath(import.meta.url)), "../../../data/runtime/demo-predictions.json");
+}
+
+function matchStateSnapshotPath(): string | undefined {
+  const configured = process.env.DEMO_MATCH_STATE_SNAPSHOT_PATH?.trim();
+  if (configured) return resolve(configured);
+  if (process.env.NODE_ENV === "test") return undefined;
+  return resolve(dirname(fileURLToPath(import.meta.url)), "../../../data/runtime/demo-match-state.json");
+}
+
+function loadMatchStateSnapshots(): Map<string, DemoMatchStateSnapshot> {
+  const path = matchStateSnapshotPath();
+  if (!path || !existsSync(path)) return new Map();
+
+  try {
+    const parsed = JSON.parse(readFileSync(path, "utf8")) as unknown;
+    if (!Array.isArray(parsed)) return new Map();
+    return new Map(
+      parsed
+        .filter(isMatchStateSnapshot)
+        .map((snapshot) => [snapshot.matchId, snapshot] as const)
+    );
+  } catch {
+    return new Map();
+  }
+}
+
+function applyMatchStateSnapshots(items: Map<string, DemoMatchStateSnapshot>): void {
+  for (const snapshot of items.values()) {
+    const match = matches.find((candidate) => candidate.id === snapshot.matchId);
+    const homeTeam = snapshot.homeTeamId ? teams[snapshot.homeTeamId] : match?.homeTeam;
+    const awayTeam = snapshot.awayTeamId ? teams[snapshot.awayTeamId] : match?.awayTeam;
+    if (!match || !homeTeam || !awayTeam) continue;
+
+    match.homeTeam = homeTeam;
+    match.awayTeam = awayTeam;
+    match.homeScore = snapshot.homeScore;
+    match.awayScore = snapshot.awayScore;
+    if (snapshot.fullMatchHomeScore !== undefined) match.fullMatchHomeScore = snapshot.fullMatchHomeScore;
+    if (snapshot.fullMatchAwayScore !== undefined) match.fullMatchAwayScore = snapshot.fullMatchAwayScore;
+    if (snapshot.penaltyShootoutHomeScore !== undefined) {
+      match.penaltyShootoutHomeScore = snapshot.penaltyShootoutHomeScore;
+    }
+    if (snapshot.penaltyShootoutAwayScore !== undefined) {
+      match.penaltyShootoutAwayScore = snapshot.penaltyShootoutAwayScore;
+    }
+    if (snapshot.resultDecision !== undefined) match.resultDecision = snapshot.resultDecision;
+    match.status = snapshot.status;
+    match.startTime = new Date(snapshot.startTime ?? match.startTime).toISOString();
+    match.minute = snapshot.minute;
+    if (snapshot.winnerTeamId && teams[snapshot.winnerTeamId]) {
+      match.winnerTeamId = snapshot.winnerTeamId;
+    }
+  }
+}
+
+function persistMatchStateSnapshots(items: Map<string, DemoMatchStateSnapshot>): void {
+  const path = matchStateSnapshotPath();
+  if (!path) return;
+
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify([...items.values()], null, 2)}\n`, "utf8");
+}
+
+function isMatchStateSnapshot(value: unknown): value is DemoMatchStateSnapshot {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Partial<DemoMatchStateSnapshot>;
+  return (
+    typeof candidate.matchId === "string" &&
+    typeof candidate.homeScore === "number" &&
+    typeof candidate.awayScore === "number" &&
+    isOptionalScore(candidate.fullMatchHomeScore) &&
+    isOptionalScore(candidate.fullMatchAwayScore) &&
+    isOptionalScore(candidate.penaltyShootoutHomeScore) &&
+    isOptionalScore(candidate.penaltyShootoutAwayScore) &&
+    (candidate.resultDecision === undefined ||
+      candidate.resultDecision === "regulation" ||
+      candidate.resultDecision === "extra_time" ||
+      candidate.resultDecision === "penalties") &&
+    typeof candidate.minute === "number" &&
+    typeof candidate.startTime === "string" &&
+    (candidate.status === "scheduled" ||
+      candidate.status === "live" ||
+      candidate.status === "halftime" ||
+      candidate.status === "finished")
+  );
+}
+
+function isOptionalScore(value: unknown): value is number | undefined {
+  return value === undefined || (typeof value === "number" && Number.isInteger(value) && value >= 0);
+}
+
+function loadPredictionSnapshots(): Map<string, Prediction> {
+  const path = predictionSnapshotPath();
+  if (!path || !existsSync(path)) return new Map();
+
+  try {
+    const parsed = JSON.parse(readFileSync(path, "utf8")) as unknown;
+    if (!Array.isArray(parsed)) return new Map();
+    return new Map(
+      parsed
+        .filter(isPredictionSnapshot)
+        .map((prediction) => [prediction.matchId, prediction] as const)
+    );
+  } catch {
+    return new Map();
+  }
+}
+
+function persistPredictionSnapshots(items: Map<string, Prediction>): void {
+  const path = predictionSnapshotPath();
+  if (!path) return;
+
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify([...items.values()], null, 2)}\n`, "utf8");
+}
+
+function isPredictionSnapshot(value: unknown): value is Prediction {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Partial<Prediction>;
+  return (
+    typeof candidate.matchId === "string" &&
+    typeof candidate.generatedAt === "string" &&
+    typeof candidate.homeWinProb === "number" &&
+    typeof candidate.drawProb === "number" &&
+    typeof candidate.awayWinProb === "number" &&
+    Array.isArray(candidate.topScores)
+  );
+}
 
 function groupStageMatches(): Match[] {
   return [
@@ -282,7 +480,7 @@ function roundOf32Matches(): Match[] {
     completed("match-014", "2026世界杯淘汰赛 · 1/16决赛", "france", "sweden", 3, 0, "2026-06-30T21:00:00.000Z"),
     completed("match-015", "2026世界杯淘汰赛 · 1/16决赛", "mexico", "ecuador", 2, 0, "2026-07-01T01:00:00.000Z"),
     completed("match-016", "2026世界杯淘汰赛 · 1/16决赛", "england", "dr_congo", 2, 1, "2026-07-01T16:00:00.000Z"),
-    completed("match-001", "2026世界杯淘汰赛 · 1/16决赛", "belgium", "senegal", 2, 2, "2026-07-01T20:00:00.000Z"),
+    completed("match-001", "2026世界杯淘汰赛 · 1/16决赛", "belgium", "senegal", 2, 2, "2026-07-01T20:00:00.000Z", 90, "belgium"),
     completed("match-002", "2026世界杯淘汰赛 · 1/16决赛", "usa", "bosnia", 2, 0, "2026-07-02T00:00:00.000Z"),
     scheduled("match-004", "2026世界杯淘汰赛 · 1/16决赛", "spain", "austria", "2026-07-02T19:00:00.000Z"),
     scheduled("match-003", "2026世界杯淘汰赛 · 1/16决赛", "portugal", "croatia", "2026-07-02T23:00:00.000Z"),
@@ -295,14 +493,14 @@ function roundOf32Matches(): Match[] {
 
 function roundOf16Matches(): Match[] {
   return [
-    scheduled("r16-090", "2026世界杯淘汰赛 · 1/8决赛", "canada", "morocco", "2026-07-04T17:00:00.000Z"),
-    scheduled("r16-089", "2026世界杯淘汰赛 · 1/8决赛", "paraguay", "france", "2026-07-04T21:00:00.000Z"),
-    scheduled("r16-091", "2026世界杯淘汰赛 · 1/8决赛", "brazil", "norway", "2026-07-05T20:00:00.000Z"),
-    scheduled("r16-092", "2026世界杯淘汰赛 · 1/8决赛", "mexico", "england", "2026-07-06T00:00:00.000Z"),
+    completed("r16-090", "2026世界杯淘汰赛 · 1/8决赛", "canada", "morocco", 0, 3, "2026-07-04T17:00:00.000Z"),
+    completed("r16-089", "2026世界杯淘汰赛 · 1/8决赛", "paraguay", "france", 0, 1, "2026-07-04T21:00:00.000Z"),
+    completed("r16-091", "2026世界杯淘汰赛 · 1/8决赛", "brazil", "norway", 1, 2, "2026-07-05T20:00:00.000Z"),
+    completed("r16-092", "2026世界杯淘汰赛 · 1/8决赛", "mexico", "england", 2, 3, "2026-07-06T01:00:00.000Z"),
     completed("r16-093", "2026世界杯淘汰赛 · 1/8决赛", "portugal", "spain", 0, 1, "2026-07-06T19:00:00.000Z"),
     completed("r16-094", "2026世界杯淘汰赛 · 1/8决赛", "usa", "belgium", 1, 4, "2026-07-07T00:00:00.000Z"),
-    scheduled("r16-095", "2026世界杯淘汰赛 · 1/8决赛", "argentina", "egypt", "2026-07-07T16:00:00.000Z"),
-    scheduled("r16-096", "2026世界杯淘汰赛 · 1/8决赛", "switzerland", "colombia", "2026-07-07T20:00:00.000Z")
+    completed("r16-095", "2026世界杯淘汰赛 · 1/8决赛", "argentina", "egypt", 3, 2, "2026-07-07T16:00:00.000Z"),
+    completed("r16-096", "2026世界杯淘汰赛 · 1/8决赛", "switzerland", "colombia", 0, 0, "2026-07-07T20:00:00.000Z", 90, "switzerland")
   ];
 }
 
@@ -345,9 +543,10 @@ function completed(
   homeScore: number,
   awayScore: number,
   startTime: string,
-  minute = 90
+  minute = 90,
+  winnerTeamId?: string
 ): Match {
-  return buildMatch(id, competition, homeTeamId, awayTeamId, homeScore, awayScore, "finished", startTime, minute);
+  return buildMatch(id, competition, homeTeamId, awayTeamId, homeScore, awayScore, "finished", startTime, minute, winnerTeamId);
 }
 
 function buildMatch(
@@ -359,7 +558,8 @@ function buildMatch(
   awayScore: number,
   status: MatchStatus,
   startTime: string,
-  minute: number
+  minute: number,
+  winnerTeamId?: string
 ): Match {
   const homeTeam = teams[homeTeamId];
   const awayTeam = teams[awayTeamId];
@@ -375,7 +575,8 @@ function buildMatch(
     awayScore,
     status,
     startTime,
-    minute
+    minute,
+    ...(winnerTeamId ? { winnerTeamId } : {})
   };
 }
 
@@ -400,11 +601,62 @@ function event(id: number, matchId: string, minute: number, type: EventType, tea
 }
 
 function withPrediction(item: Match): Match {
+  const resolved = resolveBracketMatch(item);
+  return {
+    ...resolved,
+    prediction: predictions.get(item.id)
+  };
+}
+
+function resolveBracketMatch(item: Match, visited = new Set<string>()): Match {
+  if (visited.has(item.id)) return cloneMatch(item);
+  const nextVisited = new Set(visited);
+  nextVisited.add(item.id);
+  return {
+    ...item,
+    homeTeam: resolveBracketTeam(item.homeTeam, nextVisited),
+    awayTeam: resolveBracketTeam(item.awayTeam, nextVisited)
+  };
+}
+
+function resolveBracketTeam(team: Team, visited: Set<string>): Team {
+  const slot = bracketSlots[team.id];
+  if (!slot) return { ...team };
+
+  const sourceMatch = matches.find((candidate) => candidate.id === slot.sourceMatchId);
+  if (!sourceMatch || sourceMatch.status !== "finished") {
+    return { ...team };
+  }
+
+  const resolvedSource = resolveBracketMatch(sourceMatch, visited);
+  const homeAdvanced = resolveHomeAdvanced(sourceMatch, resolvedSource);
+  if (homeAdvanced === null) return { ...team };
+  const selectedTeam =
+    slot.result === "winner"
+      ? homeAdvanced
+        ? resolvedSource.homeTeam
+        : resolvedSource.awayTeam
+      : homeAdvanced
+        ? resolvedSource.awayTeam
+        : resolvedSource.homeTeam;
+  return { ...selectedTeam };
+}
+
+function resolveHomeAdvanced(sourceMatch: Match, resolvedSource: Match): boolean | null {
+  if (sourceMatch.winnerTeamId) {
+    if (resolvedSource.homeTeam.id === sourceMatch.winnerTeamId) return true;
+    if (resolvedSource.awayTeam.id === sourceMatch.winnerTeamId) return false;
+  }
+
+  if (sourceMatch.homeScore === sourceMatch.awayScore) return null;
+  return sourceMatch.homeScore > sourceMatch.awayScore;
+}
+
+function cloneMatch(item: Match): Match {
   return {
     ...item,
     homeTeam: { ...item.homeTeam },
-    awayTeam: { ...item.awayTeam },
-    prediction: predictions.get(item.id)
+    awayTeam: { ...item.awayTeam }
   };
 }
 

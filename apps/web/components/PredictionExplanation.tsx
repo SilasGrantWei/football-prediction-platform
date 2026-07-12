@@ -14,6 +14,16 @@ export function PredictionExplanation({
     <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
       <h2 className="mb-4 text-base font-semibold text-ink">为什么这样推算</h2>
       <div className="space-y-5">
+        {explanation.dataGaps?.length ? (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+            <div className="mb-2 text-sm font-semibold text-amber-900">球员级数据缺口</div>
+            <ul className="space-y-1 text-sm leading-6 text-amber-800">
+              {explanation.dataGaps.map((gap) => (
+                <li key={gap}>{toChineseDisplay(gap, "数据缺口")}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
         <p className="text-sm leading-6 text-slate-600">{toChineseDisplay(explanation.summary, "暂无中文推算摘要")}</p>
 
         <div className="grid gap-3 md:grid-cols-2">

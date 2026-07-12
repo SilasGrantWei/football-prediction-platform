@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.2 - 2026-07-12
+
+### Added
+
+- Separate verified 90-minute, full-match, and penalty-shootout score fields, including PostgreSQL and demo-state persistence.
+- Shared match-score presentation for dashboard cards and detail pages, with explicit extra-time and shootout labels.
+- Causal-rest benchmark coverage, prediction refresh checkpoints, database migrations, and restart-persistence tests.
+- Light broadcast-style dashboard UI with stronger score, status, lineup, and post-match review hierarchy.
+
+### Changed
+
+- Upgraded exact-score generation to the Poisson + Elo + FIFA-prior distribution model with participant-bound frozen snapshots.
+- Hardened Beijing-time match grouping, stale-fixture filtering, bracket participant resolution, and automatic tournament score refresh.
+- Improved post-match calibration for favorite draw traps, score-direction mismatch, lineup context, and recent-form weighting.
+- Preserved 90-minute prediction evaluation while showing full-match outcomes separately.
+
+### Fixed
+
+- Rejected incomplete, negative, or non-numeric provider score pairs instead of fabricating zeroes.
+- Treated explicit shootout scores as authoritative penalty decisions even when provider status text only says `Final`.
+- Prevented duplicate keep-alive supervisors and persisted synchronized match state across computer restarts.
+
 ## 0.1.1 - 2026-07-07
 
 ### Added

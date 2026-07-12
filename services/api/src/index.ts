@@ -5,6 +5,7 @@ import { WebSocketServer } from "ws";
 
 import { config } from "./config.js";
 import { closeDb, query } from "./db.js";
+import { runDatabaseMigrations } from "./migrationRunner.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { getRedis } from "./redis.js";
 import { analyticsRouter } from "./routes/analytics.js";
@@ -78,11 +79,23 @@ app.use(errorHandler);
 const server = createServer(app);
 const wss = new WebSocketServer({ server, path: "/ws/live" });
 attachLiveSocket(wss);
-const stopLiveSimulator = startLiveSimulator(wss);
+let stopLiveSimulator: () => void = () => undefined;
 
-server.listen(config.port, () => {
-  console.log(JSON.stringify({ level: "info", message: "API server listening", port: config.port }));
-});
+void startApi();
+
+async function startApi(): Promise<void> {
+  try {
+    if (!config.demoMode) await runDatabaseMigrations();
+    stopLiveSimulator = startLiveSimulator(wss);
+    server.listen(config.port, () => {
+      console.log(JSON.stringify({ level: "info", message: "API server listening", port: config.port }));
+    });
+  } catch (error) {
+    console.error(JSON.stringify({ level: "error", message: "API startup failed", error: String(error) }));
+    await closeDb().catch(() => undefined);
+    process.exitCode = 1;
+  }
+}
 
 async function shutdown(): Promise<void> {
   stopLiveSimulator();

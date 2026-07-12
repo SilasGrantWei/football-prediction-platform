@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { CheckCircle2, Clock3, ShieldAlert, Sparkles, Star, UsersRound, XCircle } from "lucide-react";
 
-import { toChineseDisplay, toChineseDisplayOrOriginal } from "@/lib/chineseDisplay";
+import { isPlaceholderPlayerName, toChineseDisplay, toChineseDisplayOrOriginal, toPlayerDisplayName } from "@/lib/chineseDisplay";
 import { LineupValidationRefreshControl } from "./LineupValidationRefreshControl";
 import type {
   LineupPlayerValidation,
@@ -216,7 +216,7 @@ function TeamProjectionCard({ team, validation }: { team: TeamLineupProjection; 
                 key={`${team.teamId}-sub-${player.name}`}
                 className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
               >
-                {toChineseDisplay(player.name, "待补中文球员")} · {formatPercent(player.startProbability)}
+                {toPlayerDisplayName(player.name)} · {formatPercent(player.startProbability)}
               </span>
             ))}
           </div>
@@ -297,7 +297,7 @@ function PlayerRow({
     <div className="flex items-center justify-between gap-3 rounded-lg bg-white px-3 py-2">
       <div className="min-w-0">
         <div className="flex items-center gap-1.5">
-          <span className="truncate font-semibold text-ink">{toChineseDisplay(player.name, "待补中文球员")}</span>
+          <span className="truncate font-semibold text-ink">{toPlayerDisplayName(player.name)}</span>
           {isStar ? <Star size={14} className="shrink-0 fill-amber-400 text-amber-400" aria-hidden /> : null}
         </div>
         <div className="mt-0.5 text-xs text-slate-500">
@@ -390,25 +390,7 @@ function toDisplayableActualName(value: string | undefined): string {
 function isUsableActualDisplayName(value: string): boolean {
   const normalized = value.trim().toLowerCase();
   if (!normalized || normalized === "-" || normalized === "n/a") return false;
-  return ![
-    "未知球员",
-    "待补中文球员",
-    "未接入中文名",
-    "数据源未返回姓名",
-    "数据源重复姓名",
-    "占位",
-    "未知球员",
-    "待补中文球员",
-    "未接入中文名",
-    "数据源未返回姓名",
-    "数据源重复姓名",
-    "占位",
-    "placeholder",
-    "unknown",
-    "unknown player",
-    "tbd",
-    "待定球员"
-  ].some((placeholder) => normalized.includes(placeholder));
+  return !isPlaceholderPlayerName(value);
 }
 
 function ImpactMetric({ label, value }: { label: string; value: number }) {

@@ -59,6 +59,17 @@ describe("lineupProjectionService", () => {
     expect(signal.awayStrengthDelta).toBeCloseTo(-signal.homeStrengthDelta);
   });
 
+  it("keeps non-official projected lineups as low-weight player signals", () => {
+    const projection = buildMatchLineupProjection(portugalCroatia);
+    const signal = buildLineupImpactSignal(projection);
+
+    expect(projection.home.sourceType).toBe("projected");
+    expect(projection.away.sourceType).toBe("projected");
+    expect(Math.abs(signal.homeStrengthDelta)).toBeLessThan(0.4);
+    expect(Math.abs(signal.homeGoalFactor - 1)).toBeLessThan(0.04);
+    expect(Math.abs(signal.awayGoalFactor - 1)).toBeLessThan(0.04);
+  });
+
   it("keeps unknown teams neutral instead of inventing players", () => {
     const projection = buildMatchLineupProjection({
       ...portugalCroatia,

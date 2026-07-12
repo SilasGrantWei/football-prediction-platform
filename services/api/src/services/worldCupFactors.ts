@@ -1,4 +1,4 @@
-import type { Match, Team } from "../models.js";
+import type { Match, Team, TeamRecordComparison, TeamRecordSummary } from "../models.js";
 
 export interface TeamTournamentFactors {
   group: string;
@@ -382,11 +382,12 @@ export const worldCupSources = [
   }
 ];
 
-export function buildWorldCupFactors(match: Match): WorldCupFactors {
+export function buildWorldCupFactors(match: Match, recordComparison?: TeamRecordComparison): WorldCupFactors {
   const isKnockout = match.competition.includes("淘汰赛") || match.competition.includes("1/");
   const isGroupStage = match.competition.includes("小组赛");
-  const home = teamFactors(match.homeTeam, match.startTime, isKnockout, isGroupStage);
-  const away = teamFactors(match.awayTeam, match.startTime, isKnockout, isGroupStage);
+  const causalRecords = recordComparison?.matchId === match.id ? recordComparison : undefined;
+  const home = teamFactors(match.homeTeam, match, isKnockout, isGroupStage, causalRecords?.home);
+  const away = teamFactors(match.awayTeam, match, isKnockout, isGroupStage, causalRecords?.away);
   const h2hSummary =
     h2hNotes[`${match.homeTeam.id}:${match.awayTeam.id}`] ??
     h2hNotes[`${match.awayTeam.id}:${match.homeTeam.id}`] ??
@@ -404,10 +405,17 @@ export function buildWorldCupFactors(match: Match): WorldCupFactors {
   };
 }
 
-function teamFactors(team: Team, matchStartTime: string, isKnockout: boolean, isGroupStage: boolean): TeamTournamentFactors {
+function teamFactors(
+  team: Team,
+  match: Match,
+  isKnockout: boolean,
+  isGroupStage: boolean,
+  recordSummary?: TeamRecordSummary
+): TeamTournamentFactors {
   const rawProfile = profiles[team.id] ?? fallbackProfile(team);
   const profile = causalProfileForMatch(rawProfile, isKnockout, isGroupStage);
-  const restDays = daysBetween(profile.lastPlayedAt, matchStartTime);
+  const lastPlayedAt = resolveLastPlayedAt(profile.lastPlayedAt, match, team, recordSummary);
+  const restDays = daysBetween(lastPlayedAt, match.startTime);
   const hostAdvantage = hostBoost(team.id);
   const travelFatigue = clamp(baseTravelFatigue(profile.confederation) - restDays * 0.025 - hostAdvantage * 0.45, 0.05, 0.80);
   const groupForm = clamp(profile.groupPoints / 9 * 0.46 + normalizeGoalDiff(profile.groupGoalDiff) * 0.28 + team.recentForm / 100 * 0.26, 0, 1);
@@ -458,6 +466,32 @@ function teamFactors(team: Team, matchStartTime: string, isKnockout: boolean, is
     tacticalNote: profile.tacticalNote,
     tournamentSummary: `${profile.qualifierType}，${profile.group}组 ${profile.groupPoints}分，净胜球${signed(profile.groupGoalDiff)}，休息${restDays}天。`
   };
+}
+
+function resolveLastPlayedAt(
+  profileLastPlayedAt: string,
+  match: Match,
+  team: Team,
+  recordSummary?: TeamRecordSummary
+): string {
+  const kickoffAt = new Date(match.startTime).getTime();
+  if (!Number.isFinite(kickoffAt)) return profileLastPlayedAt;
+  const candidates = [profileLastPlayedAt];
+
+  if (recordSummary?.teamId === team.id) {
+    candidates.push(
+      ...recordSummary.recentMatches
+        .filter((record) => record.matchId !== match.id)
+        .map((record) => record.date)
+    );
+  }
+
+  const validCandidates = candidates
+    .map((candidate) => ({ candidate, timestamp: new Date(candidate).getTime() }))
+    .filter(({ timestamp }) => Number.isFinite(timestamp) && timestamp < kickoffAt)
+    .sort((left, right) => right.timestamp - left.timestamp);
+
+  return validCandidates[0]?.candidate ?? new Date(kickoffAt - 86_400_000).toISOString();
 }
 
 function causalProfileForMatch(profile: TeamProfile, isKnockout: boolean, isGroupStage: boolean): TeamProfile {

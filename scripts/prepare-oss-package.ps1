@@ -36,6 +36,10 @@ function Test-IncludedPath {
   $relative = Get-RelativePath -BasePath $root -TargetPath $File.FullName
   $segments = $relative -split "[\\/]"
 
+  if ($relative -like "data\runtime\*") {
+    return $false
+  }
+
   foreach ($segment in $segments) {
     if ($excludedSegments -contains $segment) {
       return $false

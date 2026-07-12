@@ -51,7 +51,7 @@ ON CONFLICT (id) DO UPDATE SET
   xga = EXCLUDED.xga;
 
 INSERT INTO matches (id, competition, home_team_id, away_team_id, home_score, away_score, status, start_time, minute) VALUES
-  ('match-001', '2026世界杯淘汰赛', 'belgium', 'senegal', 3, 2, 'finished', NOW() - INTERVAL '3 hours', 120),
+  ('match-001', '2026世界杯淘汰赛', 'belgium', 'senegal', 2, 2, 'finished', NOW() - INTERVAL '3 hours', 90),
   ('match-002', '2026世界杯淘汰赛', 'usa', 'bosnia', 0, 0, 'scheduled', NOW() + INTERVAL '4 hours', 0),
   ('match-003', '2026世界杯淘汰赛', 'portugal', 'croatia', 0, 0, 'scheduled', NOW() + INTERVAL '23 hours', 0),
   ('match-004', '2026世界杯淘汰赛', 'spain', 'austria', 0, 0, 'scheduled', NOW() + INTERVAL '27 hours', 0),
@@ -110,6 +110,10 @@ ON CONFLICT (id) DO UPDATE SET
   status = EXCLUDED.status,
   start_time = EXCLUDED.start_time,
   minute = EXCLUDED.minute;
+
+UPDATE matches
+SET winner_team_id = 'belgium'
+WHERE id = 'match-001';
 
 INSERT INTO events (match_id, minute, type, team_id, player) VALUES
   ('match-001', 25, 'goal', 'senegal', '迪亚拉'),

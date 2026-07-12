@@ -33,6 +33,39 @@ afterEach(() => {
 });
 
 describe("buildPostMatchCalibration", () => {
+  it("does not learn a score-distribution miss when the actual score was in the matrix Top3", async () => {
+    const matrixHitHiddenByLegacySelection = makeMatch({
+      id: "matrix-hit-hidden-by-legacy-selection",
+      startTime: "2026-07-02T04:00:00.000Z",
+      homeScore: 2,
+      awayScore: 0,
+      status: "finished",
+      minute: 90,
+      prediction: {
+        ...basePrediction,
+        matchId: "matrix-hit-hidden-by-legacy-selection",
+        topScores: [
+          { score: "2-1", probability: 0.18 },
+          { score: "1-0", probability: 0.12 },
+          { score: "1-1", probability: 0.08 }
+        ],
+        scoreProbabilityMatrix: [
+          { score: "2-1", homeGoals: 2, awayGoals: 1, probability: 0.18 },
+          { score: "2-0", homeGoals: 2, awayGoals: 0, probability: 0.14 },
+          { score: "1-0", homeGoals: 1, awayGoals: 0, probability: 0.12 },
+          { score: "1-1", homeGoals: 1, awayGoals: 1, probability: 0.08 }
+        ]
+      }
+    });
+
+    vi.spyOn(matchRepository, "findMatches").mockResolvedValue([matrixHitHiddenByLegacySelection]);
+
+    const calibration = await buildPostMatchCalibration(targetMatch);
+
+    expect(calibration).toBeDefined();
+    expect(calibration?.scoreMissRate).toBe(0);
+  });
+
   it("learns only from finished pre-kickoff prediction snapshots before the target match", async () => {
     const validSample = makeMatch({
       id: "valid-clean-sheet-miss",
@@ -181,6 +214,51 @@ describe("buildPostMatchCalibration", () => {
     expect(calibration?.notes.join("\n")).toContain("高置信热门被90分钟拖平");
   });
 
+  it("weights a recent favorite draw miss more than an older favorite success", async () => {
+    const recentFavoriteDraw = makeMatch({
+      id: "recent-favorite-draw",
+      startTime: "2026-07-02T04:00:00.000Z",
+      homeScore: 1,
+      awayScore: 1,
+      status: "finished",
+      minute: 90,
+      prediction: {
+        ...basePrediction,
+        matchId: "recent-favorite-draw",
+        homeWinProb: 0.55,
+        drawProb: 0.27,
+        awayWinProb: 0.18,
+        topScores: [
+          { score: "2-1", probability: 0.14 },
+          { score: "1-1", probability: 0.12 },
+          { score: "1-0", probability: 0.1 }
+        ]
+      }
+    });
+    const olderFavoriteWin = makeMatch({
+      id: "older-favorite-win",
+      startTime: "2026-07-01T04:00:00.000Z",
+      homeScore: 2,
+      awayScore: 1,
+      status: "finished",
+      minute: 90,
+      prediction: {
+        ...basePrediction,
+        matchId: "older-favorite-win",
+        generatedAt: "2026-07-01T00:00:00.000Z",
+        homeWinProb: 0.55,
+        drawProb: 0.27,
+        awayWinProb: 0.18
+      }
+    });
+
+    vi.spyOn(matchRepository, "findMatches").mockResolvedValue([olderFavoriteWin, recentFavoriteDraw]);
+
+    const calibration = await buildPostMatchCalibration(targetMatch);
+
+    expect(calibration?.favoriteDrawMissRate).toBeCloseTo(1 / (1 + 0.82), 4);
+  });
+
   it("learns when draw protection was too strong and the favorite breaks through", async () => {
     const drawProtectedFavoriteWin = makeMatch({
       id: "draw-protected-favorite-win",
@@ -290,6 +368,43 @@ describe("buildPostMatchCalibration", () => {
     expect(calibration?.drawTrapMarginUnderestimate).toBe(1);
     expect(calibration?.drawDampener).toBeGreaterThan(0.1);
     expect(calibration?.drawProtectionBoost).toBe(0);
+  });
+
+  it("learns compact 0-0 misses and total-goal overestimation", async () => {
+    const compactDrawMiss = makeMatch({
+      id: "compact-nil-nil-miss",
+      startTime: "2026-07-02T04:00:00.000Z",
+      homeScore: 0,
+      awayScore: 0,
+      status: "finished",
+      minute: 90,
+      prediction: {
+        ...basePrediction,
+        matchId: "compact-nil-nil-miss",
+        homeWinProb: 0.32,
+        drawProb: 0.28,
+        awayWinProb: 0.40,
+        expectedHomeGoals: 1.1,
+        expectedAwayGoals: 1.25,
+        topScores: [
+          { score: "1-1", probability: 0.14 },
+          { score: "0-1", probability: 0.09 },
+          { score: "2-3", probability: 0.03 }
+        ]
+      }
+    });
+
+    vi.spyOn(matchRepository, "findMatches").mockResolvedValue([compactDrawMiss]);
+
+    const calibration = await buildPostMatchCalibration(targetMatch);
+
+    expect(calibration).toBeDefined();
+    expect(calibration?.lowTotalMissRate).toBe(1);
+    expect(calibration?.zeroZeroMissRate).toBe(1);
+    expect(calibration?.totalGoalOverestimate).toBe(2);
+    expect(calibration?.drawProtectionBoost).toBeGreaterThan(0.12);
+    expect(calibration?.favoriteCleanSheetBoost).toBeGreaterThan(0.05);
+    expect(calibration?.notes.join("\n")).toContain("0-0");
   });
 
   it("learns when a favorite wins but concedes multiple goals in a high-total miss", async () => {

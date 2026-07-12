@@ -525,8 +525,11 @@ function teamImpactScore(team: TeamLineupProjection): number {
 
 function lineupReliability(team: TeamLineupProjection): number {
   if (!team.starters.length) return 0;
-  if (team.calibration?.status === "post_match_adjusted") return 0.74;
-  return 1;
+  if (team.sourceType === "official") return 1;
+  if (team.calibration?.status === "post_match_adjusted") return 0.34;
+  if (team.confidence === "high") return 0.36;
+  if (team.confidence === "medium") return 0.28;
+  return 0.12;
 }
 
 function clamp(value: number, min: number, max: number): number {

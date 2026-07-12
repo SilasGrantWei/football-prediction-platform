@@ -262,8 +262,10 @@ function toEventType(type: string | undefined, detail: string | undefined): Even
 }
 
 function buildEventPlayer(event: ApiFootballEvent, type: EventType): string {
-  const player = localizePlayerName(event.player?.name, "");
-  const assist = localizePlayerName(event.assist?.name ?? undefined, "");
+  const sourcePlayer = event.player?.name?.trim();
+  const sourceAssist = event.assist?.name?.trim();
+  const player = localizePlayerName(sourcePlayer, sourcePlayer ?? "");
+  const assist = localizePlayerName(sourceAssist, sourceAssist ?? "");
   if (type === "substitution" && assist && player) return `${assist} 替换 ${player}`;
   if (player) return player;
   if (type === "offside") return "越位";

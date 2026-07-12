@@ -177,6 +177,7 @@ export function buildPredictionExplanation(
     tacticalSummary:
       `${worldCupFactors.stageLabel}，90分钟打平并进入加时的倾向约 ${formatPercent(worldCupFactors.extraTimeRisk)}，但推算结果不计算加时和点球。` +
       `${match.homeTeam.name}：${home.tacticalNote} ${match.awayTeam.name}：${away.tacticalNote}`,
+    dataGaps: buildPredictionDataGaps(prediction, recordComparison),
     factors,
     scoreRationales: prediction.topScores.map((score, index, scores) => ({
       score: score.score,
@@ -185,6 +186,22 @@ export function buildPredictionExplanation(
     })),
     sources: [...worldCupFactors.sources, ...(prediction.preMatchContext?.sources ?? [])]
   };
+}
+
+function buildPredictionDataGaps(prediction: Prediction, recordComparison?: TeamRecordComparison): string[] {
+  const gaps: string[] = [];
+  const projection = prediction.lineupProjection;
+  if (!projection || projection.home.sourceType !== "official" || projection.away.sourceType !== "official") {
+    gaps.push("未接入双方官方真实首发；当前球员名单只是赛前推算球员池，已按低权重处理。");
+    gaps.push("未接入实时伤停、停赛、训练状态和赛前发布会确认名单；不能把这些当作已知事实。");
+    gaps.push("未接入球员级近期状态、出场分钟、射门/xG、关键传球、对位胜率等逐人数据；当前主要依赖球队级实力、近期赛果和公开赛事情境。");
+  }
+
+  if (!recordComparison || recordComparison.headToHead.played === 0) {
+    gaps.push("缺少双方近期直接交锋样本；对局情况只能用球队级近期表现和赛事阶段近似。");
+  }
+
+  return gaps;
 }
 
 function factor(

@@ -1,7 +1,17 @@
 import { query } from "../db.js";
 import { config } from "../config.js";
 import { demoStore } from "../demoStore.js";
-import type { EventType, Match, MatchEvent, MatchStatus, Prediction, ScorePrediction, TrendPoint, UpsetRisk } from "../models.js";
+import type {
+  EventType,
+  Match,
+  MatchDecision,
+  MatchEvent,
+  MatchStatus,
+  Prediction,
+  ScorePrediction,
+  TrendPoint,
+  UpsetRisk
+} from "../models.js";
 import { staleScheduledDisplayCutoffMs } from "../services/matchDisplayPolicy.js";
 import { matchDisplayTimeZone } from "../services/matchPeriodPolicy.js";
 
@@ -10,9 +20,15 @@ interface MatchRow {
   competition: string;
   home_score: number;
   away_score: number;
+  full_match_home_score: number | null;
+  full_match_away_score: number | null;
+  penalty_shootout_home_score: number | null;
+  penalty_shootout_away_score: number | null;
+  result_decision: MatchDecision | null;
   status: MatchStatus;
   start_time: string | Date;
   minute: number;
+  winner_team_id: string | null;
   home_team_id: string;
   home_team_name: string;
   home_fifa_rating: string;
@@ -60,10 +76,16 @@ export interface MatchStateUpdate {
   minute: number;
   homeScore: number;
   awayScore: number;
+  fullMatchHomeScore?: number;
+  fullMatchAwayScore?: number;
+  penaltyShootoutHomeScore?: number;
+  penaltyShootoutAwayScore?: number;
+  resultDecision?: MatchDecision;
   status: MatchStatus;
   homeTeamId?: string;
   awayTeamId?: string;
   startTime?: string;
+  winnerTeamId?: string;
 }
 
 const MATCH_SELECT = `
@@ -72,9 +94,15 @@ const MATCH_SELECT = `
     m.competition,
     m.home_score,
     m.away_score,
+    m.full_match_home_score,
+    m.full_match_away_score,
+    m.penalty_shootout_home_score,
+    m.penalty_shootout_away_score,
+    m.result_decision,
     m.status,
     COALESCE(m.kickoff_time, m.start_time) AS start_time,
     m.minute,
+    m.winner_team_id,
     ht.id AS home_team_id,
     ht.name AS home_team_name,
     ht.fifa_rating AS home_fifa_rating,
@@ -172,9 +200,23 @@ function rowToMatch(row: MatchRow): Match {
     },
     homeScore: row.home_score,
     awayScore: row.away_score,
+    ...(row.full_match_home_score !== null && row.full_match_away_score !== null
+      ? {
+          fullMatchHomeScore: row.full_match_home_score,
+          fullMatchAwayScore: row.full_match_away_score
+        }
+      : {}),
+    ...(row.penalty_shootout_home_score !== null && row.penalty_shootout_away_score !== null
+      ? {
+          penaltyShootoutHomeScore: row.penalty_shootout_home_score,
+          penaltyShootoutAwayScore: row.penalty_shootout_away_score
+        }
+      : {}),
+    ...(row.result_decision ? { resultDecision: row.result_decision } : {}),
     status: row.status,
     startTime: toIso(row.start_time),
     minute: row.minute,
+    winnerTeamId: row.winner_team_id ?? undefined,
     prediction: rowToPrediction(row)
   };
 }
@@ -308,9 +350,23 @@ export class MatchRepository {
            away_score = $4,
            status = $5,
            home_team_id = COALESCE($6, home_team_id),
-           away_team_id = COALESCE($7, away_team_id),
-           kickoff_time = COALESCE($8::timestamptz, kickoff_time),
-           updated_at = NOW()
+            away_team_id = COALESCE($7, away_team_id),
+            kickoff_time = COALESCE($8::timestamptz, kickoff_time),
+            winner_team_id = COALESCE($9, winner_team_id),
+            full_match_home_score = COALESCE($10, full_match_home_score),
+            full_match_away_score = COALESCE($11, full_match_away_score),
+            penalty_shootout_home_score = CASE
+              WHEN $14::text IS NULL THEN penalty_shootout_home_score
+              WHEN $14::text = 'penalties' THEN COALESCE($12, penalty_shootout_home_score)
+              ELSE NULL
+            END,
+            penalty_shootout_away_score = CASE
+              WHEN $14::text IS NULL THEN penalty_shootout_away_score
+              WHEN $14::text = 'penalties' THEN COALESCE($13, penalty_shootout_away_score)
+              ELSE NULL
+            END,
+            result_decision = COALESCE($14, result_decision),
+            updated_at = NOW()
        WHERE id = $1`,
       [
         matchId,
@@ -320,7 +376,13 @@ export class MatchRepository {
         state.status,
         state.homeTeamId ?? null,
         state.awayTeamId ?? null,
-        state.startTime ?? null
+        state.startTime ?? null,
+        state.winnerTeamId ?? null,
+        state.fullMatchHomeScore ?? null,
+        state.fullMatchAwayScore ?? null,
+        state.penaltyShootoutHomeScore ?? null,
+        state.penaltyShootoutAwayScore ?? null,
+        state.resultDecision ?? null
       ]
     );
   }

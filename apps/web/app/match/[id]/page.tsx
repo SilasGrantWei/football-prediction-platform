@@ -17,6 +17,7 @@ import { UpsetBadge } from "@/components/UpsetBadge";
 import { WorldCupScoreEnhancementPanel } from "@/components/WorldCupScoreEnhancementPanel";
 import { toChineseDisplay } from "@/lib/chineseDisplay";
 import { formatOfficialKickoffTime } from "@/lib/kickoffDisplay";
+import { formatFullMatchOutcome, getFullMatchScorePresentation } from "@/lib/fullMatchScorePresentation";
 import { getRecalculateState } from "@/lib/predictionRecalculation";
 import { getMatch, getMatchEvents, getMatchLineupValidation, getMatchTeamRecords, getMatchTrend } from "@/lib/serverApi";
 
@@ -58,6 +59,7 @@ export default async function MatchDetailPage({
   const prediction = match.prediction;
   const strongerTeam = match.homeTeam.fifaRating >= match.awayTeam.fifaRating ? match.homeTeam.name : match.awayTeam.name;
   const recalculateState = getRecalculateState(match);
+  const fullMatchScore = getFullMatchScorePresentation(match);
 
   return (
     <div className="space-y-6">
@@ -92,6 +94,12 @@ export default async function MatchDetailPage({
             <div className="mt-2 text-sm text-slate-500">
               {matchClockLabel(match)}
             </div>
+            {fullMatchScore ? (
+              <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-900 shadow-sm">
+                整场比分 <span className="score-text text-base font-black text-slate-950">{fullMatchScore.score}</span>
+                <span className="text-emerald-700"> · {formatFullMatchOutcome(fullMatchScore)}</span>
+              </div>
+            ) : null}
           </div>
           <TeamBlock
             role="客队"

@@ -12,7 +12,7 @@ import {
   Video
 } from "lucide-react";
 
-import { toChineseDisplay } from "@/lib/chineseDisplay";
+import { isPlaceholderPlayerName, toChineseDisplay, toPlayerDisplayName } from "@/lib/chineseDisplay";
 import type { EventType, MatchEvent } from "@/lib/types";
 import type { MatchStatus } from "@/lib/types";
 
@@ -94,8 +94,8 @@ function formatMinute(minute: number): string {
 }
 
 function displayPlayer(event: MatchEvent): string {
-  if (!event.player || genericPlayerLabels.has(event.player)) return "数据源未返回具体球员";
-  return toChineseDisplay(event.player, "待补中文球员");
+  if (!event.player || genericPlayerLabels.has(event.player) || isPlaceholderPlayerName(event.player)) return "数据源未返回具体球员";
+  return toPlayerDisplayName(event.player, "数据源未返回具体球员");
 }
 
 function eventDetail(event: MatchEvent): string {
